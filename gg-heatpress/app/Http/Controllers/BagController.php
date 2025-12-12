@@ -1,0 +1,141 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Bag;
+use App\Models\Customer;
+use App\Services\BagService;
+use Illuminate\Http\Request;
+
+class BagController extends Controller
+{
+    public function __construct(
+        private BagService $bagService
+    ) {}
+
+    /**
+     * Bags index with filters + sorting
+     */
+    public function index(Request $request)
+    {
+        $query = Bag::with(['customer']);
+
+        // search by customer name or bag number
+        if ($search = $request->input('search')) {
+            $query->where('bag_number', 'like', "%{$search}%")
+                  ->orWhereHas('customer', fn($c) =>
+                      $c->where('name', 'like', "%{$search}%")
+                  );
+        }
+
+        // subcategory filter
+        if ($subcategory = $request->input('subcategory')) {
+            $query->where('subcategory', 'like', "%{$subcategory}%");
+        }
+
+        // sorting
+        switch ($request->input('sort')) {
+            case 'id_asc':
+                $query->orderBy('bag_number')->orderBy('bag_index');
+                break;
+
+            case 'id_desc':
+                $query->orderBy('bag_number', 'desc')->orderBy('bag_index', 'desc');
+                break;
+
+            case 'customer_desc':
+                $query->join('customers', 'bags.customer_id', '=', 'customers.id')
+                      ->orderBy('customers.name', 'desc')
+                      ->select('bags.*');
+                break;
+
+            default:
+                $query->join('customers', 'bags.customer_id', '=', 'customers.id')
+                      ->orderBy('customers.name', 'asc')
+                      ->select('bags.*');
+                break;
+        }
+
+        $bags = $query->paginate(20);
+
+        return view('bags.index', compact('bags'));
+    }
+
+    /**
+     * Create page for bag.
+     */
+    public function create(Request $request)
+    {
+        $customer = Customer::findOrFail($request->id);
+        $lastIndex = Bag::where('bag_number', $customer->id)->max('bag_index') ?? 0;
+
+        return view('bags.create', compact('customer', 'lastIndex'));
+    }
+
+    /**
+     * Store bag using service
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'subcategory' => 'nullable|string',
+            'notes'       => 'nullable|string',
+        ]);
+
+        $this->bagService->create($validated);
+
+        return redirect()
+            ->route('customers.show', $validated['customer_id'])
+            ->with('success', 'Bag created successfully.');
+    }
+
+    /**
+     * Show bag + leftovers
+     */
+    public function show(Bag $bag)
+    {
+        $bag->load(['customer', 'leftovers.type']);
+        return view('bags.show', compact('bag'));
+    }
+
+    /**
+     * Edit
+     */
+    public function edit(Bag $bag)
+    {
+        return view('bags.edit', [
+            'bag'      => $bag,
+            'customer' => $bag->customer,
+        ]);
+    }
+
+    /**
+     * Update
+     */
+    public function update(Request $request, Bag $bag)
+    {
+        $validated = $request->validate([
+            'subcategory' => 'nullable|string',
+            'notes'       => 'nullable|string',
+        ]);
+
+        $bag->update($validated);
+
+        return redirect()
+            ->route('bags.show', $bag->id)
+            ->with('success', 'Bag updated.');
+    }
+
+    /**
+     * Delete bag
+     */
+    public function destroy(Bag $bag)
+    {
+        $bag->delete();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Bag removed.');
+    }
+}
