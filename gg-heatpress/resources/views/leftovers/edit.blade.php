@@ -1,182 +1,181 @@
 <x-layouts.app title="Edit Leftover">
-
+{{-- {{ $leftover }} --}}
     <div class="container py-4">
 
         {{-- HEADER --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0">Edit Leftover</h1>
 
-            <a href="{{ route('bags.show', $leftover->bag_id) }}" class="btn btn-secondary">
+            <a href="{{ route('bags.show', $bag ) }}" class="btn btn-secondary">
                 Back to Bag
             </a>
         </div>
 
 
         {{-- CARD --}}
-        <div class="card">
-            <div class="card-body">
+            <div class="card">
+                <div class="card-body">
 
-                <form action="{{ route('leftovers.update', $leftover) }}"
-                      method="POST"
-                      enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-
-
-                    {{-- STATIC IDENTIFIER ROW --}}
-                    <div class="mb-4">
-                        <p class="mb-1">
-                            <strong>Bag:</strong>
-                            {{ $leftover->bag_number }}.{{ $leftover->bag_index }}
-                        </p>
-
-                        <p class="mb-1">
-                            <strong>Customer:</strong>
-                            {{ $leftover->customer->name }}
-                        </p>
-
-                        <p class="mb-1">
-                            <strong>Batch:</strong>
-                            {{ $leftover->batch_number }}
-                        </p>
-                    </div>
+                    <form action="{{ route('leftovers.update', $leftover) }}"
+                        method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
 
-                    {{-- LOCATION --}}
-                    <div class="mb-3">
-                        <label class="form-label">Location *</label>
-                        <input type="text"
-                               name="location"
-                               value="{{ old('location', $leftover->location) }}"
-                               class="form-control @error('location') is-invalid @enderror"
-                               required>
-                        @error('location')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
+                        {{-- STATIC IDENTIFIER ROW --}}
+                        <div class="mb-4">
+                            <p class="mb-1">
+                                <strong>Bag:</strong>
+                                {{ $leftover->bag_number }}.{{ $leftover->bag_index }}
+                            </p>
 
+                            <p class="mb-1">
+                                <strong>Customer:</strong>
+                                {{ $customer->name }}
+                            </p>
 
-                    {{-- SIZE --}}
-                    <div class="mb-3">
-                        <label class="form-label">Size *</label>
-                        <input type="text"
-                               name="size"
-                               value="{{ old('size', $leftover->size) }}"
-                               class="form-control @error('size') is-invalid @enderror"
-                               required>
-                        @error('size')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-
-                    {{-- DESCRIPTION --}}
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea name="description"
-                                  rows="3"
-                                  class="form-control @error('description') is-invalid @enderror">{{ old('description', $leftover->description) }}</textarea>
-
-                        @error('description')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-
-                    {{-- TRANSFER TYPE --}}
-                    <div class="mb-3">
-                        <label class="form-label">Transfer Type *</label>
-                        <select name="transfer_type_id"
-                                class="form-select @error('transfer_type_id') is-invalid @enderror"
-                                required>
-                            @foreach($types as $type)
-                                <option value="{{ $type->id }}"
-                                    {{ old('transfer_type_id', $leftover->transfer_type_id) == $type->id ? 'selected' : '' }}>
-                                    {{ $type->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('transfer_type_id')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-
-                    {{-- VENDOR --}}
-                    <div class="mb-3">
-                        <label class="form-label">Vendor</label>
-                        <input type="text"
-                               name="vendor"
-                               value="{{ old('vendor', $leftover->vendor) }}"
-                               class="form-control @error('vendor') is-invalid @enderror">
-                        @error('vendor')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-
-                    {{-- QUANTITY --}}
-                    <div class="mb-3">
-                        <label class="form-label">Quantity *</label>
-                        <input type="number"
-                               name="quantity"
-                               value="{{ old('quantity', $leftover->quantity) }}"
-                               class="form-control @error('quantity') is-invalid @enderror"
-                               min="1"
-                               required>
-                        @error('quantity')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-
-                    {{-- EXPIRES AT --}}
-                    <div class="mb-3">
-                        <label class="form-label">Expires At *</label>
-                        <input type="date"
-                               name="expires_at"
-                               value="{{ old('expires_at', $leftover->expires_at?->format('Y-m-d')) }}"
-                               class="form-control @error('expires_at') is-invalid @enderror"
-                               required>
-                        @error('expires_at')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-
-                    {{-- CURRENT IMAGE PREVIEW --}}
-                    @if($leftover->image_path)
-                        <div class="mb-3">
-                            <label class="form-label">Current Preview</label><br>
-                            <img src="{{ asset('storage/'.$leftover->image_path) }}"
-                                 class="rounded border"
-                                 style="max-width: 150px;">
+                            <p class="mb-1">
+                                <strong>Batch:</strong>
+                                {{ $leftover->batch_number }}
+                            </p>
                         </div>
-                    @endif
 
 
-                    {{-- IMAGE UPLOAD --}}
-                    <div class="mb-3">
-                        <label class="form-label">Replace Image (optional)</label>
-                        <input type="file"
-                               name="image"
-                               class="form-control @error('image') is-invalid @enderror"
-                               accept="image/*">
-                        @error('image')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
+                        {{-- LOCATION --}}
+                        <div class="mb-3">
+                            <label class="form-label">Location *</label>
+                            <input type="text"
+                                name="location"
+                                value="{{ old('location', $leftover->location) }}"
+                                class="form-control @error('location') is-invalid @enderror"
+                                required>
+                            @error('location')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
 
-                    {{-- SAVE BUTTON --}}
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary px-4">Update Leftover</button>
-                    </div>
+                        {{-- SIZE --}}
+                        <div class="mb-3">
+                            <label class="form-label">Size *</label>
+                            <input type="text"
+                                name="size"
+                                value="{{ old('size', $leftover->size) }}"
+                                class="form-control @error('size') is-invalid @enderror"
+                                required>
+                            @error('size')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
 
-                </form>
+
+                        {{-- DESCRIPTION --}}
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description"
+                                    rows="3"
+                                    class="form-control @error('description') is-invalid @enderror">{{ old('description', $leftover->description) }}</textarea>
+
+                            @error('description')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+
+                        {{-- TRANSFER TYPE --}}
+                        <div class="mb-3">
+                            <label class="form-label">Transfer Type *</label>
+                            <select name="transfer_type_id"
+                                    class="form-select @error('transfer_type_id') is-invalid @enderror"
+                                    required>
+                                @foreach($types as $type)
+                                    <option value="{{ $type->id }}"
+                                        {{ old('transfer_type_id', $leftover->transfer_type_id) == $type->id ? 'selected' : '' }}>
+                                        {{ $type->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('transfer_type_id')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+
+                        {{-- VENDOR --}}
+                        <div class="mb-3">
+                            <label class="form-label">Vendor</label>
+                            <input type="text"
+                                name="vendor"
+                                value="{{ old('vendor', $leftover->vendor) }}"
+                                class="form-control @error('vendor') is-invalid @enderror">
+                            @error('vendor')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+
+                        {{-- QUANTITY --}}
+                        <div class="mb-3">
+                            <label class="form-label">Quantity *</label>
+                            <input type="number"
+                                name="quantity"
+                                value="{{ old('quantity', $leftover->quantity) }}"
+                                class="form-control @error('quantity') is-invalid @enderror"
+                                min="1"
+                                required>
+                            @error('quantity')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+
+                        {{-- EXPIRES AT --}}
+                        <div class="mb-3">
+                            <label class="form-label">Expires At *</label>
+                            <input type="date"
+                                name="expires_at"
+                                value="{{ old('expires_at', $leftover->expires_at?->format('Y-m-d')) }}"
+                                class="form-control @error('expires_at') is-invalid @enderror"
+                                required>
+                            @error('expires_at')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+
+                        {{-- CURRENT IMAGE PREVIEW --}}
+                        @if($leftover->image_path)
+                            <div class="mb-3">
+                                <label class="form-label">Current Preview</label><br>
+                                <img src="{{ asset('storage/'.$leftover->image_path) }}"
+                                    class="rounded border"
+                                    style="max-width: 150px;">
+                            </div>
+                        @endif
+
+
+                        {{-- IMAGE UPLOAD --}}
+                        <div class="mb-3">
+                            <label class="form-label">Replace Image (optional)</label>
+                            <input type="file"
+                                name="image"
+                                class="form-control @error('image') is-invalid @enderror"
+                                accept="image/*">
+                            @error('image')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+
+                        {{-- SAVE BUTTON --}}
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary px-4">Update Leftover</button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-        </div>
-
     </div>
 
 </x-layouts.app>

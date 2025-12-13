@@ -79,7 +79,7 @@
                                 </td>
 
                                 <td>
-                                    {{ $customer->bags_count ?? 0 }}
+                                    {{ $customer->bags_count ?? '—' }}
                                 </td>
 
                                 <td class="text-muted">

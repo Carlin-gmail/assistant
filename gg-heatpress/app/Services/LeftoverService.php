@@ -142,6 +142,12 @@ class LeftoverService
             ->update(['consumed_at' => now()]);
     }
 
+    public function update(Leftover $leftover, array $data)
+    {
+        $leftover->update($data);
+
+    }
+
     /**
      * Grouped search: show totals per design.
      */

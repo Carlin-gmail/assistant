@@ -205,12 +205,12 @@ class LeftoverController extends Controller
     /**
      * Edit leftover.
      */
-    public function edit(Leftover $leftover, Bag $bag)
+    public function edit(Leftover $leftover)
     {
         return view('leftovers.edit', [
             'leftover' => $leftover,
-            'bag'      => $bag,
-            'customer' => $bag->customer,
+            'bag'      => $leftover->bag,
+            'customer' => $leftover->bag->customer,
             'types'    => TransferType::all(),
         ]);
     }
@@ -220,6 +220,8 @@ class LeftoverController extends Controller
      */
     public function update(Request $request, Leftover $leftover)
     {
+
+        // dd($leftover);
         $validated = $request->validate([
             'transfer_type_id' => 'nullable|exists:transfer_types,id',
             'vendor'           => 'nullable|string',
@@ -228,11 +230,10 @@ class LeftoverController extends Controller
             'description'      => 'nullable|string',
             'quantity'         => 'required|integer|min:0',
         ]);
-
-        $this->service->update($leftover, $validated);
+        $leftover->update( $validated);
 
         return redirect()
-            ->route('bags.show', $leftover->bag_id)
+            ->route('bags.show', 1)
             ->with('success', 'Leftover updated successfully.');
     }
 }

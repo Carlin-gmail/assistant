@@ -100,9 +100,10 @@ class BagController extends Controller
      */
     public function show(Bag $bag)
     {
-        $bag->load(['customer', 'leftovers.type']);
+        // $bag->load(['customer', 'leftovers.type']);
         $customer = $bag->customer;
         $leftovers = $bag->leftovers;
+
         return view('bag.show', compact('bag', 'customer', 'leftovers'));
     }
 

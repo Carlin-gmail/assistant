@@ -77,11 +77,13 @@ Route::middleware(['auth'])->group(function () {
         // FIFO consume
         Route::post('/consume', [LeftoverController::class, 'consume'])
             ->name('consume');
+
     });
 
     // Global leftovers inventory
 
-    Route::get('/leftovers/{bag}/edit', [LeftoverController::class, 'edit'])->name('leftovers.edit');
+    Route::get('/leftovers/{leftover}/edit', [LeftoverController::class, 'edit'])
+        ->name('leftovers.edit');
 
     Route::get('/leftovers', [LeftoverController::class, 'index'])
         ->name('leftovers.index');
@@ -89,6 +91,9 @@ Route::middleware(['auth'])->group(function () {
     // Global leftovers search
     Route::get('/leftovers/search', [LeftoverController::class, 'search'])
         ->name('leftovers.search');
+
+    Route::put('/leftovers/{leftover}', [LeftoverController::class, 'update'])
+              ->name('leftovers.update');
 
     // Expired update
     Route::post('/leftovers/update-expired', [LeftoverController::class, 'updateExpired'])
