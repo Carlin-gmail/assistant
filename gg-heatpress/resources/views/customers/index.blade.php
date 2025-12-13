@@ -51,7 +51,6 @@
             </div>
         </form>
 
-
         {{-- CUSTOMERS TABLE --}}
         <div class="card">
             <div class="card-body p-0">
@@ -60,7 +59,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>ID</th>
+                            <th>Account</th>
                             <th>Notes</th>
                             <th>Bags</th>
                             <th>Last Job</th>
@@ -73,7 +72,7 @@
                             <tr>
                                 <td>{{ $customer->name }}</td>
 
-                                <td class="text-muted">{{ $customer->id }}</td>
+                                <td class="text-muted">{{ $customer->account_number_accessor }}</td>
 
                                 <td class="text-muted small">
                                     {{ \Illuminate\Support\Str::limit($customer->notes, 40) }}
@@ -105,10 +104,7 @@
         <div class="mt-3">
             {{ $customers->links() }}
         </div>
-
     </div>
-
-
 
     {{-- ===========================
          NEW CUSTOMER MODAL
@@ -119,30 +115,50 @@
                 @csrf
 
                 <div class="modal-header">
-                    <h5 class="modal-title">New Customer</h5>
+                    <h5 class="modal-title">+ New Customer</h5>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label class="form-label">Name *</label>
-                        <input name="name" class="form-control" required>
+                        {{-- <label class="form-label">Name *</label> --}}
+                        <input name="name" class="form-control" placeholder="Name" required>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input name="email" type="email" class="form-control">
+                        {{-- <label class="form-label">Email</label> --}}
+                        <input name="email" type="email" class="form-control" placeholder="Email">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Phone</label>
-                        <input name="phone" class="form-control">
+                        {{-- <label class="form-label">Phone</label> --}}
+                        <input name="phone" class="form-control" placeholder="Phone">
+                    </div>
+
+                    <div class="">
+                        <label class="form-label">Address</label>
+                        <input name="address" class="form-control" placeholder="Address">
+                    </div>
+
+                    <div class="">
+                        <label class="form-label">City</label>
+                        <input name="city" class="form-control" placeholder="City">
+                    </div>
+
+                    <div class="">
+                        <label class="form-label">State</label>
+                        <input name="state" class="form-control" placeholder="State">
+                    </div>
+
+                    <div class="mb-3">
+                        {{-- <label class="form-label">Account Number</label> --}}
+                        <input type="text" name="account_number" class="form-control" placeholder="Account Number">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Notes</label>
-                        <textarea name="notes" class="form-control" rows="2"></textarea>
+                        <textarea name="notes" class="form-control" rows="4"></textarea>
                     </div>
 
                 </div>

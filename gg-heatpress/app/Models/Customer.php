@@ -13,6 +13,7 @@ class Customer extends Model
         'name',
         'email',
         'phone',
+        'account_number',
         'address',
         'city',
         'state',
@@ -40,6 +41,11 @@ class Customer extends Model
     public function getBagCountAttribute()
     {
         return $this->bags()->count();
+    }
+
+ public function getAccountNumberAccessorAttribute()
+    {
+        return $this->account_number ? 'BAG-' . $this->account_number : 'N/A';
     }
 
     public function getTotalLeftoversAttribute()

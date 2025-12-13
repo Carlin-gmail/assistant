@@ -42,6 +42,19 @@
                         @enderror
                     </div>
 
+                    {{-- ACCOUNT NUMBER --}}
+                    <div class="mb-3">
+                        <label class="form-label">Account Number</label>
+                        <input type="text"
+                               name="account_number"
+                               value="{{ old('account_number') }}"
+                               class="form-control @error('account_number') is-invalid @enderror">
+
+                        @error('account_number')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
                     {{-- PHONE --}}
                     <div class="mb-3">
                         <label class="form-label">Phone</label>

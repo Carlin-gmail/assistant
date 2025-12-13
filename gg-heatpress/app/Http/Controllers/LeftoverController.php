@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bag;
+use App\Models\Customer;
 use App\Models\Leftover;
 use App\Models\TransferType;
 use App\Services\LeftoverService;
@@ -57,6 +58,7 @@ class LeftoverController extends Controller
             $imagePath = $request->file('image')->store('images', 'public');
         }
         $validated = $request->validate([
+            'expires_at'      => 'required|date_format:Y-m-d',
             'transfer_type_id' => 'nullable|exists:transfer_types,id',
             'vendor'           => 'nullable|string',
             'location'         => 'required|string|max:255',
@@ -101,9 +103,12 @@ class LeftoverController extends Controller
 
     public function consume(Request $request, Bag $bag)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'quantity' => 'required|integer|min:1',
+            'leftover_id' => 'integer',
         ]);
+        // dd($validated);
 
         $result = $this->service->consume($bag, $validated);
 
@@ -200,12 +205,12 @@ class LeftoverController extends Controller
     /**
      * Edit leftover.
      */
-    public function edit(Leftover $leftover)
+    public function edit(Leftover $leftover, Bag $bag)
     {
         return view('leftovers.edit', [
             'leftover' => $leftover,
-            'bag'      => $leftover->bag,
-            'customer' => $leftover->bag->customer,
+            'bag'      => $bag,
+            'customer' => $bag->customer,
             'types'    => TransferType::all(),
         ]);
     }

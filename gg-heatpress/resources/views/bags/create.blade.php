@@ -22,8 +22,8 @@
                     {{-- HIDDEN VALUES (bag_number + bag_index + customer_id) --}}
                     <input type="hidden" name="customer_id" value="{{ $customer->id }}">
 
-                    {{-- bag_number is always the customer id --}}
-                    <input type="hidden" name="bag_number" value="{{ $customer->id }}">
+                    {{-- bag_number is always the customer account number --}}
+                    <input type="hidden" name="bag_number" value="{{ $customer->account_number }}">
 
                     {{-- bag_index increments --}}
                     <input type="hidden" name="bag_index" value="{{ $lastIndex + 1 }}">
@@ -34,7 +34,7 @@
                         <label class="form-label">Bag Identifier</label>
                         <input type="text"
                                class="form-control"
-                               value="{{ $customer->id }}.{{ $lastIndex + 1 }}"
+                               value="{{ $customer->account_number }}.{{ $lastIndex + 1 }}"
                                disabled>
                     </div>
 

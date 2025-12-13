@@ -48,13 +48,6 @@
         {{-- LEFTOVERS TITLE --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Leftovers in this Bag</h4>
-
-            {{-- Button for FIFO consumption --}}
-            <a href="#" class="btn btn-outline-danger btn-sm"
-               data-bs-toggle="modal"
-               data-bs-target="#consumeModal">
-                Consume
-            </a>
         </div>
 
 
@@ -75,8 +68,7 @@
                             <th>Type</th>
                             <th>Qty</th>
                             <th>Expires In</th>
-                            <th>Edit</th>
-                            <th>Batches</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
 
@@ -146,22 +138,21 @@
                                     @endif
                                 </td>
 
-                                {{-- EDIT BUTTON --}}
+                                {{-- ACTION BUTTONS --}}
                                 <td>
+                                    {{-- Button for FIFO consumption --}}
+                                    <a href="#" class="btn btn-outline-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#consumeModal{{ $leftover->id }}">
+                                        Consume
+                                    </a>
+
+                                    {{-- Button for editing leftovers --}}
                                     <a href="{{ route('leftovers.edit', $leftover) }}"
                                        class="btn btn-sm btn-outline-primary">
                                         Edit
                                     </a>
                                 </td>
-
-                                {{-- BATCHES BUTTON --}}
-                                <td>
-                                    <a href="{{-- route('leftovers.batches', $leftover) --}}"
-                                       class="btn btn-sm btn-secondary">
-                                        Batches
-                                    </a>
-                                </td>
-
                             </tr>
 
 
@@ -202,6 +193,52 @@
                                 </div>
                             </div>
 
+                            {{-- FIFO CONSUMPTION MODAL --}}
+                            <div class="modal fade" id="consumeModal{{ $leftover->id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Consume Leftovers</h5>
+                                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <form action="{{ route('leftovers.consume', $bag) }}" method="POST">
+                                            @csrf
+
+                                            <div class="">
+                                                <input
+                                                    type="hidden"
+                                                    name="leftover_id"
+                                                    id="leftover_id"
+                                                    value="{{ $leftover->id }}"
+                                                >
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <label class="form-label">Quantity to Remove</label>
+                                                <input type="number"
+                                                    name="quantity"
+                                                    class="form-control"
+                                                    min="1"
+                                                    required>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Cancel
+                                                </button>
+                                                <button class="btn btn-danger">
+                                                    Consume FIFO
+                                                </button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         @endforeach
                     </tbody>
 
@@ -212,41 +249,6 @@
     </div>
 
 
-    {{-- FIFO CONSUMPTION MODAL --}}
-    <div class="modal fade" id="consumeModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Consume Leftovers</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <form action="{{ route('leftovers.consume', $bag) }}" method="POST">
-                    @csrf
-
-                    <div class="modal-body">
-                        <label class="form-label">Quantity to Remove</label>
-                        <input type="number"
-                               name="quantity"
-                               class="form-control"
-                               min="1"
-                               required>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancel
-                        </button>
-                        <button class="btn btn-danger">
-                            Consume FIFO
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
 {{-- SCRIPTS --}}
    <script>
         function openImageModal(src) {

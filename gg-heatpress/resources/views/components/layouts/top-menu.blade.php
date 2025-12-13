@@ -18,7 +18,7 @@
                 {{-- Dashboard --}}
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                       href="{{-- route('dashboard') --}}">
+                       href="{{ route('dashboard') }}">
                         Dashboard
                     </a>
                 </li>
@@ -61,9 +61,9 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="mb-0">Leftovers Inventory</h1>
 
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLeftoverModal">
+                <a class="btn btn-primary" href="{{ route('bags.index') }}">
                     + Add Leftover
-                </button>
+                </a>
             </div>
 
 

@@ -12,10 +12,11 @@ class BagService
      */
     public function create(array $data): Bag
     {
+        // dd($data);
         $customerId = $data['customer_id'];
 
         // bag_number is ALWAYS the customer account number
-        $bagNumber = $customerId;
+        $bagNumber = $data['bag_number'];
 
         // next index for this customer
         $nextIndex = Bag::where('bag_number', $bagNumber)->max('bag_index') + 1;

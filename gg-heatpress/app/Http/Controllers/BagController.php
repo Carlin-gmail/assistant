@@ -66,8 +66,10 @@ class BagController extends Controller
      */
     public function create(Request $request)
     {
+        // dd($request->id);
         $customer = Customer::findOrFail($request->id);
-        $lastIndex = Bag::where('bag_number', $customer->id)->max('bag_index') ?? 0;
+        $lastIndex = Bag::where('bag_number', $customer->account_number)->max('bag_index') ?? 0;
+        // dd($lastIndex);
 
         return view('bags.create', compact('customer', 'lastIndex'));
     }
@@ -77,11 +79,14 @@ class BagController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
+            'bag_number' => 'required|exists:customers,account_number',
             'customer_id' => 'required|exists:customers,id',
             'subcategory' => 'nullable|string',
             'notes'       => 'nullable|string',
         ]);
+        // dd($validated);
 
         $this->bagService->create($validated);
 
@@ -106,7 +111,7 @@ class BagController extends Controller
      */
     public function edit(Bag $bag)
     {
-        return view('bag.edit', [
+        return view('bags.edit', [
             'bag'      => $bag,
             'customer' => $bag->customer,
         ]);

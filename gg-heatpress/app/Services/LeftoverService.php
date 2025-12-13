@@ -20,7 +20,7 @@ class LeftoverService
         $nextBatch = Leftover::where('bag_id', $bag->id)->max('batch_number') + 1;
 
         // expiration: ALWAYS 6 months from saved date
-        $expires = now()->addMonths(6)->toDateString();
+        $expires = $data['expires_at'] ?? now()->addMonths(6);
 
         // QR code structure:
         // customerId_timestamp_batch_qty_location_rand
@@ -86,45 +86,47 @@ class LeftoverService
      */
     public function consume(Bag $bag, array $data)
     {
+        // dd($data ?? 0);
         $qtyToTake = (int) $data['quantity'];
 
-        $batches = Leftover::where('bag_id', $bag->id)
-            ->whereNull('consumed_at')
-            ->orderBy('created_at', 'asc')
-            ->get();
+        // dd($qtyToTake);
+
+        $leftover= Leftover::where('id', $data['leftover_id'])
+        ->get();
+
+        $batch = $leftover->first();
+
+        // dd($batch->last()->id);
 
         $result = [];
 
-        foreach ($batches as $batch) {
+        if ($qtyToTake <= 0) {
+            abort(400, "Quantity to consume must be greater than zero.");
+        };
 
-            if ($qtyToTake <= 0) break;
+        if ($batch->quantity <= $qtyToTake) {
 
-            if ($batch->quantity <= $qtyToTake) {
+            // consume whole batch
+            $result[] = [
+                'batch_id' => $batch->id,
+                'taken'    => $batch->quantity,
+            ];
 
-                // consume whole batch
-                $result[] = [
-                    'batch_id' => $batch->id,
-                    'taken'    => $batch->quantity,
-                ];
+            $batch->quantity = 0;
+            $batch->consumed_at = now();
+            $batch->save();
 
-                $qtyToTake -= $batch->quantity;
+        } else {
 
-                $batch->quantity = 0;
-                $batch->consumed_at = now();
-                $batch->save();
+            // partial consumption
+            $result[] = [
+                'batch_id' => $batch->id,
+                'taken'    => $qtyToTake,
+            ];
 
-            } else {
-
-                // partial consumption
-                $result[] = [
-                    'batch_id' => $batch->id,
-                    'taken'    => $qtyToTake,
-                ];
-
-                $batch->quantity -= $qtyToTake;
-                $batch->save();
-                $qtyToTake = 0;
-            }
+            $batch->quantity -= $qtyToTake;
+            $batch->save();
+            $qtyToTake = 0;
         }
 
         return $result;

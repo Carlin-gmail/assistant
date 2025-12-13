@@ -16,13 +16,12 @@ Route::get('/', [DashboardController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
-| Lravel's Dashboard
+| Laravel's Dashboard
 |--------------------------------------------------------------------------
 */
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])
+->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
 
