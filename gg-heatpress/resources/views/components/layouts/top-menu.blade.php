@@ -57,6 +57,16 @@
 
             </ul>
 
+            {{-- Add leftovers button --}}
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Leftovers Inventory</h1>
+
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLeftoverModal">
+                    + Add Leftover
+                </button>
+            </div>
+
+
         </div>
 
     </div>

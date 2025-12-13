@@ -35,7 +35,7 @@ class LeftoverService
             'bag_id'           => $bag->id,
             'customer_id'      => $customer->id,
 
-            'bag_number'       => $bag->bag_number,   // = customer_id
+            'bag_number'       => $bag->bag_number,   // = customer_id or customer account number
             'bag_index'        => $bag->bag_index,
 
             'transfer_type_id' => $data['transfer_type_id'] ?? null,
@@ -49,8 +49,37 @@ class LeftoverService
             'batch_number'     => $nextBatch,
             'expires_at'       => $expires,
             'qr_code'          => $qr,
+
+            'image_path'        => $data['image_url'] ?? null,
         ]);
     }
+
+    public function createGlobal(array $data) // may not be used
+    {
+        // Handle optional image upload
+        $imagePath = null;
+
+        if (isset($data['image_url'])) {
+            $imagePath = $data['image']->store('leftovers', 'public');
+        }
+
+        // Compute expiration date (6 months)
+        $expiresAt = now()->addMonths(6);
+
+        return \App\Models\Leftover::create([
+            'bag_id'           => $data['bag_id'],
+            'transfer_type_id' => $data['transfer_type_id'] ?? null,
+            'vendor'           => $data['vendor'] ?? null,
+            'location'         => $data['location'],
+            'size'             => $data['size'] ?? null,
+            'description'      => $data['description'] ?? null,
+            'quantity'         => $data['quantity'],
+            'image_url'        => $imagePath,
+            'expires_at'       => $expiresAt,
+            'status'           => 'active',
+        ]);
+    }
+
 
     /**
      * FIFO consumption: remove oldest batches first.

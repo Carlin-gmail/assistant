@@ -88,14 +88,18 @@
                             {{-- Tint rows expiring ≤ 2 weeks --}}
                             <tr @if($leftover->should_tint) style="background:#ffe5e5;" @endif>
 
-                                {{-- IMAGE PLACEHOLDER --}}
                                 <td>
+
+
+                                    <x-custom.image_show_modal leftover="$leftover"/>
+
                                     <div class="ratio ratio-1x1 bg-light border rounded d-flex
                                                 align-items-center justify-content-center"
                                          style="width: 75px;">
                                         @if($leftover->image_path)
                                             <img src="{{ asset('storage/'.$leftover->image_path) }}"
-                                                 class="img-fluid rounded">
+                                            onclick="openImageModal('{{ asset('storage/' . $leftover->image_path) }}')"
+                                                 class="">
                                         @else
                                             <span class="text-muted small">Preview</span>
                                         @endif
@@ -129,7 +133,7 @@
                                 <td>
                                     @if ($leftover->expires_in_weeks > 2)
                                         <span class="badge bg-success">
-                                            {{ $leftover->expires_in_weeks }} weeks
+                                            {{ substr($leftover->expires_in_weeks,0, 4) }} weeks
                                         </span>
 
                                     @elseif ($leftover->expires_in_weeks > 0)
@@ -152,7 +156,7 @@
 
                                 {{-- BATCHES BUTTON --}}
                                 <td>
-                                    <a href="{{ route('leftovers.batches', $leftover) }}"
+                                    <a href="{{-- route('leftovers.batches', $leftover) --}}"
                                        class="btn btn-sm btn-secondary">
                                         Batches
                                     </a>
@@ -243,6 +247,17 @@
             </div>
         </div>
     </div>
+{{-- SCRIPTS --}}
+   <script>
+        function openImageModal(src) {
+            const modalImage = document.getElementById('imagePreview');
+            modalImage.src = src;
 
+            const modal = new bootstrap.Modal(
+                document.getElementById('imagePreviewModal')
+            );
+            modal.show();
+        }
+    </script>
 
 </x-layouts.app>

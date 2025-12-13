@@ -159,7 +159,7 @@
 
                     {{-- SAVE BUTTON --}}
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary px-4">Save Leftover</button>
+                        <button type="submit" class="btn btn-primary px-4">Save Leftover</button>
                     </div>
 
                 </form>

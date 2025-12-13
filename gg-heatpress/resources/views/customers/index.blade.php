@@ -90,31 +90,7 @@
                                 </td>
 
                                 <td class="text-end">
-
-                                    {{-- View --}}
-                                    <a href="{{ route('customers.show', $customer) }}"
-                                       class="btn btn-sm btn-outline-primary">
-                                        View
-                                    </a>
-
-                                    {{-- Edit --}}
-                                    <a href="{{ route('customers.edit', $customer) }}"
-                                       class="btn btn-sm btn-warning">
-                                        Edit
-                                    </a>
-
-                                    {{-- Delete --}}
-                                    <form action="{{ route('customers.destroy', $customer) }}"
-                                          method="POST"
-                                          class="d-inline"
-                                          onsubmit="return confirm('Delete this customer and all related bags/leftovers?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger">
-                                            Delete
-                                        </button>
-                                    </form>
-
+                                    <x-custom.action_buttons :model="$customer" viewName="customers"/>
                                 </td>
                             </tr>
                         @endforeach

@@ -14,116 +14,13 @@ class LeftoverController extends Controller
         private LeftoverService $service
     ) {}
 
-    public function index(Request $request)
+    public function index()
     {
-        // -----------------------------------------------------------
-        // 1) Base query with relationships
-        // -----------------------------------------------------------
-        $query = Leftover::with(['bag.customer', 'transferType']);
-
-        // -----------------------------------------------------------
-        // 2) SEARCH
-        // -----------------------------------------------------------
-        if ($search = $request->input('search')) {
-
-            $query->where(function ($q) use ($search) {
-
-                $q->where('location', 'like', "%{$search}%")
-                ->orWhere('size', 'like', "%{$search}%")
-                ->orWhere('description', 'like', "%{$search}%")
-
-                // transfer type
-                ->orWhereHas('transferType', function ($t) use ($search) {
-                    $t->where('name', 'like', "%{$search}%");
-                })
-
-                // bag id
-                ->orWhereHas('bag', function ($b) use ($search) {
-                    $b->where('id', $search)
-                        ->orWhere('bag_number', $search)
-                        ->orWhere('bag_index', $search);
-                })
-
-                // customer name
-                ->orWhereHas('bag.customer', function ($c) use ($search) {
-                    $c->where('name', 'like', "%{$search}%");
-                });
-
-            });
-        }
-
-        // -----------------------------------------------------------
-        // 3) FILTER: transfer type
-        // -----------------------------------------------------------
-        if ($typeId = $request->input('type')) {
-            $query->where('transfer_type_id', $typeId);
-        }
-
-        // -----------------------------------------------------------
-        // 4) FILTER: expiration (in weeks)
-        // -----------------------------------------------------------
-        if ($weeks = $request->input('expires')) {
-            $limitDate = now()->addWeeks($weeks)->startOfDay();
-            $query->where('expires_at', '<=', $limitDate);
-        }
-
-        // -----------------------------------------------------------
-        // 5) Fetch all leftovers (ungrouped)
-        // -----------------------------------------------------------
-        $leftovers = $query->orderBy('bag_id')->get();
-
-        // -----------------------------------------------------------
-        // 6) GROUP leftovers for the dashboard
-        // Key: customer_id + bag_id + location + size + transfer_type_id
-        // -----------------------------------------------------------
-        $groups = $leftovers
-            ->groupBy(function ($lo) {
-                return implode('-', [
-                    $lo->bag->customer_id,
-                    $lo->bag_id,
-                    $lo->location,
-                    $lo->size,
-                    $lo->transfer_type_id,
-                ]);
-            })
-            ->map(function ($batchGroup) {
-
-                $first = $batchGroup->first();
-                $customer = $first->bag->customer;
-                $bag = $first->bag;
-
-                // Total quantity for this group
-                $totalQty = $batchGroup->sum('quantity');
-
-                // Expiration in weeks based on the OLDEST batch
-                $oldest = $batchGroup->sortBy('expires_at')->first();
-                $expiresInWeeks = now()->diffInWeeks($oldest->expires_at, false);
-                $expiresInWeeks = max($expiresInWeeks, 0);
-
-                return [
-                    'customer'          => $customer,
-                    'bag'               => $bag,
-                    'location'          => $first->location,
-                    'size'              => $first->size,
-                    'type'              => $first->transferType,
-                    'quantity'          => $totalQty,
-                    'expires_in_weeks'  => $expiresInWeeks,
-                    'leftovers'         => $batchGroup,  // raw batches for modal
-                ];
-            })
-            ->values(); // reset array keys
-
-        // -----------------------------------------------------------
-        // 7) Transfer types list for filter dropdown
-        // -----------------------------------------------------------
-        $types = \App\Models\TransferType::orderBy('name')->get();
-
-        // -----------------------------------------------------------
-        // 8) Return page
-        // -----------------------------------------------------------
         return view('leftovers.index', [
-            'groups' => $groups,
-            'types'  => $types,
+            'types'     => TransferType::all(),
+            'bags'      => Bag::with('customer')->get(),
+            'groups'    => [], // empty by default
+            'query'     => null
         ]);
     }
 
@@ -140,11 +37,25 @@ class LeftoverController extends Controller
         ]);
     }
 
+    public function createGlobal()
+    {
+        return view('leftovers.create-global', [
+            'bags'  => Bag::with('customer')->get(),
+            'types' => TransferType::all(),
+        ]);
+    }
+
+
     /**
      * Store leftover batch.
      */
     public function store(Request $request, Bag $bag)
     {
+        // dd($request->hasFile('image'));
+        $imagePath = '';
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
         $validated = $request->validate([
             'transfer_type_id' => 'nullable|exists:transfer_types,id',
             'vendor'           => 'nullable|string',
@@ -154,7 +65,12 @@ class LeftoverController extends Controller
             'quantity'         => 'required|integer|min:0',
         ]);
 
+        $validated['image_url'] = $imagePath;
+        // dd($validated);
+
         $this->service->create($bag, $validated);
+
+        // dd($imagePath);
 
         return redirect()
             ->route('bags.show', $bag->id)
@@ -164,6 +80,25 @@ class LeftoverController extends Controller
     /**
      * FIFO consumption.
      */
+
+    public function storeGlobal(Request $request)
+    {
+        $validated = $request->validate([
+            'bag_id'           => 'required|exists:bags,id',
+            'transfer_type_id' => 'nullable|exists:transfer_types,id',
+            'vendor'           => 'nullable|string',
+            'location'         => 'required|string',
+            'size'             => 'nullable|string',
+            'description'      => 'nullable|string',
+            'quantity'         => 'required|integer|min:1',
+            'image'            => 'nullable|image|max:2048',
+        ]);
+
+        $this->service->createGlobal($validated);
+
+        return redirect()->back()->with('success', 'Leftover added.');
+    }
+
     public function consume(Request $request, Bag $bag)
     {
         $validated = $request->validate([
@@ -183,11 +118,71 @@ class LeftoverController extends Controller
      */
     public function search(Request $request)
     {
-        $query = $request->input('query', '');
+        $queryBuilder = Leftover::with(['bag.customer', 'type']);
 
-        $results = $this->service->searchGrouped($query);
+        // ---------------------------------------
+        // SEARCH FILTER
+        // ---------------------------------------
+        if ($search = $request->input('search')) {
+            $queryBuilder->where(function ($q) use ($search) {
+                $q->where('location', 'like', "%{$search}%")
+                ->orWhere('size', 'like', "%{$search}%")
+                ->orWhere('vendor', 'like', "%{$search}%")
+                ->orWhereHas('type', fn($t) =>
+                        $t->where('name', 'like', "%{$search}%"))
+                ->orWhereHas('bag.customer', fn($c) =>
+                        $c->where('name', 'like', "%{$search}%"))
+                ->orWhereHas('bag', fn($b) =>
+                        $b->where('bag_number', 'like', "%{$search}%"));
+            });
+        }
 
-        return view('leftovers.index', compact('results', 'query'));
+        // ---------------------------------------
+        // FILTER BY TRANSFER TYPE
+        // ---------------------------------------
+        if ($request->filled('type')) {
+            $queryBuilder->where('transfer_type_id', $request->type);
+        }
+
+        // ---------------------------------------
+        // FILTER BY EXPIRATION RANGE
+        // ---------------------------------------
+        if ($expires = $request->input('expires')) {
+            $queryBuilder->where('expires_at', '<=', now()->addWeeks($expires));
+        }
+
+        $results = $queryBuilder->orderBy('created_at', 'desc')->get();
+
+        // ---------------------------------------
+        // GROUPING INTO DISPLAY ROWS
+        // ---------------------------------------
+        $groups = $results->groupBy(function ($item) {
+            return $item->bag_id.'-'.$item->location.'-'.$item->size.'-'.$item->transfer_type_id;
+        })->map(function ($items) {
+
+            $first = $items->first();
+
+            return [
+                'customer' => $first->bag->customer,
+                'bag'      => $first->bag,
+                'type'     => $first->type,
+                'location' => $first->location,
+                'size'     => $first->size,
+                'quantity' => $items->sum('quantity'),
+                'leftovers' => $items,
+                'expires_in_weeks' => now()->diffInWeeks($items->min('expires_at'), false),
+            ];
+        });
+
+        // ---------------------------------------
+        // RETURN SAME INDEX VIEW
+        // ---------------------------------------
+        return view('leftovers.index', [
+            'groups'    => $groups,
+            'types'     => \App\Models\TransferType::all(),
+            'bags'      => \App\Models\Bag::with('customer')->get(),
+            'query'     => $request->only(['search', 'type', 'expires'])
+        ]);
     }
 
     /**

@@ -96,7 +96,9 @@ class BagController extends Controller
     public function show(Bag $bag)
     {
         $bag->load(['customer', 'leftovers.type']);
-        return view('bags.show', compact('bag'));
+        $customer = $bag->customer;
+        $leftovers = $bag->leftovers;
+        return view('bag.show', compact('bag', 'customer', 'leftovers'));
     }
 
     /**
@@ -104,7 +106,7 @@ class BagController extends Controller
      */
     public function edit(Bag $bag)
     {
-        return view('bags.edit', [
+        return view('bag.edit', [
             'bag'      => $bag,
             'customer' => $bag->customer,
         ]);

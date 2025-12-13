@@ -100,29 +100,7 @@
                                 {{-- ACTIONS --}}
                                 <td class="text-end">
 
-                                    {{-- View --}}
-                                    <a href="{{ route('bags.show', $bag) }}"
-                                       class="btn btn-sm btn-outline-primary">
-                                        View
-                                    </a>
-
-                                    {{-- Edit --}}
-                                    <a href="{{ route('bags.edit', $bag) }}"
-                                       class="btn btn-sm btn-warning">
-                                        Edit
-                                    </a>
-
-                                    {{-- Delete --}}
-                                    <form action="{{ route('bags.destroy', $bag) }}"
-                                          method="POST"
-                                          class="d-inline"
-                                          onsubmit="return confirm('Delete this bag? All leftovers inside will be removed!')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <x-custom.action_buttons :model="$bag" viewName="bags"/>
 
                                 </td>
                             </tr>
