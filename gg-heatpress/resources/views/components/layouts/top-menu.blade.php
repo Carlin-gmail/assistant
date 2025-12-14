@@ -1,73 +1,49 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
+<nav class="bg-dark text-white">
+    <div class="container d-flex align-items-center justify-content-between py-2">
 
         {{-- Brand --}}
-        <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">
+        <a href="{{ route('dashboard') }}" class="text-white fw-bold text-decoration-none">
             Carlos's Assistant
         </a>
 
         {{-- Mobile toggle --}}
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-            <span class="navbar-toggler-icon"></span>
+        <button id="menuToggle"
+                class="btn btn-outline-light d-lg-none"
+                type="button">
+            ☰
         </button>
 
-        {{-- Links --}}
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav me-auto">
+        {{-- Desktop menu --}}
+        <ul class="list-unstyled d-none d-lg-flex gap-3 mb-0">
+            <li><a class="text-white text-decoration-none" href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li><a class="text-white text-decoration-none" href="{{ route('customers.index') }}">Customers</a></li>
+            <li><a class="text-white text-decoration-none" href="{{ route('bags.index') }}">Bags</a></li>
+            <li><a class="text-white text-decoration-none" href="{{ route('leftovers.index') }}">Leftovers</a></li>
+            <li><a class="text-white text-decoration-none" href="{{ route('transfer-types.index') }}">Transfer Types</a></li>
+        </ul>
 
-                {{-- Dashboard --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                       href="{{ route('dashboard') }}">
-                        Dashboard
-                    </a>
-                </li>
+        {{-- Desktop action --}}
+        <a class="btn btn-primary d-none d-lg-inline-block"
+           href="{{ route('bags.index') }}">
+            + Add Leftover
+        </a>
+    </div>
 
-                {{-- Customers --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}"
-                       href="{{ route('customers.index') }}">
-                        Customers
-                    </a>
-                </li>
-
-                {{-- Bags --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('bags.*') ? 'active' : '' }}"
-                       href="{{ route('bags.index') }}">
-                        Bags
-                    </a>
-                </li>
-
-                {{-- Leftovers --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('leftovers.*') ? 'active' : '' }}"
-                       href="{{ route('leftovers.index') }}">
-                        Leftovers
-                    </a>
-                </li>
-
-                {{-- Transfer Types --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('transfer-types.*') ? 'active' : '' }}"
-                       href="{{ route('transfer-types.index') }}">
-                        Transfer Types
-                    </a>
-                </li>
-
+    {{-- Mobile menu --}}
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="container py-3">
+            <ul class="list-unstyled mb-3">
+                <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('customers.index') }}">Customers</a></li>
+                <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('bags.index') }}">Bags</a></li>
+                <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('leftovers.index') }}">Leftovers</a></li>
+                <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('transfer-types.index') }}">Transfer Types</a></li>
             </ul>
 
-            {{-- Add leftovers button --}}
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="mb-0">Leftovers Inventory</h1>
-
-                <a class="btn btn-primary" href="{{ route('bags.index') }}">
-                    + Add Leftover
-                </a>
-            </div>
-
-
+            <a class="btn btn-primary w-100"
+               href="{{ route('bags.index') }}">
+                + Add Leftover
+            </a>
         </div>
-
     </div>
 </nav>

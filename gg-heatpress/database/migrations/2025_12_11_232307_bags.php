@@ -20,15 +20,14 @@ return new class extends Migration
             // Identifies multiple bags under same customer
 
             // Relationship
-            $table->foreignId('customer_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
 
             // Additional details
             $table->string('subcategory')->nullable(); // ex: Football, Dance Team...
             $table->text('notes')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
 
             // A customer cannot have duplicated bag_index
             $table->unique(['customer_id', 'bag_index']);

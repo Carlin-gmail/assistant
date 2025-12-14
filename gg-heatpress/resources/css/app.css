@@ -1,3 +1,34 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Navbar animation */
+/* Mobile menu base state */
+.mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* Open state */
+.mobile-menu.open {
+    max-height: 500px; /* must be larger than content */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#menuToggle {
+    transition: transform 0.5s ease;
+}
+
+#menuToggle.open {
+    transform: rotate(360deg);
+}
+
+

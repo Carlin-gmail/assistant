@@ -153,7 +153,7 @@
 
                     <div class="mb-3">
                         {{-- <label class="form-label">Account Number</label> --}}
-                        <input type="text" name="account_number" class="form-control" placeholder="Account Number">
+                        <input type="text" name="account_number" class="form-control" placeholder="Account Number" required>
                     </div>
 
                     <div class="mb-3">

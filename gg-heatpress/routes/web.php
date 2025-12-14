@@ -11,6 +11,9 @@ use App\Http\Controllers\ProfileController;
 // Route::get('/profile', [ProfileController::class, 'edit'])
 //     ->name('profile');
 
+Route::get('/js', fn()=>
+    view('delete-me.learningJS'));
+
 
 Route::get('/', [DashboardController::class, 'index'])->name('home');
 

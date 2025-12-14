@@ -50,7 +50,11 @@ class CustomerController extends Controller
         ]);
 
         // dd($validated);
-
+        if($validated['account_number'] === null) {
+            return redirect()
+                ->back()
+                ->withErrors(['account_number' => 'Account number is required.']);  // This is the error message
+        }
         Customer::create($validated);
 
         return redirect()
