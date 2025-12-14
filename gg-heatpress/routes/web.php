@@ -124,8 +124,7 @@ Route::middleware(['auth'])->group(function () {
     |
     */
 
-    Route::resource('transfer-types', TransferTypeController::class)
-        ->only(['index', 'store', 'update']);
+    Route::resource('transfer-types', TransferTypeController::class);
 
     // Modal JSON route
     Route::get('/transfer-types/{type}/modal',

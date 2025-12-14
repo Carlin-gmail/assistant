@@ -41,4 +41,8 @@ class TransferTypeService
             'last_update' => $type->last_update?->toDateString(),
         ];
     }
+
+    public function delete(TransferType $transferType){
+        $transferType->delete($transferType);
+    }
 }

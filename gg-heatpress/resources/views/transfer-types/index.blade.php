@@ -53,22 +53,13 @@
                                         Directions
                                     </button>
 
-                                    {{-- Edit Modal --}}
-                                    <button
-                                        class="btn btn-sm btn-warning"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editTypeModal_{{ $type->id }}">
-                                        Edit
-                                    </button>
-
-                                    {{-- Optional Delete --}}
-                                    <form action="{{ route('transfer-types.update', $type) }}"
-                                          method="POST"
-                                          class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
+                                    <x-custom.action_buttons
+                                        viewName="transfer-types"
+                                        model="TransfersType"
+                                        :id="$type->id"
+                                        :editModal="true"
+                                        :deleteModal="true"
+                                    />
 
                                 </td>
                             </tr>

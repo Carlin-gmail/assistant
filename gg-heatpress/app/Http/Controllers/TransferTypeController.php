@@ -75,4 +75,13 @@ class TransferTypeController extends Controller
             $this->service->getPressingSettings($type)
         );
     }
+
+    /**
+     * Delete type
+     */
+    public function destroy(TransferType $transferType){
+        // dd($transferType);
+        $this->service->delete($transferType);
+        return redirect()->back()->with('success', 'Transfer type deleted.');
+    }
 }
