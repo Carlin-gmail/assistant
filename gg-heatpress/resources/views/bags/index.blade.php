@@ -30,13 +30,14 @@
                        name="subcategory"
                        value="{{ request('subcategory') }}"
                        class="form-control"
-                       placeholder="Football, Dance, etc.">
+                       placeholder="Football, Dance, etc."
+                       disabled>
             </div>
 
             {{-- Sort --}}
-            <div class="col-md-3">
+            <div class="col-md-3 ">
                 <label class="form-label mb-1">Sort</label>
-                <select name="sort" class="form-select">
+                <select name="sort" class="form-select" disabled>
                     <option value="">Customer A → Z</option>
                     <option value="customer_desc" {{ request('sort')=='customer_desc' ? 'selected' : '' }}>Customer Z → A</option>
                     <option value="id_asc" {{ request('sort')=='id_asc' ? 'selected' : '' }}>Bag Number ↑</option>

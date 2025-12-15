@@ -17,8 +17,8 @@ class TransferTypeController extends Controller
      */
     public function index()
     {
-        $types = TransferType::orderBy('name')->get();
-        return view('transfer-types.index', compact('types'));
+        $transferTypes = TransferType::orderBy('name')->get();
+        return view('transfer-types.index', compact('transferTypes'));
     }
 
     /**
@@ -43,6 +43,21 @@ class TransferTypeController extends Controller
             ->back()
             ->with('success', 'Transfer type created.');
     }
+
+     public function show(TransferType $transferType)
+    {
+        return view('transfer-types.show', [
+            'transferType' => $transferType,
+        ]);
+    }
+
+    public function edit(TransferType $transferType)
+    {
+        return view('transfer-types.edit', [
+            'transferType' => $transferType,
+        ]);
+    }
+
 
     /**
      * Update type

@@ -33,15 +33,15 @@
 
                     <tbody>
 
-                        @foreach ($types as $type)
+                        @foreach ($transferTypes as $transferType)
                             <tr>
-                                <td>{{ $type->name }}</td>
-                                <td>{{ $type->supplier ?? '—' }}</td>
-                                <td>{{ $type->fabric_type ?? '—' }}</td>
-                                <td>{{ $type->temperature ? $type->temperature . '°F' : '—' }}</td>
-                                <td>{{ $type->press_time ? $type->press_time . ' sec' : '—' }}</td>
-                                <td>{{ $type->peel_type ?? '—' }}</td>
-                                <td>{{ $type->last_update ?? '—' }}</td>
+                                <td>{{ $transferType->name }}</td>
+                                <td>{{ $transferType->supplier ?? '—' }}</td>
+                                <td>{{ $transferType->fabric_type ?? '—' }}</td>
+                                <td>{{ $transferType->temperature ? $transferType->temperature . '°F' : '—' }}</td>
+                                <td>{{ $transferType->press_time ? $transferType->press_time . ' sec' : '—' }}</td>
+                                <td>{{ $transferType->peel_type ?? '—' }}</td>
+                                <td>{{ $transferType->last_update ?? '—' }}</td>
 
                                 <td class="text-end">
 
@@ -49,16 +49,13 @@
                                     <button
                                         class="btn btn-sm btn-secondary"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#directionsModal_{{ $type->id }}">
+                                        data-bs-target="#directionsModal_{{ $transferType->id }}">
                                         Directions
                                     </button>
 
                                     <x-custom.action_buttons
                                         viewName="transfer-types"
-                                        model="TransfersType"
-                                        :id="$type->id"
-                                        :editModal="true"
-                                        :deleteModal="true"
+                                        :model="$transferType"
                                     />
 
                                 </td>
@@ -69,33 +66,33 @@
                             {{-- ========================================================= --}}
                             {{-- DIRECTIONS MODAL --}}
                             {{-- ========================================================= --}}
-                            <div class="modal fade" id="directionsModal_{{ $type->id }}" tabindex="-1">
+                            <div class="modal fade" id="directionsModal_{{ $transferType->id }}" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
 
                                         <div class="modal-header">
                                             <h5 class="modal-title">
-                                                {{ $type->name }} – Pressing Directions
+                                                {{ $transferType->name }} – Pressing Directions
                                             </h5>
                                             <button class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
 
                                         <div class="modal-body">
 
-                                            <p><strong>Supplier:</strong> {{ $type->supplier ?? '—' }}</p>
-                                            <p><strong>Fabric Type:</strong> {{ $type->fabric_type ?? '—' }}</p>
+                                            <p><strong>Supplier:</strong> {{ $transferType->supplier ?? '—' }}</p>
+                                            <p><strong>Fabric Type:</strong> {{ $transferType->fabric_type ?? '—' }}</p>
 
                                             <ul class="mt-3">
-                                                <li><strong>Temp:</strong> {{ $type->temperature ? $type->temperature . '°F' : '—' }}</li>
-                                                <li><strong>Time:</strong> {{ $type->press_time ? $type->press_time . ' sec' : '—' }}</li>
-                                                <li><strong>Pressure:</strong> {{ $type->pressure ?? '—' }}</li>
-                                                <li><strong>Peel:</strong> {{ $type->peel_type ?? '—' }}</li>
+                                                <li><strong>Temp:</strong> {{ $transferType->temperature ? $transferType->temperature . '°F' : '—' }}</li>
+                                                <li><strong>Time:</strong> {{ $transferType->press_time ? $transferType->press_time . ' sec' : '—' }}</li>
+                                                <li><strong>Pressure:</strong> {{ $transferType->pressure ?? '—' }}</li>
+                                                <li><strong>Peel:</strong> {{ $transferType->peel_type ?? '—' }}</li>
                                             </ul>
 
-                                            @if ($type->notes)
+                                            @if ($transferType->notes)
                                                 <div class="mt-3">
                                                     <strong>Notes:</strong>
-                                                    <p>{{ $type->notes }}</p>
+                                                    <p>{{ $transferType->notes }}</p>
                                                 </div>
                                             @endif
 
@@ -116,16 +113,16 @@
                             {{-- ========================================================= --}}
                             {{-- EDIT MODAL --}}
                             {{-- ========================================================= --}}
-                            <div class="modal fade" id="editTypeModal_{{ $type->id }}" tabindex="-1">
+                            <div class="modal fade" id="editTypeModal_{{ $transferType->id }}" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
 
-                                        <form method="POST" action="{{ route('transfer-types.update', $type) }}">
+                                        <form method="POST" action="{{ route('transfer-types.update', $transferType) }}">
                                             @csrf
                                             @method('PUT')
 
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Edit {{ $type->name }}</h5>
+                                                <h5 class="modal-title">Edit {{ $transferType->name }}</h5>
                                                 <button class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
 
@@ -135,21 +132,21 @@
                                                     <label class="form-label">Name</label>
                                                     <input type="text" name="name"
                                                         class="form-control"
-                                                        value="{{ $type->name }}">
+                                                        value="{{ $transferType->name }}">
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label class="form-label">Supplier</label>
                                                     <input type="text" name="supplier"
                                                         class="form-control"
-                                                        value="{{ $type->supplier }}">
+                                                        value="{{ $transferType->supplier }}">
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label class="form-label">Fabric Type</label>
                                                     <input type="text" name="fabric_type"
                                                         class="form-control"
-                                                        value="{{ $type->fabric_type }}">
+                                                        value="{{ $transferType->fabric_type }}">
                                                 </div>
 
                                                 <div class="row">
@@ -157,14 +154,14 @@
                                                         <label class="form-label">Temperature (°F)</label>
                                                         <input type="number" name="temperature"
                                                                class="form-control"
-                                                               value="{{ $type->temperature }}">
+                                                               value="{{ $transferType->temperature }}">
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
                                                         <label class="form-label">Time (sec)</label>
                                                         <input type="number" name="press_time"
                                                                class="form-control"
-                                                               value="{{ $type->press_time }}">
+                                                               value="{{ $transferType->press_time }}">
                                                     </div>
                                                 </div>
 
@@ -172,19 +169,19 @@
                                                     <label class="form-label">Pressure</label>
                                                     <input type="text" name="pressure"
                                                         class="form-control"
-                                                        value="{{ $type->pressure }}">
+                                                        value="{{ $transferType->pressure }}">
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label class="form-label">Peel Type</label>
                                                     <input type="text" name="peel_type"
                                                         class="form-control"
-                                                        value="{{ $type->peel_type }}">
+                                                        value="{{ $transferType->peel_type }}">
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label class="form-label">Notes</label>
-                                                    <textarea name="notes" class="form-control" rows="2">{{ $type->notes }}</textarea>
+                                                    <textarea name="notes" class="form-control" rows="2">{{ $transferType->notes }}</textarea>
                                                 </div>
 
                                             </div>

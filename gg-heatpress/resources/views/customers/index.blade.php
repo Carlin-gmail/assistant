@@ -25,7 +25,7 @@
             </div>
 
             {{-- Sort --}}
-            <div class="col-md-3">
+            <div class="col-md-3 d-none">
                 <label class="form-label mb-1">Sort</label>
                 <select name="sort" class="form-select">
                     <option value="">Name A → Z</option>
@@ -36,7 +36,7 @@
             </div>
 
             {{-- Last Job Filter (placeholder for future use) --}}
-            <div class="col-md-3">
+            <div class="col-md-3 d-none">
                 <label class="form-label mb-1">Last Job</label>
                 <select name="job_filter" class="form-select">
                     <option value="">Any time</option>
@@ -46,7 +46,7 @@
                 </select>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-2 d-none">
                 <button class="btn btn-secondary w-100">Apply</button>
             </div>
         </form>
