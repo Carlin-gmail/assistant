@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeftoverController;
 use App\Http\Controllers\TransferTypeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 
 // Route::get('/profile', [ProfileController::class, 'edit'])
 //     ->name('profile');
@@ -109,10 +110,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/leftovers/create-global', [LeftoverController::class, 'createGlobal'])
     ->name('leftovers.create-global');
 
-
-
-
-
+    // SETTINGS
+    Route::get('/settings', function () {
+        return view('settings.index');
+    })->middleware('auth')->name('settings.index');
 
     /*
     |--------------------------------------------------------------------------
@@ -149,6 +150,13 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/profile', [ProfileController::class, 'destroy'])
             ->name('profile.destroy');
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Users
+    |-------------------------------------------------------------------------
+    */
+    Route::resource('/user', UserController::class);
 });
 
 
