@@ -3,7 +3,7 @@
 
         {{-- Brand --}}
         <a href="{{ route('dashboard') }}" class="text-white fw-bold text-decoration-none">
-            Carlos's Assistant
+            GG - Heat Press Department
         </a>
 
         {{-- Mobile toggle --}}
