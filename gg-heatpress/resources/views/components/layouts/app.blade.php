@@ -21,7 +21,7 @@
     <div class="min-vh-100 d-flex flex-column">
 
         <!-- KEEP EXACTLY AS IS -->
-        <livewire:layout.navigation />
+        {{-- <livewire:layout.navigation /> --}}
         <x-layouts.top-menu />
 
 
