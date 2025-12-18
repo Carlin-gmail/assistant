@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCustomerRequest;
 
 class CustomerController extends Controller
 {
@@ -36,29 +37,13 @@ class CustomerController extends Controller
     /**
      * Store the new customer.
      */
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request)
     {
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'nullable|email',
-            'phone'   => 'nullable|string',
-            'address' => 'nullable|string',
-            'account_number' => 'nullable|integer',
-            'city'    => 'nullable|string',
-            'state'   => 'nullable|string',
-            'notes'   => 'nullable|string',
-        ]);
 
-        // dd($validated);
-        if($validated['account_number'] === null) {
-            return redirect()
-                ->back()
-                ->withErrors(['account_number' => 'Account number is required.']);  // This is the error message
-        }
-        Customer::create($validated);
+        $customer = Customer::create($request->validated());
 
         return redirect()
-            ->route('customers.index')
+            ->route('customers.show', $customer)
             ->with('success', 'Customer created.');
     }
 

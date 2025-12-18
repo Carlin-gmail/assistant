@@ -88,10 +88,10 @@ class BagController extends Controller
         ]);
         // dd($validated);
 
-        $this->bagService->create($validated);
+        $bag = $this->bagService->create($validated);
 
         return redirect()
-            ->route('customers.show', $validated['customer_id'])
+            ->route('bags.show', $bag)
             ->with('success', 'Bag created successfully.');
     }
 

@@ -73,12 +73,12 @@
 
                 <tbody>
 
-                @if(isset($groups) && $groups->count())
+                @if(isset($leftovers) && $leftovers->count())
 
-                    @foreach($groups as $group)
+                    @foreach($leftovers as $leftover)
 
                         @php
-                            $tint = $group['expires_in_weeks'] <= 2
+                            $tint = $leftover['expires_in_weeks'] <= 2
                                 ? 'background:#ffe5e5;'
                                 : '';
                         @endphp
@@ -88,44 +88,44 @@
                             {{-- PREVIEW --}}
                             <td>
                                 <div class="ratio ratio-1x1 bg-light border rounded
-                                            d-flex align-items-center justify-content-center">
-                                    <span class="text-muted small">Preview</span>
+                                    d-flex align-items-center justify-content-center">
+                                    <img src="{{ asset('storage/' . $leftover->image_path) }}" alt="">
                                 </div>
                             </td>
 
                             {{-- CUSTOMER --}}
-                            <td>{{ $group['customer']->name }}</td>
+                            <td>{{ $leftover['customer']->name }}</td>
 
                             {{-- BAG --}}
                             <td>
-                                <a href="{{ route('bags.show', $group['bag']->id) }}">
-                                    {{ $group['bag']->bag_number }}.{{ $group['bag']->bag_index }}
+                                <a href="{{ route('bags.show', $leftover['bag']->id) }}">
+                                    {{ $leftover['bag']->bag_number }}.{{ $leftover['bag']->bag_index }}
                                 </a>
                             </td>
 
                             {{-- LOCATION --}}
-                            <td>{{ $group['location'] }}</td>
+                            <td>{{ $leftover['location'] }}</td>
 
                             {{-- SIZE --}}
-                            <td>{{ $group['size'] ?? '—' }}</td>
+                            <td>{{ $leftover['size'] ?? '—' }}</td>
 
                             {{-- TYPE --}}
-                            <td>{{ $group['type']?->name ?? '—' }}</td>
+                            <td>{{ $leftover['type']?->name ?? '—' }}</td>
 
                             {{-- QTY --}}
-                            <td><strong>{{ $group['quantity'] }}</strong></td>
+                            <td><strong>{{ $leftover['quantity'] }}</strong></td>
 
                             {{-- EXPIRES --}}
                             <td>
-                                @if($group['expires_in_weeks'] <= 0)
+                                @if($leftover['expires_in_weeks'] <= 0)
                                     <span class="badge bg-danger">Expired</span>
-                                @elseif($group['expires_in_weeks'] <= 2)
+                                @elseif($leftover['expires_in_weeks'] <= 2)
                                     <span class="badge bg-warning text-dark">
-                                        {{ $group['expires_in_weeks'] }} w
+                                        {{ $leftover['expires_in_weeks'] }} w
                                     </span>
                                 @else
                                     <span class="badge bg-success">
-                                        {{ $group['expires_in_weeks'] }} w
+                                        {{ $leftover['expires_in_weeks'] }} w
                                     </span>
                                 @endif
                             </td>
@@ -133,7 +133,7 @@
                             {{-- ACTIONS --}}
                             <td class="text-end">
 
-                                <a href="{{ route('bags.show', $group['bag']->id) }}"
+                                <a href="{{ route('bags.show', $leftover['bag']->id) }}"
                                    class="btn btn-sm btn-outline-primary">
                                     View Bag
                                 </a>
@@ -156,7 +156,7 @@
                                 <div class="modal-content">
 
                                     <form method="POST"
-                                          action="{{ route('leftovers.consume', $group['bag']->id) }}">
+                                          action="{{ route('leftovers.consume', $leftover['bag']->id) }}">
                                         @csrf
 
                                         <div class="modal-header">
@@ -170,7 +170,7 @@
                                                    name="quantity"
                                                    class="form-control"
                                                    min="1"
-                                                   max="{{ $group['quantity'] }}"
+                                                   max="{{ $leftover['quantity'] }}"
                                                    required>
                                         </div>
 

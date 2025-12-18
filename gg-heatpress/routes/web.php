@@ -8,6 +8,7 @@ use App\Http\Controllers\LeftoverController;
 use App\Http\Controllers\TransferTypeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FeedbackController;
 
 // Route::get('/profile', [ProfileController::class, 'edit'])
 //     ->name('profile');
@@ -83,6 +84,16 @@ Route::middleware(['auth'])->group(function () {
             ->name('consume');
 
     });
+
+    // Feedbacks management
+
+    Route::prefix('feedbacks')->name('feedbacks.')->group(function () {
+
+        // List feedbacks
+        Route::get('/', [FeedbackController::class, 'index'])
+            ->name('index');
+    });
+
 
     // Global leftovers inventory
 

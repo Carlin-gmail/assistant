@@ -24,3 +24,11 @@ mobileLinks.forEach(link => {
 
 //-------------------------------------------
 //-------------------------------------------
+    function openImageModal(id) {
+        const modal = document.querySelector(id).addEventListener("click", function(){
+            alert("clicked");
+        });
+    }
+
+
+// alert("script loaded");

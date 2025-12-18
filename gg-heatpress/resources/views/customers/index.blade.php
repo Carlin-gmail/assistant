@@ -70,9 +70,13 @@
                     <tbody>
                         @foreach ($customers as $customer)
                             <tr>
-                                <td>{{ $customer->name }}</td>
+                                <td>
+                                    <a href="{{ route('customers.show', $customer) }}" class="">{{ $customer->name }}</a>
+                                </td>
 
-                                <td class="text-muted">{{ $customer->account_number_accessor }}</td>
+                                <td class="text-muted">
+                                    <a href="{{ route('customers.show', $customer) }}" class="">{{ $customer->account_number_accessor }}</a>
+                                </td>
 
                                 <td class="text-muted small">
                                     {{ \Illuminate\Support\Str::limit($customer->notes, 40) }}

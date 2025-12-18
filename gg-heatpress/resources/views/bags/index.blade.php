@@ -85,7 +85,7 @@
 
                                 {{-- SUBCATEGORY --}}
                                 <td>
-                                    {{ $bag->subcategory ?: '—' }}
+                                    <a href="{{ route('bags.show', $bag) }}" class="">{{ $bag->subcategory ?: '—' }}</a>
                                 </td>
 
                                 {{-- NOTES --}}
