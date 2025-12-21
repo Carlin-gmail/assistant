@@ -17,6 +17,7 @@
             <div class="card-body">
 
                 <p><strong>ID:</strong> {{ $customer->id }}</p>
+                <p class=""><strong>Account Number: </strong> {{ $customer->account_number ?? '—' }}</p>
                 <p><strong>Email:</strong> {{ $customer->email ?? '—' }}</p>
                 <p><strong>Phone:</strong> {{ $customer->phone ?? '—' }}</p>
                 <p><strong>Address:</strong> {{ $customer->address ?? '—' }}</p>

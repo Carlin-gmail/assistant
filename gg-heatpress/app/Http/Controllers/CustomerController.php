@@ -26,10 +26,11 @@ class CustomerController extends Controller
         $customers = Customer::query()
             ->when($search, fn($q) =>
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%")
+                  ->orWhere('account_number', 'like', "%{$search}%")
             )
             ->orderBy('name')
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         return view('customers.index', compact('customers', 'search'));
     }
@@ -110,16 +111,16 @@ class CustomerController extends Controller
     /**
      * Search route for AJAX or page.
      */
-    public function search(Request $request)
-    {
-        $query = $request->input('query');
+    // public function search(Request $request)
+    // {
+    //     dd('searching');
+    //     $query = $request->input('query');
 
-        $results = Customer::where('name', 'like', "%{$query}%")
-            ->orWhere('id', 'like', "%{$query}%")
-            ->get();
+    //     $results = Customer::where('name', 'like', "%{$query}%")
+    //         ->paginate(3);
 
-        return view('customers.search-results', compact('results', 'query'));
-    }
+    //     return view('customers.search-results', compact('results', 'query'));
+    // }
 
     public function saveBatchCsv(Request $request){
 

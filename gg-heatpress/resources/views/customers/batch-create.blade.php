@@ -27,7 +27,7 @@
                         name="raw_text"
                         rows="16"
                         class="form-control @error('raw_text') is-invalid @enderror"
-                        placeholder="Paste CSV, TSV, or raw customer text here...">{{ old('raw_text') }}</textarea>
+                        placeholder="Paste TSV, or raw customer text here...">{{ old('raw_text') }}</textarea>
 
                     @error('raw_text')
                         <small class="text-danger">{{ $message }}</small>
@@ -37,8 +37,8 @@
                 {{-- HELP TEXT --}}
                 <div class="alert alert-secondary small">
                     <strong>Tip:</strong><br>
-                    • One customer per line is recommended<br>
-                    • This can be CSV, copied spreadsheet data, or plain text<br>
+                    • One customer per line<br>
+                    • This be TSV, copied spreadsheet data<br>
                     • Parsing rules will be applied on submit
                 </div>
 

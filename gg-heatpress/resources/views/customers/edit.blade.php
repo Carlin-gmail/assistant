@@ -32,6 +32,12 @@
                                value="{{ $customer->phone }}">
                     </div>
 
+                    <div class="">
+                        <label for="account_number" class="form-label fw-bold">Account Number</label>
+                        <input type="text   " class="form-control" name="account_number"
+                               value="{{ $customer->account_number }}">
+                    </div>
+
                     {{-- Address --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold">Address</label>

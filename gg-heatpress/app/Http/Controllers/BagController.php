@@ -80,16 +80,18 @@ class BagController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        $validated = $request->validate([
+            $validated = $request->validate([
             'bag_number' => 'required|exists:customers,account_number',
             'customer_id' => 'required|exists:customers,id',
             'subcategory' => 'nullable|string',
             'notes'       => 'nullable|string',
         ]);
-        // dd($validated);
 
-        $bag = $this->bagService->create($validated);
-
+        if(isset($validated)) {
+            $bag = $this->bagService->create($validated);
+        } else {
+            dd('no validated data');
+        }
         return redirect()
             ->route('bags.show', $bag)
             ->with('success', 'Bag created successfully.');

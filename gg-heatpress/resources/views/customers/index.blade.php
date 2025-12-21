@@ -4,7 +4,7 @@
 
         {{-- HEADER --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="mb-0">Customers</h1>
+            <h1 class="mb-0"><b class="">Customers</b></h1>
 
             <div class="">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCustomerModal">
@@ -26,7 +26,9 @@
                        name="search"
                        value="{{ request('search') }}"
                        class="form-control"
-                       placeholder="Search by name">
+                       placeholder="Search by name or bag number"
+                       autofocus
+                       >
             </div>
 
             {{-- Sort --}}
@@ -60,7 +62,7 @@
         <div class="card">
             <div class="card-body p-0">
 
-                <table class="table table-striped mb-0">
+                <table class="table table-striped table-hover mb-0">
                     <thead>
                         <tr>
                             <th>Name</th>
