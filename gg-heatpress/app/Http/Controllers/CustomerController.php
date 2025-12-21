@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCustomerRequest;
+use App\Livewire\Actions\Logout;
+use App\Services\CreateCsvService;
+use App\Http\Requests\TextToCsvRequest;
 
 class CustomerController extends Controller
 {
+    protected $csvService;
+    public function __construct(CreateCsvService $csvService){
+        $this->csvService = $csvService;
+    }
+
     /**
      * List all customers.
      */
@@ -111,5 +119,30 @@ class CustomerController extends Controller
             ->get();
 
         return view('customers.search-results', compact('results', 'query'));
+    }
+
+    public function saveBatchCsv(Request $request){
+
+        //Get the array from text
+        $arr = $this->csvService->textToArray($request->input('raw_text'));
+
+        //Normalize the array to match 4 columns
+        $newArr = array_map( function($item){
+            return [
+                'name' => $item[0] ?? '-',
+                'account_number' => $item[1] ?? null,
+                'hp_bag_number' => $item[2] ?? null,
+                'notes' => $item[3] ?? null,
+            ];
+        }, $arr);
+
+        foreach($newArr as $eachRegistry){
+            Customer::create($eachRegistry);
+        }
+
+        return redirect()
+        ->route('customers.index')
+        ->with('success', 'CSV data processed.');
+
     }
 }

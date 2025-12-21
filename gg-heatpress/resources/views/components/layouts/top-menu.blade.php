@@ -42,6 +42,8 @@
                 <li><a class="text-white text-decoration-none" href="{{ route('transfer-types.index') }}">Settings</a></li>
             </ul>
 
+            <a href="" class="">Logout</a>
+
             <a class="btn btn-primary w-100"
                href="{{ route('bags.index') }}">
                 + Add Leftover

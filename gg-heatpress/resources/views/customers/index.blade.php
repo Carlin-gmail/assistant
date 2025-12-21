@@ -6,9 +6,14 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="mb-0">Customers</h1>
 
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCustomerModal">
-                + New Customer
-            </button>
+            <div class="">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCustomerModal">
+                    + New Customer
+                </button>
+                <a href="{{ route('customers.batch-create') }}" class="btn btn-danger">
+                    + Customer/batch
+                </a>
+            </div>
         </div>
 
         {{-- SEARCH + FILTER BAR --}}

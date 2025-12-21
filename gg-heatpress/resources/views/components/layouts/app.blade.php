@@ -44,9 +44,5 @@
         </main>
 
     </div>
-
-    <script>
-        console.log('Hello world')
-    </script>
 </body>
 </html>

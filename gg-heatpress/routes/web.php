@@ -9,9 +9,22 @@ use App\Http\Controllers\TransferTypeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FeedbackController;
+use App\Livewire\Actions\Logout;
 
 // Route::get('/profile', [ProfileController::class, 'edit'])
 //     ->name('profile');
+
+Route::get('/logout', Logout::class)->name('logout');
+
+// CSV generation routes
+Route::Post('/csv', [CustomerController::class, 'saveBatchCsv'])->name('csv.save');
+
+Route::get('/customers/batch-create', function () {
+    return view('customers.batch-create');
+})->name('customers.batch-create');
+
+Route::post('/customers/store-batch', [CustomerController::class, 'storeBatch'])
+    ->name('customers.store-batch');
 
 Route::get('/js', fn()=>
     view('delete-me.learningJS'));

@@ -79,7 +79,7 @@
                                 {{-- CUSTOMER --}}
                                 <td>
                                     <a href="{{ route('customers.show', $bag->customer_id) }}">
-                                        {{ $bag->customer->name }}
+                                        {{ $bag->customer->name ?? 'none'}}
                                     </a>
                                 </td>
 
