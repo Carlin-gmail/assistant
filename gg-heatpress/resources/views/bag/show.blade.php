@@ -70,7 +70,7 @@
                                                 class="img-fluid rounded"
                                                 alt="Preview">
                                         @else
-                                            <span class="text-muted small m-auto">No Image</span>
+                                            <span class="text-muted small m-auto d-flex fw-bold p-2 text-center">No Image</span>
                                         @endif
 
                                         {{-- IMAGE PREVIEW MODAL --}}
@@ -97,9 +97,9 @@
 
                                 <td>
                                     @if ($leftover->expires_in_weeks > 2)
-                                        <span class="badge bg-success">{{ $leftover->expires_in_weeks }} w</span>
+                                        <span class="badge bg-success">{{ substr($leftover->expires_in_weeks, 0, 5) }} Weeks</span>
                                     @elseif ($leftover->expires_in_weeks > 0)
-                                        <span class="badge bg-warning text-dark">{{ $leftover->expires_in_weeks }} w</span>
+                                        <span class="badge bg-warning text-dark">{{ substr($leftover->expires_in_weeks, 0, 5) }} Weeks</span>
                                     @else
                                         <span class="badge bg-danger">Expired</span>
                                     @endif

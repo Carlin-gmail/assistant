@@ -1,4 +1,4 @@
-<nav class="bg-dark text-white">
+<nav class="bg-dark text-white sticky-top">
     <div class="container d-flex align-items-center justify-content-between py-2">
 
         {{-- Brand --}}

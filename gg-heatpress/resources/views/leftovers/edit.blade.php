@@ -7,7 +7,7 @@
             <h1 class="mb-0">Edit Leftover</h1>
 
             <a href="{{ route('bags.show', $bag ) }}" class="btn btn-secondary">
-                Back to Bag
+                Back
             </a>
         </div>
 

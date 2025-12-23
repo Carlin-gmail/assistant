@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    box-sizing: border-box;
+}
+
 /* Navbar animation */
 /* Mobile menu base state */
 .mobile-menu {
