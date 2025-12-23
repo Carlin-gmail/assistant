@@ -5,7 +5,7 @@
 
         {{-- HEADER --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Transfer Types</h1>
+            <h1 class="mb-0"><b class="">Transfer Types</b></h1>
 
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTypeModal">
                 + New Transfer Type

@@ -1,8 +1,7 @@
 <x-layouts.app title="Dashboard">
-
     <div class="container py-4">
 
-        <h1 class="mb-4">Dashboard</h1>
+        <h1 class="mb-4"><b class="">Dashboard</b></h1>
 
         <div class="row g-4">
 
@@ -44,7 +43,7 @@
 
         <h4>Quick Links</h4>
 
-        <div class="list-group">
+        <div class="list-group pt-2">
             <a href="{{ route('customers.index') }}" class="list-group-item list-group-item-action">Manage Customers</a>
             <a href="{{ route('bags.index') }}" class="list-group-item list-group-item-action">Manage Bags</a>
             <a href="{{ route('leftovers.index') }}" class="list-group-item list-group-item-action">Leftovers Inventory</a>

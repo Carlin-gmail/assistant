@@ -2,7 +2,7 @@
 
     <div class="container py-4">
 
-        <h1 class="mb-4">Edit Customer</h1>
+        <h1 class="mb-4"><b class="">Edit Customer</b></h1>
 
         <div class="card">
             <div class="card-body">

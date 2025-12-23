@@ -4,7 +4,7 @@
 
         {{-- HEADER --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="mb-0">Bags</h1>
+            <h1 class="mb-0"><b class="">Bags</b></h1>
 
             {{-- No "New Bag" button here because bags belong to a customer --}}
         </div>

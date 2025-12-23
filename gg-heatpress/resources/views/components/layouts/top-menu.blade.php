@@ -24,10 +24,15 @@
         </ul>
 
         {{-- Desktop action --}}
-        <a class="btn btn-primary d-none d-lg-inline-block"
+        <div class="">
+                    <a class="btn btn-primary d-none d-lg-inline-block"
            href="{{ route('bags.index') }}">
             + Add Leftover
         </a>
+        <a href="{{ route('logout') }}" class="btn btn-secondary">Logout</a>
+        </div>
+        <p>User: <span class="fw-bold">{{ auth()->user()->name }}</span></p>
+
     </div>
 
     {{-- Mobile menu --}}

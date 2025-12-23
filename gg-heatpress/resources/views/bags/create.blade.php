@@ -4,7 +4,7 @@
 
         {{-- HEADER --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Create Bag for {{ $customer->name }}</h1>
+            <h1 class="mb-0"><b class="">Create Bag for {{ $customer->name }}</b></h1>
 
             <a href="{{ route('customers.show', $customer) }}" class="btn btn-secondary">
                 Back

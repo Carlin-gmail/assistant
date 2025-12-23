@@ -15,9 +15,10 @@ class LeftoverController extends Controller
         private LeftoverService $service
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        $leftovers = Leftover::all();
+        $query =
+        $leftovers = Leftover::paginate(1);
         // dd($leftovers);
         return view('leftovers.index', [
             'leftovers' => $leftovers,

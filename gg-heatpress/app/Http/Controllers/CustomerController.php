@@ -84,10 +84,12 @@ class CustomerController extends Controller
             'email'   => 'nullable|email',
             'phone'   => 'nullable|string',
             'address' => 'nullable|string',
+            'account_number' => 'nullable|integer',
             'city'    => 'nullable|string',
             'state'   => 'nullable|string',
             'notes'   => 'nullable|string',
         ]);
+        // dd($validated);
 
         $customer->update($validated);
 

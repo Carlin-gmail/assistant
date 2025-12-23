@@ -28,11 +28,6 @@ class BagController extends Controller
                   );
         }
 
-        // subcategory filter
-        if ($subcategory = $request->input('subcategory')) {
-            $query->where('subcategory', 'like', "%{$subcategory}%");
-        }
-
         // sorting
         switch ($request->input('sort')) {
             case 'id_asc':
