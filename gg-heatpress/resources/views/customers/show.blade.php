@@ -50,7 +50,8 @@
                         @forelse ($bags as $bag)
 
                             <tr>
-                                <td><strong>{{ $bag->full_identifier }}</strong></td>
+                                <td><strong><a href="{{ route('bags.show', $bag) }}" class="">{{ $bag->full_identifier }}</a></strong>
+                                </td>
 
                                 <td>{{ $bag->subcategory ?? '—' }}</td>
 

@@ -62,24 +62,27 @@
 
                                 {{-- IMAGE PREVIEW --}}
                                 <td>
-                                    <div class="ratio ratio-1x1 bg-light border rounded">
+                                    <div class="ratio ratio-1x1 bg-light border rounded leftovers"
+                                    data-img="{{ asset('storage/'.$leftover->image_path) }}"
+                                    data-id="modal{{ $leftover->id }}"
+                                    id="img{{ $leftover->id }}" >
 
                                         @if($leftover->image_path)
                                             <img
                                                 src="{{ asset('storage/'.$leftover->image_path) }}"
-                                                class="img-fluid rounded"
-                                                alt="Preview">
+                                                class="img-fluid rounded open-modal"
+                                                alt="Preview"
+                                                data-full="{{ asset('storage/'.$leftover->image_path) }}"
+                                                alt="Thumbnail {{ $leftover->id }}"
+                                                >
                                         @else
                                             <span class="text-muted small m-auto d-flex fw-bold p-2 text-center">No Image</span>
                                         @endif
-
-                                        {{-- IMAGE PREVIEW MODAL --}}
-                                        {{-- <div class="image-modal" id="imageModal{{ $leftover->id }}"> --}}
-                                            {{-- <img src="{{ asset('storage/'.$leftover->image_path) }}" alt=""> --}}
-                                        {{-- </div> --}}
-
                                     </div>
+
+
                                 </td>
+                                {{-- IMAGE PREVIEW MODAL --}}
 
                                 <td id="location"><a href="#" class="" onclick="test()">{{ $leftover->location }}</a></td>
                                 <td class="small text-muted">{{ $leftover->description }}</td>
@@ -169,4 +172,9 @@
             </div>
         </div>
     </div>
+
+    {{-- IMAGE PREVIEW MODAL --}}
+    <x-custom.image-show-modal/>
+
+
     </x-layouts.app>

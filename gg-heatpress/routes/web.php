@@ -23,6 +23,8 @@ Route::get('/customers/batch-create', function () {
     return view('customers.batch-create');
 })->name('customers.batch-create');
 
+Route::get('/get-missing-bags',[CustomerController::class, 'getMissingBags'])->name('customers.get-missing-bags');
+
 Route::post('/customers/store-batch', [CustomerController::class, 'storeBatch'])
     ->name('customers.store-batch');
 

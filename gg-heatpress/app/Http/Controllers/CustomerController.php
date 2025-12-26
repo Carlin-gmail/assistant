@@ -8,6 +8,7 @@ use App\Http\Requests\StoreCustomerRequest;
 use App\Livewire\Actions\Logout;
 use App\Services\CreateCsvService;
 use App\Http\Requests\TextToCsvRequest;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -103,28 +104,20 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        $customer->delete();
+        if($customer->delete()){
+            Log::channel('auth')->info('Customer deleted', [
+                'user_name' => auth()->user()->name,
+                'customer_id' => $customer->id,
+                'customer_name' => $customer->name,
+            ]);
+        }
 
         return redirect()
             ->route('customers.index')
             ->with('success', 'Customer removed.');
     }
 
-    /**
-     * Search route for AJAX or page.
-     */
-    // public function search(Request $request)
-    // {
-    //     dd('searching');
-    //     $query = $request->input('query');
-
-    //     $results = Customer::where('name', 'like', "%{$query}%")
-    //         ->paginate(3);
-
-    //     return view('customers.search-results', compact('results', 'query'));
-    // }
-
-    public function saveBatchCsv(Request $request){
+     public function saveBatchCsv(Request $request){
 
         //Get the array from text
         $arr = $this->csvService->textToArray($request->input('raw_text'));
@@ -147,5 +140,26 @@ class CustomerController extends Controller
         ->route('customers.index')
         ->with('success', 'CSV data processed.');
 
+    }
+
+    public function getMissingBags(){
+        //define the comparison number
+        $i = 0;
+        $counter = 0;
+        $bagNumber = Customer::where('accountnumber', '!=', '0000')->pluck('account_number')->toArray();
+
+        foreach($bagNumber as $bag){
+            if(!in_array($i, $bagNumber)){
+                echo "isn't in array: $i <br>";
+                $counter++;
+            }
+            if($i <= 8500){
+                $i++;
+            }else{
+                break;
+            }
+        }
+        dd($counter);
+        return $bagNumber;
     }
 }

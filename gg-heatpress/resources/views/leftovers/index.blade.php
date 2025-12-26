@@ -15,38 +15,18 @@
     {{-- SEARCH + FILTER BAR --}}
     <form method="GET"
           action="{{ route('leftovers.search') }}"
-          class="row g-2 mb-4">
+          class="row mb-4">
 
         <div class="col-md-4">
             <input type="text"
                    name="search"
                    value="{{ $query['search'] ?? '' }}"
-                   class="form-control"
-                   placeholder="Search customer, bag, location, vendor...">
+                   class="form-control rounded border-1 shadow-sm"
+                   placeholder="Search customer, bag, location, vendor..."
+                   autofocus >
         </div>
 
-        <div class="col-md-3">
-            <select name="type" class="form-select">
-                <option value="">All Transfer Types</option>
-                @foreach($types as $type)
-                    <option value="{{ $type->id }}"
-                        {{ ($query['type'] ?? '') == $type->id ? 'selected' : '' }}>
-                        {{ $type->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <select name="expires" class="form-select">
-                <option value="">Expiration</option>
-                <option value="2">≤ 2 weeks</option>
-                <option value="4">≤ 4 weeks</option>
-                <option value="8">≤ 8 weeks</option>
-            </select>
-        </div>
-
-        <div class="col-md-2 d-grid">
+        <div class="col-md-2 d-grid d-none">
             <button class="btn btn-secondary">Apply</button>
         </div>
     </form>
@@ -59,7 +39,7 @@
 
                 <thead class="bg-light">
                     <tr>
-                        <th style="width:90px;">Preview</th>
+                        <th style="width:100px;">Preview</th>
                         <th>Customer</th>
                         <th>Bag</th>
                         <th>Location</th>
@@ -77,6 +57,8 @@
 
                     @foreach($leftovers as $leftover)
 
+
+                        {{-- There is logic here, needs to be taken off - fix - refactor --}}
                         @php
                             $tint = $leftover['expires_in_weeks'] <= 2
                                 ? 'background:#ffe5e5;'
@@ -88,7 +70,8 @@
                             {{-- PREVIEW --}}
                             <td>
                                 <div class="ratio ratio-1x1 bg-light border rounded
-                                    d-flex align-items-center justify-content-center">
+                                    d-flex align-items-center justify-content-center"
+                                    id="leftoverImg{{ $leftover->id }}">
                                     <img src="{{ asset('storage/' . $leftover->image_path) }}" alt="">
                                 </div>
                             </td>

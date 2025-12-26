@@ -18,7 +18,7 @@ class LeftoverController extends Controller
     public function index(Request $request)
     {
         $query =
-        $leftovers = Leftover::paginate(1);
+        $leftovers = Leftover::paginate();
         // dd($leftovers);
         return view('leftovers.index', [
             'leftovers' => $leftovers,
@@ -236,7 +236,7 @@ class LeftoverController extends Controller
         $leftover->update( $validated);
 
         return redirect()
-            ->route('bags.show', 1)
+            ->route('bags.show', $leftover->bag)
             ->with('success', 'Leftover updated successfully.');
     }
 }

@@ -13,6 +13,7 @@
                 <a href="{{ route('customers.batch-create') }}" class="btn btn-danger">
                     + Customer/batch
                 </a>
+                <a href="{{ route('customers.get-missing-bags') }}" class="btn btn-secondary">Get Missing bags</a>
             </div>
         </div>
 
