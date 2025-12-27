@@ -6,114 +6,72 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="mb-0"><b class="">Customers</b></h1>
 
+            {{-- Top buttons --}}
             <div class="">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCustomerModal">
-                    + New Customer
-                </button>
-                <a href="{{ route('customers.batch-create') }}" class="btn btn-danger">
-                    + Customer/batch
-                </a>
-                <a href="{{ route('customers.get-missing-bags') }}" class="btn btn-secondary">Get Missing bags</a>
+                <x-custom.button
+                    btnName="+ NewCustomer"
+                    btnColor="btn-primary"
+                    href="#"
+                />
+                <x-custom.button
+                    btnName=" + Customers/batch"
+                    btnColor="btn-danger"
+                    href="{{ route('customers.batch-create') }}"
+                />
+                <x-custom.button
+                    btnName="Getting Missing bags"
+                    btnColor="btn-secondary"
+                    href="{{ route('customers.get-missing-bags') }}"
+                />
             </div>
         </div>
 
         {{-- SEARCH + FILTER BAR --}}
-        <form method="GET" action="{{ route('customers.index') }}" class="row g-2 align-items-end mb-3">
 
-            {{-- Search --}}
-            <div class="col-md-4">
-                <label class="form-label mb-1">Search</label>
-                <input type="text"
-                       name="search"
-                       value="{{ request('search') }}"
-                       class="form-control"
-                       placeholder="Search by name or bag number"
-                       autofocus
-                       >
-            </div>
-
-            {{-- Sort --}}
-            <div class="col-md-3 d-none">
-                <label class="form-label mb-1">Sort</label>
-                <select name="sort" class="form-select">
-                    <option value="">Name A → Z</option>
-                    <option value="name_desc" {{ request('sort')=='name_desc' ? 'selected' : '' }}>Name Z → A</option>
-                    <option value="id_asc" {{ request('sort')=='id_asc' ? 'selected' : '' }}>Customer ID ↑</option>
-                    <option value="id_desc" {{ request('sort')=='id_desc' ? 'selected' : '' }}>Customer ID ↓</option>
-                </select>
-            </div>
-
-            {{-- Last Job Filter (placeholder for future use) --}}
-            <div class="col-md-3 d-none">
-                <label class="form-label mb-1">Last Job</label>
-                <select name="job_filter" class="form-select">
-                    <option value="">Any time</option>
-                    <option value="30"  {{ request('job_filter')=='30' ? 'selected' : '' }}>Last 30 days</option>
-                    <option value="90"  {{ request('job_filter')=='90' ? 'selected' : '' }}>Last 90 days</option>
-                    <option value="365" {{ request('job_filter')=='365' ? 'selected' : '' }}>Last 12 months</option>
-                </select>
-            </div>
-
-            <div class="col-md-2 d-none">
-                <button class="btn btn-secondary w-100">Apply</button>
-            </div>
-        </form>
+        {{-- Search - need fix: make the bag be ordered by number if the search is numeric --}}
+        <x-custom.search-bar
+            route="{{ route('customers.index') }}"
+            placeholder="Search by name or bag number"
+        />
 
         {{-- CUSTOMERS TABLE --}}
-        <div class="card">
-            <div class="card-body p-0">
+        {{ $customers->links() }}
+        @foreach ($customers as $customer)
+            <x-custom.card cardHeader="{{ $customer->name }}">
+                <div class="d-flex card-body" style="justify-content: space-between">
+                    {{-- ACCOUNT NUMBER --}}
+                    <p class="">
+                        <b class="">Bag Number:</b> {{ $customer->account_number_accessor }}
+                    </p>
 
-                <table class="table table-striped table-hover mb-0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Account</th>
-                            <th>Notes</th>
-                            <th>Bags</th>
-                            <th>Last Job</th>
-                            <th class="text-end" style="width:210px;">Actions</th>
-                        </tr>
-                    </thead>
+                    <p>
+                        <b>Bags:</b>
+                        {{ $customer->bags_count ?? '—' }}
+                    </p>
 
-                    <tbody>
-                        @foreach ($customers as $customer)
-                            <tr>
-                                <td>
-                                    <a href="{{ route('customers.show', $customer) }}" class="">{{ $customer->name }}</a>
-                                </td>
+                    <p>
+                        <b>Last Job:</b>
+                        {{ $customer->last_job_at
+                            ? $customer->last_job_at->format('Y-m-d')
+                            : '—' }}
+                    </p>
 
-                                <td class="text-muted">
-                                    <a href="{{ route('customers.show', $customer) }}" class="">{{ $customer->account_number_accessor }}</a>
-                                </td>
+                </div>
 
-                                <td class="text-muted small">
-                                    {{ \Illuminate\Support\Str::limit($customer->notes, 40) }}
-                                </td>
+                {{-- CARD FOOTER --}}
+                <div class="card-footer d-flex justify-content-end">
+                    {{-- NOTES --}}
+                    <p class="me-auto">
+                        <b class="">Notes:</b> {{ \Illuminate\Support\Str::limit($customer->notes, 40) ?: '—' }}
+                    </p>
+                    <x-custom.action_buttons :model="$customer" viewName="customers"/>
+                </div>
 
-                                <td>
-                                    {{ $customer->bags_count ?? '—' }}
-                                </td>
-
-                                <td class="text-muted">
-                                    {{ $customer->last_job_at
-                                        ? $customer->last_job_at->format('Y-m-d')
-                                        : '—' }}
-                                </td>
-
-                                <td class="text-end">
-                                    <x-custom.action_buttons :model="$customer" viewName="customers"/>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-
-                </table>
-
-            </div>
-        </div>
+            </x-custom.card>
+        @endforeach
 
         {{-- PAGINATION --}}
-        <div class="mt-3">
+        <div class="">
             {{ $customers->links() }}
         </div>
     </div>
@@ -121,6 +79,8 @@
     {{-- ===========================
          NEW CUSTOMER MODAL
        =========================== --}}
+
+    <!--
     <div class="modal fade" id="newCustomerModal" tabindex="-1">
         <div class="modal-dialog">
             <form action="{{ route('customers.store') }}" method="POST" class="modal-content">
@@ -135,7 +95,7 @@
 
                     <div class="mb-3">
                         {{-- <label class="form-label">Name *</label> --}}
-                        <input name="name" class="form-control" placeholder="Name" required>
+                        <input name="name" class="form-control" placeholder="Name">
                     </div>
 
                     <div class="mb-3">
@@ -165,7 +125,7 @@
 
                     <div class="mb-3">
                         {{-- <label class="form-label">Account Number</label> --}}
-                        <input type="text" name="account_number" class="form-control" placeholder="Account Number" required>
+                        <input type="text" name="account_number" class="form-control" placeholder="Account Number">
                     </div>
 
                     <div class="mb-3">
@@ -183,5 +143,6 @@
             </form>
         </div>
     </div>
+    -->
 
 </x-layouts.app>

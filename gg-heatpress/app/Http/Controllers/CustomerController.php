@@ -25,6 +25,7 @@ class CustomerController extends Controller
         $search = $request->input('search');
 
         $customers = Customer::query()
+            ->with('bags')
             ->when($search, fn($q) =>
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('account_number', 'like', "%{$search}%")

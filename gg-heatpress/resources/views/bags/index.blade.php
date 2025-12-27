@@ -73,7 +73,9 @@
                             <tr>
                                 {{-- BAG IDENTIFIER --}}
                                 <td>
-                                    <strong>{{ $bag->bag_number }}.{{ $bag->bag_index }}</strong>
+                                    <a href="{{ route('bags.show', $bag) }}" class="">
+                                        <strong>{{ $bag->bag_number }}.{{ $bag->bag_index }}</strong>
+                                    </a>
                                 </td>
 
                                 {{-- CUSTOMER --}}

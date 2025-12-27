@@ -46,7 +46,7 @@
                         <th>Size</th>
                         <th>Type</th>
                         <th>Qty</th>
-                        <th>Expires</th>
+                        <th>Expires in</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -70,9 +70,13 @@
                             {{-- PREVIEW --}}
                             <td>
                                 <div class="ratio ratio-1x1 bg-light border rounded
-                                    d-flex align-items-center justify-content-center"
-                                    id="leftoverImg{{ $leftover->id }}">
-                                    <img src="{{ asset('storage/' . $leftover->image_path) }}" alt="">
+                                d-flex align-items-center justify-content-center"
+                                id="leftoverImg{{ $leftover->id }}"
+                                >
+                                    <img src="{{ asset('storage/' . $leftover->image_path) }}" alt=""
+                                    class="open-modal"
+                                    data-full=" {{ asset('storage/'.$leftover->image_path) }}"
+                                    >
                                 </div>
                             </td>
 
@@ -108,7 +112,7 @@
                                     </span>
                                 @else
                                     <span class="badge bg-success">
-                                        {{ $leftover['expires_in_weeks'] }} w
+                                        {{ substr($leftover['expires_in_weeks'],0,5) }} Weeks
                                     </span>
                                 @endif
                             </td>
@@ -190,5 +194,8 @@
     </div>
 
 </div>
+<x-custom.image-show-modal>
+    <img src="" alt="Full preview" id="modalImage" class="border-3 border-dark img-fluid m-1">
+</x-custom.image-show-modal>
 
 </x-layouts.app>

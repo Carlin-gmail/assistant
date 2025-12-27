@@ -232,6 +232,7 @@ class LeftoverController extends Controller
             'size'             => 'nullable|string|max:255',
             'description'      => 'nullable|string',
             'quantity'         => 'required|integer|min:0',
+            'expires_at'      => 'required|date_format:Y-m-d',
         ]);
         $leftover->update( $validated);
 

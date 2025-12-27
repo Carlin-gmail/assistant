@@ -80,7 +80,6 @@
                                         @endif
                                     </div>
 
-
                                 </td>
                                 {{-- IMAGE PREVIEW MODAL --}}
 
@@ -174,7 +173,10 @@
     </div>
 
     {{-- IMAGE PREVIEW MODAL --}}
-    <x-custom.image-show-modal/>
+    <x-custom.image-show-modal>
+        <img src="" alt="Full preview" id="modalImage" class="border-3 border-dark img-fluid m-1">
+    </x-custom.image-show-modal>
+
 
 
     </x-layouts.app>
