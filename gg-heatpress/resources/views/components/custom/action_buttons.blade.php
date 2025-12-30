@@ -17,7 +17,7 @@
 <form action="{{ route("$viewName.destroy", $model) }}"
         method="POST"
         class="d-inline"
-        onsubmit="return confirm('Delete this customer and all related bags/leftovers?')">
+        onsubmit="return confirm('Are you sure you want to delete it?')">
     @csrf
     @method('DELETE')
     <button class="btn btn-sm btn-danger"

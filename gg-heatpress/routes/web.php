@@ -139,7 +139,9 @@ Route::middleware(['auth'])->group(function () {
     // SETTINGS
     Route::get('/settings', function () {
         return view('settings.index');
-    })->middleware('auth')->name('settings.index');
+    })->name('settings.index');
+
+    Route::get('settings/backup', [CustomerController::class, 'backup'])->name('settings.backup');
 
     /*
     |--------------------------------------------------------------------------

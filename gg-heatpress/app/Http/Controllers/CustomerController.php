@@ -147,20 +147,35 @@ class CustomerController extends Controller
         //define the comparison number
         $i = 0;
         $counter = 0;
-        $bagNumber = Customer::where('accountnumber', '!=', '0000')->pluck('account_number')->toArray();
+        $bagNumbers = [];
+        $numbers = Customer::where('account_number', '!=', 'null')
+        ->orderBy('name')
+        ->pluck('account_number')
+        ->toArray();
 
-        foreach($bagNumber as $bag){
-            if(!in_array($i, $bagNumber)){
-                echo "isn't in array: $i <br>";
-                $counter++;
+        // dd($numbers);
+
+        foreach($numbers as $bag){
+            if(!in_array($i, $numbers)){
+                $bagNumbers[] = $i;
             }
-            if($i <= 8500){
+            if($i <= max($numbers)){
                 $i++;
             }else{
                 break;
             }
         }
-        dd($counter);
-        return $bagNumber;
+        // dd($bagNumbers);
+        $counter = count($bagNumbers);
+        return view('customers.get-missing-bags', compact([
+            'counter',
+            'bagNumbers',
+        ]
+        ));
+    }
+
+    public function backup(){ // need fix: needs to add a bath method that prints just the ones that are new customer, if it was printed before skip them.
+        $customers = Customer::all();
+        return view('settings.backup', compact('customers'));
     }
 }

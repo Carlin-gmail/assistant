@@ -1,8 +1,5 @@
 <x-layouts.app title="Transfer Types">
 
-
-
-
     {{-- Top of page --}}
     <div class="container py-4">
 
@@ -10,9 +7,13 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0"><b class="">Transfer Types</b></h1>
 
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTypeModal">
-                + New Transfer Type
-            </button>
+            <x-custom.button
+            btnName="+ New Transfer Type"
+            href="{{ route('transfer-types.create') }}"
+            btnColor="btn-primary"
+            >
+            </x-custom.button>
+
         </div>
 
         {{-- TABLE --}}
@@ -63,74 +64,8 @@
     {{-- ========================================================= --}}
     {{-- NEW TRANSFER TYPE MODAL --}}
     {{-- ========================================================= --}}
-    <div class="modal fade" id="newTypeModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
 
-                <form method="POST" action="{{ route('transfer-types.store') }}">
-                    @csrf
 
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add New Transfer Type</h5>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input name="name" type="text" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Supplier</label>
-                            <input name="supplier" type="text" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Fabric Type</label>
-                            <input name="fabric_type" type="text" class="form-control">
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Temperature (°F)</label>
-                                <input name="temperature" type="number" class="form-control">
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Time (sec)</label>
-                                <input name="press_time" type="number" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Pressure</label>
-                            <input name="pressure" type="text" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Peel Type</label>
-                            <input name="peel_type" type="text" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Notes (optional)</label>
-                            <textarea name="notes" class="form-control" rows="2"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary">Save Type</button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-    </div>
 
 
 </x-layouts.app>

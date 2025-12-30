@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
+    const modalContent = document.getElementById('modalContent');
 
     document.addEventListener('click', (event) => {
         const trigger = event.target.closest('.open-modal');

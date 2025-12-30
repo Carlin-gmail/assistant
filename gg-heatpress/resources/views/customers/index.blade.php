@@ -34,7 +34,7 @@
             placeholder="Search by name or bag number"
         />
 
-        {{-- CUSTOMERS TABLE --}}
+        {{-- CUSTOMERS CARDS --}}
         {{ $customers->links() }}
         @foreach ($customers as $customer)
             <x-custom.card cardHeader="{{ $customer->name }}">

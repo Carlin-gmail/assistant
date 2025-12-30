@@ -32,7 +32,7 @@
 
 
             {{-- ===============================
-                 USER MANAGEMENT
+                USER MANAGEMENT
             =============================== --}}
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
@@ -45,6 +45,26 @@
                         <a href="{{ route('user.index') }}" class="btn btn-outline-primary">
                             Manage Users
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ===================================
+                PRINT BACKUP
+            =================================== --}}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Print backup book</h5>
+                        <p class="card-text text-muted">
+                            Print a physical backup of your customers bags.
+                        </p>
+
+                        <x-custom.button
+                            href="{{ route('settings.backup') }}"
+                            btnColor="btn btn-outline-primary"
+                            btnName="Print Backup" >
+                        </x-custom.button>
                     </div>
                 </div>
             </div>

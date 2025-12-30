@@ -223,6 +223,8 @@ class LeftoverController extends Controller
      */
     public function update(Request $request, Leftover $leftover)
     {
+        // dd($request->all());
+
 
         // dd($leftover);
         $validated = $request->validate([
@@ -234,6 +236,12 @@ class LeftoverController extends Controller
             'quantity'         => 'required|integer|min:0',
             'expires_at'      => 'required|date_format:Y-m-d',
         ]);
+
+        if($request->hasFile('image')){
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image_path'] = $imagePath;
+        }
+        // dd($validated);
         $leftover->update( $validated);
 
         return redirect()

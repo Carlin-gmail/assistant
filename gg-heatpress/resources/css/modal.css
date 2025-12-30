@@ -1,7 +1,7 @@
 /* === Modal overlay === */
 .modal {
     position: fixed;
-    inset: 0;
+    inset: 200;
 
     background-color: rgba(0, 0, 0, 0.7);
 

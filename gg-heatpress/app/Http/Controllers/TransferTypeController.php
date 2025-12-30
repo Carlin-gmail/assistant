@@ -21,6 +21,11 @@ class TransferTypeController extends Controller
         return view('transfer-types.index', compact('transferTypes'));
     }
 
+    public function create()
+    {
+        return view('transfer-types.create');
+    }
+
     /**
      * Store new type
      */
@@ -40,7 +45,7 @@ class TransferTypeController extends Controller
         $this->service->create($validated);
 
         return redirect()
-            ->back()
+            ->route('transfer-types.index')
             ->with('success', 'Transfer type created.');
     }
 

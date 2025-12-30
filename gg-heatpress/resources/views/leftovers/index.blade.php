@@ -13,23 +13,11 @@
     </div>
 
     {{-- SEARCH + FILTER BAR --}}
-    <form method="GET"
-          action="{{ route('leftovers.search') }}"
-          class="row mb-4">
+    <x-custom.search-bar
+        route="{{ route('leftovers.index') }}"
+        placeholder="Search comming soon..."
+    />
 
-        <div class="col-md-4">
-            <input type="text"
-                   name="search"
-                   value="{{ $query['search'] ?? '' }}"
-                   class="form-control rounded border-1 shadow-sm"
-                   placeholder="Search customer, bag, location, vendor..."
-                   autofocus >
-        </div>
-
-        <div class="col-md-2 d-grid d-none">
-            <button class="btn btn-secondary">Apply</button>
-        </div>
-    </form>
 
     {{-- TABLE --}}
     <div class="card">
@@ -56,8 +44,6 @@
                 @if(isset($leftovers) && $leftovers->count())
 
                     @foreach($leftovers as $leftover)
-
-
                         {{-- There is logic here, needs to be taken off - fix - refactor --}}
                         @php
                             $tint = $leftover['expires_in_weeks'] <= 2
@@ -85,8 +71,8 @@
 
                             {{-- BAG --}}
                             <td>
-                                <a href="{{ route('bags.show', $leftover['bag']->id) }}">
-                                    {{ $leftover['bag']->bag_number }}.{{ $leftover['bag']->bag_index }}
+                                <a href="#">
+                                    —
                                 </a>
                             </td>
 
@@ -108,7 +94,7 @@
                                     <span class="badge bg-danger">Expired</span>
                                 @elseif($leftover['expires_in_weeks'] <= 2)
                                     <span class="badge bg-warning text-dark">
-                                        {{ $leftover['expires_in_weeks'] }} w
+                                        {{ substr($leftover['expires_in_weeks'],0,5) }} Weeks
                                     </span>
                                 @else
                                     <span class="badge bg-success">
@@ -120,7 +106,7 @@
                             {{-- ACTIONS --}}
                             <td class="text-end">
 
-                                <a href="{{ route('bags.show', $leftover['bag']->id) }}"
+                                <a href=""
                                    class="btn btn-sm btn-outline-primary">
                                     View Bag
                                 </a>
@@ -143,7 +129,7 @@
                                 <div class="modal-content">
 
                                     <form method="POST"
-                                          action="{{ route('leftovers.consume', $leftover['bag']->id) }}">
+                                          action="">
                                         @csrf
 
                                         <div class="modal-header">

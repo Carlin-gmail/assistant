@@ -13,6 +13,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles()
 </head>
 
 <body style="background-color: #e4e4e4;">
@@ -44,5 +45,6 @@
         </main>
 
     </div>
+@livewireScripts()
 </body>
 </html>
