@@ -155,26 +155,4 @@
         <img src="" alt="Full preview" id="modalImage" class="border-3 border-dark img-fluid m-1">
     </x-custom.image-show-modal>
 
-    {{-- CONSUME MODAL --}}
-    <form class="modal-content"
-            method="POST"
-            action="{{ route('leftovers.consume', $bag) }}">
-        @csrf
-        <input type="hidden" name="leftover_id" value="{{ $leftover->id }}">
-        <div class="modal-header">
-            <h5 class="modal-title">Consume Leftover</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-            <input type="number" name="quantity"
-                    class="form-control" min="1" required>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button class="btn btn-danger">Consume</button>
-        </div>
-    </form>
-
-
-
     </x-layouts.app>
