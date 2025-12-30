@@ -11,7 +11,7 @@
                 <x-custom.button
                     btnName="+ NewCustomer"
                     btnColor="btn-primary"
-                    href="#"
+                    href="{{ route('customers.create') }}"
                 />
                 <x-custom.button
                     btnName=" + Customers/batch"
