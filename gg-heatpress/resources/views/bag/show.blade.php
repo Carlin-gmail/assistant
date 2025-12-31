@@ -22,7 +22,9 @@
         {{-- CUSTOMER INFO --}}
         <div class="mb-4">
             <h5 class="mb-1">Customer</h5>
-            <p class="text-muted mb-1"><strong>{{ $customer->name }}</strong></p>
+            <p class="text-muted mb-1">
+                <strong>{{ $customer->name }}</strong>
+            </p>
             <p class="text-muted small">
                 Customer ID: <strong>{{ $customer->id }}</strong>
             </p>
@@ -57,56 +59,72 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($leftovers as $leftover)
+                        @forelse ($leftovers as $leftover)
+
                             <tr @if($leftover->should_tint) style="background:#ffe5e5;" @endif>
 
                                 {{-- IMAGE PREVIEW --}}
                                 <td>
-                                    <div class="ratio ratio-1x1 bg-light border rounded leftovers"
-                                    data-img="{{ asset('storage/'.$leftover->image_path) }}"
-                                    data-id="modal{{ $leftover->id }}"
-                                    id="img{{ $leftover->id }}" >
-
+                                    <div class="ratio ratio-1x1 bg-light border rounded d-flex align-items-center justify-content-center"
+                                         style="width: 75px;">
                                         @if($leftover->image_path)
                                             <img
                                                 src="{{ asset('storage/'.$leftover->image_path) }}"
-                                                class="img-fluid rounded open-modal"
-                                                alt="Preview"
+                                                class="img-fluid rounded open-image-modal"
+                                                style="cursor:pointer;"
                                                 data-full="{{ asset('storage/'.$leftover->image_path) }}"
-                                                alt="Thumbnail {{ $leftover->id }}"
-                                                >
+                                            >
                                         @else
-                                            <span class="text-muted small m-auto d-flex fw-bold p-2 text-center">No Image</span>
+                                            <span class="text-muted small fw-bold text-center">
+                                                No Image
+                                            </span>
                                         @endif
                                     </div>
-
                                 </td>
-                                {{-- IMAGE PREVIEW MODAL --}}
 
-                                <td id="location"><a href="#" class="" onclick="test()">{{ $leftover->location }}</a></td>
-                                <td class="small text-muted">{{ $leftover->description }}</td>
-                                <td>{{ $leftover->size }}</td>
+                                {{-- LOCATION --}}
+                                <td>{{ $leftover->location }}</td>
 
-                                {{-- TYPE MODAL LINK --}}
+                                {{-- DESCRIPTION --}}
+                                <td class="small text-muted">
+                                    {{ $leftover->description ?? '—' }}
+                                </td>
+
+                                {{-- SIZE --}}
+                                <td>{{ $leftover->size ?? '—' }}</td>
+
+                                {{-- TRANSFER TYPE --}}
                                 <td>
-                                    <a href="#" data-bs-toggle="modal"
-                                       data-bs-target="#typeModal{{ $leftover->type->id }}">
-                                        {{ $leftover->type->name }}
-                                    </a>
+                                    @if ($leftover->type)
+                                        <a href="#"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#typeModal{{ $leftover->id }}">
+                                            {{ $leftover->type->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted small">—</span>
+                                    @endif
                                 </td>
 
+                                {{-- QUANTITY --}}
                                 <td>{{ $leftover->quantity }}</td>
 
+                                {{-- EXPIRATION --}}
                                 <td>
                                     @if ($leftover->expires_in_weeks > 2)
-                                        <span class="badge bg-success">{{ substr($leftover->expires_in_weeks, 0, 5) }} Weeks</span>
+                                        <span class="badge bg-success">
+                                            {{ round($leftover->expires_in_weeks, 1) }} weeks
+                                        </span>
                                     @elseif ($leftover->expires_in_weeks > 0)
-                                        <span class="badge bg-warning text-dark">{{ substr($leftover->expires_in_weeks, 0, 5) }} Weeks</span>
+                                        <span class="badge bg-warning text-dark">
+                                            {{ round($leftover->expires_in_weeks, 1) }} weeks
+                                        </span>
                                     @else
                                         <span class="badge bg-danger">Expired</span>
                                     @endif
                                 </td>
 
+                                {{-- ACTIONS --}}
                                 <td class="d-flex gap-1">
                                     <button class="btn btn-sm btn-outline-danger"
                                             data-bs-toggle="modal"
@@ -121,38 +139,113 @@
                                 </td>
                             </tr>
 
-                            {{-- TYPE MODAL --}}
-                            <div class="modal fade" id="typeModal{{ $leftover->type->id }}" tabindex="-1">
+                            {{-- TRANSFER TYPE MODAL --}}
+                            @if ($leftover->type)
+                                <div class="modal fade"
+                                     id="typeModal{{ $leftover->id }}"
+                                     tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">
+                                                    {{ $leftover->type->name }}
+                                                </h5>
+                                                <button class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="mb-2">
+                                                    <li>Temp: {{ $leftover->type->temperature ?? '—' }}°F</li>
+                                                    <li>Time: {{ $leftover->type->press_time ?? '—' }} sec</li>
+                                                    <li>Pressure: {{ $leftover->type->pressure ?? '—' }}</li>
+                                                    <li>Peel: {{ $leftover->type->peel_type ?? '—' }}</li>
+                                                </ul>
+
+                                                @if($leftover->type->notes)
+                                                    <p class="small text-muted">
+                                                        {{ $leftover->type->notes }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- CONSUME MODAL --}}
+                            <div class="modal fade"
+                                 id="consumeModal{{ $leftover->id }}"
+                                 tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">{{ $leftover->type->name }}</h5>
-                                            <button class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <ul>
-                                                <li>Temp: {{ $leftover->type->temperature }}°F</li>
-                                                <li>Time: {{ $leftover->type->press_time }} sec</li>
-                                                <li>Pressure: {{ $leftover->type->pressure }}</li>
-                                                <li>Peel: {{ $leftover->type->peel_type }}</li>
-                                            </ul>
-                                        </div>
+
+                                        <form method="POST"
+                                              action="{{ route('leftovers.consume', $bag) }}">
+                                            @csrf
+
+                                            <input type="hidden"
+                                                   name="leftover_id"
+                                                   value="{{ $leftover->id }}">
+
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Consume Leftovers</h5>
+                                                <button class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <label class="form-label">
+                                                    Quantity to remove
+                                                </label>
+                                                <input type="number"
+                                                       name="quantity"
+                                                       min="1"
+                                                       max="{{ $leftover->quantity }}"
+                                                       class="form-control"
+                                                       required>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Cancel
+                                                </button>
+                                                <button class="btn btn-danger">
+                                                    Consume FIFO
+                                                </button>
+                                            </div>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
 
-
-
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    No leftovers found in this bag.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
 
     {{-- IMAGE PREVIEW MODAL --}}
     <x-custom.image-show-modal>
-        <img src="" alt="Full preview" id="modalImage" class="border-3 border-dark img-fluid m-1">
+        <img src="" id="modalImage" class="img-fluid border rounded">
     </x-custom.image-show-modal>
 
-    </x-layouts.app>
+    {{-- IMAGE MODAL SCRIPT --}}
+    <script>
+        document.querySelectorAll('.open-image-modal').forEach(img => {
+            img.addEventListener('click', () => {
+                document.getElementById('modalImage').src = img.dataset.full;
+                new bootstrap.Modal(
+                    document.getElementById('imagePreviewModal')
+                ).show();
+            });
+        });
+    </script>
+
+</x-layouts.app>

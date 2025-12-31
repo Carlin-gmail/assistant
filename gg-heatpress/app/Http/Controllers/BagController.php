@@ -18,40 +18,9 @@ class BagController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Bag::with(['customer']);
+        $bags = Bag::with(['customer'])->paginate(20);
 
-        // search by customer name or bag number
-        if ($search = $request->input('search')) {
-            $query->where('bag_number', 'like', "%{$search}%")
-                  ->orWhereHas('customer', fn($c) =>
-                      $c->where('name', 'like', "%{$search}%")
-                  );
-        }
-
-        // sorting
-        switch ($request->input('sort')) {
-            case 'id_asc':
-                $query->orderBy('bag_number')->orderBy('bag_index');
-                break;
-
-            case 'id_desc':
-                $query->orderBy('bag_number', 'desc')->orderBy('bag_index', 'desc');
-                break;
-
-            case 'customer_desc':
-                $query->join('customers', 'bags.customer_id', '=', 'customers.id')
-                      ->orderBy('customers.name', 'desc')
-                      ->select('bags.*');
-                break;
-
-            default:
-                $query->join('customers', 'bags.customer_id', '=', 'customers.id')
-                      ->orderBy('customers.name', 'asc')
-                      ->select('bags.*');
-                break;
-        }
-
-        $bags = $query->paginate(20);
+        // $bag = $query->paginate(20);
 
         return view('bags.index', compact('bags'));
     }
@@ -95,14 +64,19 @@ class BagController extends Controller
     /**
      * Show bag + leftovers
      */
-    public function show(Bag $bag)
-    {
-        // $bag->load(['customer', 'leftovers.type']);
-        $customer = $bag->customer;
-        $leftovers = $bag->leftovers;
+public function show(Bag $bag)
+{
+    $bag->load([
+        'customer',
+        'leftovers.type'
+    ]);
 
-        return view('bag.show', compact('bag', 'customer', 'leftovers'));
-    }
+    return view('bag.show', [
+        'bag'       => $bag,
+        'customer'  => $bag->customer,
+        'leftovers' => $bag->leftovers,
+    ]);
+}
 
     /**
      * Edit

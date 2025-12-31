@@ -45,8 +45,9 @@
                     </p>
 
                     <p>
+                        {{-- @dump($customer) --}}
                         <b>Bags:</b>
-                        {{ $customer->bags_count ?? '—' }}
+                        {{ $customer->bags->count() }}
                     </p>
 
                     <p>

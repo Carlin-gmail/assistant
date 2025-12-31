@@ -18,11 +18,10 @@ class LeftoverController extends Controller
     public function index(Request $request)
     {
         $query =
-        $leftovers = Leftover::paginate();
+        $leftovers = Leftover::all();
         // dd($leftovers);
         return view('leftovers.index', [
             'leftovers' => $leftovers,
-            'query'     => null,
             'types'     => TransferType::all(),
             'bags'      => Bag::with('customer')->get(),
         ]);

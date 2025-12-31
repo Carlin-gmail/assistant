@@ -9,7 +9,6 @@ use App\Livewire\Actions\Logout;
 use App\Services\CreateCsvService;
 use App\Http\Requests\TextToCsvRequest;
 use Illuminate\Support\Facades\Log;
-
 class CustomerController extends Controller
 {
     protected $csvService;
@@ -24,7 +23,10 @@ class CustomerController extends Controller
     {
         $search = $request->input('search');
 
-        $customers = Customer::query()
+        $customers = Customer::with('bags')->paginate(20);
+
+        if($search){
+            $customers = Customer::query()
             ->with('bags')
             ->when($search, fn($q) =>
                 $q->where('name', 'like', "%{$search}%")
@@ -33,6 +35,7 @@ class CustomerController extends Controller
             ->orderBy('name')
             ->paginate(20)
             ->withQueryString();
+        }
 
         return view('customers.index', compact('customers', 'search'));
     }

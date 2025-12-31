@@ -46,7 +46,8 @@
                                name="subcategory"
                                value="{{ old('subcategory') }}"
                                class="form-control @error('subcategory') is-invalid @enderror"
-                               placeholder="Example: Football, Volunteers, Dance Team">
+                               placeholder="Example: Football, Volunteers, Dance Team"
+                               autofocus >
 
                         @error('subcategory')
                             <small class="text-danger">{{ $message }}</small>
