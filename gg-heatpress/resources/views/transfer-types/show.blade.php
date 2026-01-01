@@ -79,6 +79,17 @@
                         <strong>Peel Type:</strong>
                         {{ $transferType->peel_type ?? '—' }}
                     </li>
+
+                    <li>
+                        <strong>Link for reference</strong>
+                        <a
+                        class=""
+                        href="{{ $transferType->transfer_url ?? '—'}}"
+                        target="_blank"
+                        >
+                            <span class="text-primary">Visit official page</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

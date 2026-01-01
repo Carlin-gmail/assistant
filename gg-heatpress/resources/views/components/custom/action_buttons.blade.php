@@ -1,5 +1,5 @@
 {{-- View --}}
-<div class="d-flex gap-1">
+<div class="d-flex">
     <a href="{{ route("$viewName.show",  $model ) }}"
     style="width:4rem; padding:1px;"
     class="btn btn-sm btn-primary">

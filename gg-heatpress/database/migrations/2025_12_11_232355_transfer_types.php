@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('notes')->nullable();           // Any additional directions
 
             $table->date('last_update')->nullable();     // Forces workers to verify outdated info
+            $table->string(('transfer_url'))->nullable(); // Link to supplier page or PDF instructions
 
             $table->timestamps();
         });

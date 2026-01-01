@@ -40,6 +40,7 @@ class TransferTypeController extends Controller
             'pressure'    => 'nullable|string',
             'peel_type'   => 'nullable|string',
             'notes'       => 'nullable|string',
+            'transfer_url' => 'nullable|url',
         ]);
 
         $this->service->create($validated);
@@ -67,8 +68,9 @@ class TransferTypeController extends Controller
     /**
      * Update type
      */
-    public function update(Request $request, TransferType $type)
+    public function update(Request $request, TransferType $transferType)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'supplier'    => 'nullable|string',
             'fabric_type' => 'nullable|string',
@@ -77,12 +79,14 @@ class TransferTypeController extends Controller
             'pressure'    => 'nullable|string',
             'peel_type'   => 'nullable|string',
             'notes'       => 'nullable|string',
+            'transfer_url' => 'nullable|url',
         ]);
+        // dd($validated);
 
-        $this->service->update($type, $validated);
+        $this->service->update($transferType, $validated);
 
         return redirect()
-            ->back()
+            ->route('transfer-types.show', $transferType)
             ->with('success', 'Type updated.');
     }
 

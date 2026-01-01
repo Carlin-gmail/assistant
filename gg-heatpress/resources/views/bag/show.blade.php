@@ -70,9 +70,10 @@
                                         @if($leftover->image_path)
                                             <img
                                                 src="{{ asset('storage/'.$leftover->image_path) }}"
-                                                class="img-fluid rounded open-image-modal"
+                                                class="img-fluid rounded open-modal"
                                                 style="cursor:pointer;"
-                                                data-full="{{ asset('storage/'.$leftover->image_path) }}"
+                                                data-image="{{ asset('storage/'.$leftover->image_path) }}"
+                                                data-id="id{{ $leftover->id }}"
                                             >
                                         @else
                                             <span class="text-muted small fw-bold text-center">
@@ -126,9 +127,9 @@
 
                                 {{-- ACTIONS --}}
                                 <td class="d-flex gap-1">
-                                    <button class="btn btn-sm btn-outline-danger"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#consumeModal{{ $leftover->id }}">
+                                    <button class="btn btn-sm btn-outline-danger open-modal"
+                                            data-image=""
+                                            data-id="modal{{ $leftover->id}}" >
                                         Consume
                                     </button>
 
@@ -170,53 +171,6 @@
                                     </div>
                                 </div>
                             @endif
-
-                            {{-- CONSUME MODAL --}}
-                            <div class="modal fade"
-                                 id="consumeModal{{ $leftover->id }}"
-                                 tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-
-                                        <form method="POST"
-                                              action="{{ route('leftovers.consume', $bag) }}">
-                                            @csrf
-
-                                            <input type="hidden"
-                                                   name="leftover_id"
-                                                   value="{{ $leftover->id }}">
-
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Consume Leftovers</h5>
-                                                <button class="btn-close" data-bs-dismiss="modal"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <label class="form-label">
-                                                    Quantity to remove
-                                                </label>
-                                                <input type="number"
-                                                       name="quantity"
-                                                       min="1"
-                                                       max="{{ $leftover->quantity }}"
-                                                       class="form-control"
-                                                       required>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Cancel
-                                                </button>
-                                                <button class="btn btn-danger">
-                                                    Consume FIFO
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-
                         @empty
                             <tr>
                                 <td colspan="8" class="text-center text-muted py-4">
@@ -231,21 +185,44 @@
         </div>
     </div>
 
-    {{-- IMAGE PREVIEW MODAL --}}
+    {{-- CONSUME MODAL --}}
     <x-custom.image-show-modal>
-        <img src="" id="modalImage" class="img-fluid border rounded">
+
+        <div class="gap-3 p-3 text-center justify-center">
+            {{-- IMAGE PREVIEW MODAL --}}
+            <img src="" id="modalImage" class="img-fluid border rounded">
+
+            {{-- CONSUME FORM --}}
+            <form method="POST"
+                    action="{{ route('leftovers.consume', $bag) }}">
+                @csrf
+
+                <input type="hidden"
+                        name="leftover_id"
+                        value="{{ $leftover->id }}">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Consume Leftovers</h5>
+                </div>
+
+                <div class="modal-body">
+                    <label class="form-label">
+                        Quantity to remove
+                    </label>
+                    <input type="number"
+                            name="quantity"
+                            min="1"
+                            max="{{ $leftover->quantity }}"
+                            class="form-control rounded"
+                            required>
+                </div>
+
+                    <button class="btn btn-danger">
+                        Consume
+                    </button>
+                </div>
+            </form>
+        </div>
+
     </x-custom.image-show-modal>
-
-    {{-- IMAGE MODAL SCRIPT --}}
-    <script>
-        document.querySelectorAll('.open-image-modal').forEach(img => {
-            img.addEventListener('click', () => {
-                document.getElementById('modalImage').src = img.dataset.full;
-                new bootstrap.Modal(
-                    document.getElementById('imagePreviewModal')
-                ).show();
-            });
-        });
-    </script>
-
 </x-layouts.app>

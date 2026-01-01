@@ -20,6 +20,7 @@ class TransferType extends Model
         'peel_type',
         'notes',
         'last_update',
+        'transfer_url',
     ];
 
     protected $casts = [

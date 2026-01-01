@@ -1,4 +1,4 @@
-<div class="modal" id="imageModal">
+<div class="modal" id="{{ $id ?? 'modal' }}">
     <div class="">
             <div class="modal-content ">
                 {{ $slot }}

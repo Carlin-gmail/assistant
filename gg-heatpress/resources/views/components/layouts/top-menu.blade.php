@@ -18,7 +18,7 @@
             <li><a class="text-white text-decoration-none" href="{{ route('dashboard') }}">Dashboard</a></li>
             <li><a class="text-white text-decoration-none" href="{{ route('customers.index') }}">Customers</a></li>
             <li><a class="text-white text-decoration-none" href="{{ route('bags.index') }}">Bags</a></li>
-            <li><a class="text-white text-decoration-none" href="{{ route('leftovers.index') }}">Leftovers</a></li>
+            {{-- <li><a class="text-white text-decoration-none" href="{{ route('leftovers.index') }}">Leftovers</a></li> --}}
             <li><a class="text-white text-decoration-none" href="{{ route('transfer-types.index') }}">Transfer Types</a></li>
             <li><a class="text-white text-decoration-none" href="{{ route('settings.index') }}">Settings</a></li>
         </ul>

@@ -148,7 +148,6 @@ class CustomerController extends Controller
 
     public function getMissingBags(){
         //define the comparison number
-        $i = 0;
         $counter = 0;
         $bagNumbers = [];
         $numbers = Customer::where('account_number', '!=', 'null')
@@ -157,19 +156,29 @@ class CustomerController extends Controller
         ->toArray();
 
         // dd($numbers);
+        // Extract only the integers from the account numbers to check
+        $numbers = Customer::where('account_number', '!=', '0000')
+            ->pluck('account_number')
+            ->map(fn ($n) => (int) $n)
+            ->toArray();
 
-        foreach($numbers as $bag){
-            if(!in_array($i, $numbers)){
+        $missingNumbers = [];
+
+        // Define the range to check for missing numbers
+        $start = 0;          // or 0 / 1 if you prefer
+        $end   = max($numbers);
+
+        //Loop through the range and find missing numbers
+        for ($i = $start; $i <= $end; $i++) {
+            if (!in_array($i, $numbers)) {
                 $bagNumbers[] = $i;
             }
-            if($i <= max($numbers)){
-                $i++;
-            }else{
-                break;
-            }
         }
-        // dd($bagNumbers);
+
+        //get quantity of missing numbers
         $counter = count($bagNumbers);
+
+        // dd($bagNumbers);
         return view('customers.get-missing-bags', compact([
             'counter',
             'bagNumbers',

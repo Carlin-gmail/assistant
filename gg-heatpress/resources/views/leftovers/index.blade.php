@@ -20,163 +20,159 @@
 
 
     {{-- TABLE --}}
-    <div class="card">
-        <div class="card-body p-0" style="overflow-x:auto">
+        <table class="table table-striped mb-0">
 
-            <table class="table table-striped mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th style="width:100px;">Preview</th>
+                    <th>Customer</th>
+                    <th>Bag</th>
+                    <th>Location</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>Qty</th>
+                    <th>Expires in</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
 
-                <thead class="bg-light">
-                    <tr>
-                        <th style="width:100px;">Preview</th>
-                        <th>Customer</th>
-                        <th>Bag</th>
-                        <th>Location</th>
-                        <th>Size</th>
-                        <th>Type</th>
-                        <th>Qty</th>
-                        <th>Expires in</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
+            <tbody>
 
-                <tbody>
+            @if(isset($leftovers) && $leftovers->count())
 
-                @if(isset($leftovers) && $leftovers->count())
+                @foreach($leftovers as $leftover)
+                    {{-- There is logic here, needs to be taken off - fix - refactor --}}
+                    @php
+                        $tint = $leftover['expires_in_weeks'] <= 2
+                            ? 'background:#ffe5e5;'
+                            : '';
+                    @endphp
 
-                    @foreach($leftovers as $leftover)
-                        {{-- There is logic here, needs to be taken off - fix - refactor --}}
-                        @php
-                            $tint = $leftover['expires_in_weeks'] <= 2
-                                ? 'background:#ffe5e5;'
-                                : '';
-                        @endphp
+                    <tr style="{{ $tint }}">
 
-                        <tr style="{{ $tint }}">
-
-                            {{-- PREVIEW --}}
-                            <td>
-                                <div class="ratio ratio-1x1 bg-light border rounded
-                                d-flex align-items-center justify-content-center"
-                                id="leftoverImg{{ $leftover->id }}"
+                        {{-- PREVIEW --}}
+                        <td>
+                            <div class="ratio ratio-1x1 bg-light border rounded
+                            d-flex align-items-center justify-content-center"
+                            id="leftoverImg{{ $leftover->id }}"
+                            >
+                                <img src="{{ asset('storage/' . $leftover->image_path) }}" alt=""
+                                class="open-modal"
+                                data-image=" {{ asset('storage/'.$leftover->image_path) }}"
+                                data-id="id{{ $leftover->id }}"
                                 >
-                                    <img src="{{ asset('storage/' . $leftover->image_path) }}" alt=""
-                                    class="open-modal"
-                                    data-full=" {{ asset('storage/'.$leftover->image_path) }}"
-                                    >
-                                </div>
-                            </td>
+                            </div>
+                        </td>
 
-                            {{-- CUSTOMER --}}
-                            <td>{{ $leftover['customer']->name }}</td>
+                        {{-- CUSTOMER --}}
+                        <td>{{ $leftover['customer']->name }}</td>
 
-                            {{-- BAG --}}
-                            <td>
-                                <a href="#">
-                                    —
-                                </a>
-                            </td>
+                        {{-- BAG --}}
+                        <td>
+                            <a href="#">
+                                —
+                            </a>
+                        </td>
 
-                            {{-- LOCATION --}}
-                            <td>{{ $leftover['location'] }}</td>
+                        {{-- LOCATION --}}
+                        <td>{{ $leftover['location'] }}</td>
 
-                            {{-- SIZE --}}
-                            <td>{{ $leftover['size'] ?? '—' }}</td>
+                        {{-- SIZE --}}
+                        <td>{{ $leftover['size'] ?? '—' }}</td>
 
-                            {{-- TYPE --}}
-                            <td>{{ $leftover['type']?->name ?? '—' }}</td>
+                        {{-- TYPE --}}
+                        <td>{{ $leftover['type']?->name ?? '—' }}</td>
 
-                            {{-- QTY --}}
-                            <td><strong>{{ $leftover['quantity'] }}</strong></td>
+                        {{-- QTY --}}
+                        <td><strong>{{ $leftover['quantity'] }}</strong></td>
 
-                            {{-- EXPIRES --}}
-                            <td>
-                                @if($leftover['expires_in_weeks'] <= 0)
-                                    <span class="badge bg-danger">Expired</span>
-                                @elseif($leftover['expires_in_weeks'] <= 2)
-                                    <span class="badge bg-warning text-dark">
-                                        {{ substr($leftover['expires_in_weeks'],0,5) }} Weeks
-                                    </span>
-                                @else
-                                    <span class="badge bg-success">
-                                        {{ substr($leftover['expires_in_weeks'],0,5) }} Weeks
-                                    </span>
-                                @endif
-                            </td>
+                        {{-- EXPIRES --}}
+                        <td>
+                            @if($leftover['expires_in_weeks'] <= 0)
+                                <span class="badge bg-danger">Expired</span>
+                            @elseif($leftover['expires_in_weeks'] <= 2)
+                                <span class="badge bg-warning text-dark">
+                                    {{ substr($leftover['expires_in_weeks'],0,5) }} Weeks
+                                </span>
+                            @else
+                                <span class="badge bg-success">
+                                    {{ substr($leftover['expires_in_weeks'],0,5) }} Weeks
+                                </span>
+                            @endif
+                        </td>
 
-                            {{-- ACTIONS --}}
-                            <td class="text-end">
+                        {{-- ACTIONS --}}
+                        <td class="text-end">
 
-                                <a href=""
-                                   class="btn btn-sm btn-outline-primary">
-                                    View Bag
-                                </a>
+                            <a href="{{ route('bags.show', $leftover->bag ?? '0') }}" {{-- That part should be watched colosely, passing 0 as bag number to protect from break the app after deleting a bag doesn't look to be the best option --}}
+                                class="btn btn-sm btn-outline-primary">
+                                View Bag
+                            </a>
 
-                                <button class="btn btn-sm btn-outline-danger"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#consumeModal{{ $loop->index }}">
-                                    Consume
-                                </button>
-                            </td>
+                            <button class="btn btn-sm btn-outline-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#consumeModal{{ $loop->index }}">
+                                Consume
+                            </button>
+                        </td>
 
-                        </tr>
+                    </tr>
 
-                        {{-- CONSUME MODAL --}}
-                        <div class="modal fade"
-                             id="consumeModal{{ $loop->index }}"
-                             tabindex="-1">
+                    {{-- CONSUME MODAL --}}
+                    <div class="modal fade"
+                            id="consumeModal{{ $loop->index }}"
+                            tabindex="-1">
 
-                            <div class="modal-dialog">
-                                <div class="modal-content">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
 
-                                    <form method="POST"
-                                          action="">
-                                        @csrf
+                                <form method="POST"
+                                        action="">
+                                    @csrf
 
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Consume Leftovers</h5>
-                                            <button class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Consume Leftovers</h5>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
 
-                                        <div class="modal-body">
-                                            <label class="form-label">Quantity</label>
-                                            <input type="number"
-                                                   name="quantity"
-                                                   class="form-control"
-                                                   min="1"
-                                                   max="{{ $leftover['quantity'] }}"
-                                                   required>
-                                        </div>
+                                    <div class="modal-body">
+                                        <label class="form-label">Quantity</label>
+                                        <input type="number"
+                                                name="quantity"
+                                                class="form-control"
+                                                min="1"
+                                                max="{{ $leftover['quantity'] }}"
+                                                required>
+                                    </div>
 
-                                        <div class="modal-footer">
-                                            <button class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Cancel
-                                            </button>
-                                            <button class="btn btn-danger">
-                                                Consume FIFO
-                                            </button>
-                                        </div>
-                                    </form>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Cancel
+                                        </button>
+                                        <button class="btn btn-danger">
+                                            Consume FIFO
+                                        </button>
+                                    </div>
+                                </form>
 
-                                </div>
                             </div>
                         </div>
+                    </div>
 
-                    @endforeach
+                @endforeach
 
-                @else
-                    <tr>
-                        <td colspan="9"
-                            class="text-center py-4 text-muted">
-                            No leftovers found.
-                        </td>
-                    </tr>
-                @endif
+            @else
+                <tr>
+                    <td colspan="9"
+                        class="text-center py-4 text-muted">
+                        No leftovers found.
+                    </td>
+                </tr>
+            @endif
 
-                </tbody>
+            </tbody>
 
-            </table>
-
-        </div>
+        </table>
     </div>
 
 </div>

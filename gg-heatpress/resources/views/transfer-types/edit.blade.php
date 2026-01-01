@@ -88,15 +88,28 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="">
+                        <label class="form-label">Transfer Instructions URL</label>
+                        <div class="input-group mb-4">
+                            <span class="input-group-text">Link:</span>
+                            <input type="text"
+                                   name="transfer_url"
+                                   value="{{ old('transfer_url', $transferType->transfer_url) }}"
+                                   class="form-control"
+                                   placeholder="example.com/instructions.pdf">
+                        </div>
                     </div>
 
                     {{-- NOTES --}}
                     <div class="mb-4">
                         <label class="form-label">Notes</label>
                         <textarea name="notes"
-                                  rows="3"
-                                  class="form-control">{{ old('notes', $transferType->notes) }}</textarea>
+                            rows="3"
+                            class="form-control">{{ old('notes', $transferType->notes) }}
+                        </textarea>
                     </div>
+
 
                     {{-- ACTIONS --}}
                     <div class="d-flex justify-content-between">

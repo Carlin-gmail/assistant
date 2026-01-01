@@ -1,15 +1,19 @@
+// Modal activator
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('imageModal');
-    const modalContent = document.getElementById('modalContent');
+    const modal = document.getElementById('modal');
 
     document.addEventListener('click', (event) => {
         const trigger = event.target.closest('.open-modal');
+        const modalImage = document.getElementById('modalImage');
 
         // Open modal
         if (trigger) {
-            const fullImage = trigger.dataset.full;
+            const fullImage = trigger.dataset.image; // if have an image it will be here
+
             modalImage.src = fullImage;
-            modal.classList.add('is-open');
+            modal.classList.add('is-open')
+            modal.id = trigger.dataset.id;
+
             return;
         }
 

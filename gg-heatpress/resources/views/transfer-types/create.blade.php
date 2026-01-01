@@ -45,6 +45,16 @@
                     <input name="peel_type" type="text" class="form-control">
                 </div>
 
+                <div class="">
+                    <label class="form-label">Transfer Instructions URL</label>
+                    <div class="input-group mb-4">
+                        <span class="input-group-text">Link:</span>
+                        <input type="text"
+                                name="transfer_url"
+                                class="form-control"
+                                placeholder="example.com/instructions.pdf">
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label">Notes (optional)</label>
                     <textarea name="notes" class="form-control" rows="2"></textarea>
