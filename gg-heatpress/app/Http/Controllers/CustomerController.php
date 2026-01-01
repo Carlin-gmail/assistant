@@ -149,13 +149,7 @@ class CustomerController extends Controller
     public function getMissingBags(){
         //define the comparison number
         $counter = 0;
-        $bagNumbers = [];
-        $numbers = Customer::where('account_number', '!=', 'null')
-        ->orderBy('name')
-        ->pluck('account_number')
-        ->toArray();
-
-        // dd($numbers);
+             // dd($numbers);
         // Extract only the integers from the account numbers to check
         $numbers = Customer::where('account_number', '!=', '0000')
             ->pluck('account_number')

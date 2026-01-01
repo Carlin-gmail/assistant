@@ -37,9 +37,20 @@
             font-weight: bold;
         }
 
+        /* STRIPED ROWS */
+        tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
         .bag-number {
             font-weight: bold;
             white-space: nowrap;
+        }
+
+        /* DELETED STYLE */
+        .deleted {
+            color: #dc3545; /* bootstrap danger red */
+            text-decoration: line-through;
         }
 
         /* PRINT OPTIMIZATION */
@@ -63,6 +74,7 @@
         }
     </style>
 </head>
+
 <body class="container">
 
     <h1>Customer Bag Backup</h1>
@@ -82,12 +94,16 @@
 
         <tbody>
             @foreach ($customers as $customer)
+                @php
+                    $isDeleted = str_contains($customer->name, '(Deleted)');
+                @endphp
+
                 <tr>
-                    <td>
+                    <td class="{{ $isDeleted ? 'deleted' : '' }}">
                         {{ $customer->name }}
                     </td>
 
-                    <td class="bag-number">
+                    <td class="bag-number {{ $isDeleted ? 'deleted' : '' }}">
                         {{ $customer->account_number_accessor ?? '—' }}
                     </td>
                 </tr>
@@ -95,4 +111,5 @@
         </tbody>
     </table>
 
+</body>
 </x-layouts.app>
