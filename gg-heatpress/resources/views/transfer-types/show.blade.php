@@ -55,7 +55,7 @@
         {{-- PRESSING SETTINGS --}}
         <div class="card mb-4">
             <div class="card-header">
-                Pressing Directions
+                PRESSING SETTINGS
             </div>
 
             <div class="card-body">
@@ -92,20 +92,16 @@
                     </li>
                 </ul>
             </div>
-        </div>
 
-        {{-- NOTES --}}
-        <div class="card">
-            <div class="card-header">
-                Notes
-            </div>
-
-            <div class="card-body">
+            {{-- NOTES --}}
+            <div class="card-footer">
+                <strong>Notes: </strong>
                 <p class="mb-0 text-muted">
                     {{ $transferType->notes ?: 'No notes added.' }}
                 </p>
             </div>
         </div>
+
 
     </div>
 

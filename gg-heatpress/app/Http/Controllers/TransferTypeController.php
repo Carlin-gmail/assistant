@@ -17,8 +17,14 @@ class TransferTypeController extends Controller
      */
     public function index()
     {
-        $transferTypes = TransferType::orderBy('name')->get();
-        return view('transfer-types.index', compact('transferTypes'));
+        $transferTypes = TransferType::orderBy('name')
+        ->orderBy('name')
+        ->get();
+
+        $groups = TransferType::orderBy('supplier')->pluck('supplier')->unique();
+        // dd($groups);
+
+        return view('transfer-types.index', compact(['transferTypes', 'groups']));
     }
 
     public function create()
@@ -107,5 +113,16 @@ class TransferTypeController extends Controller
         // dd($transferType);
         $this->service->delete($transferType);
         return redirect()->back()->with('success', 'Transfer type deleted.');
+    }
+
+    public function search(Request $request){
+        $query = $request->input('search');
+
+        $transferTypes = TransferType::where('name',  'like',"%{$query}%")
+            ->orderBy('name')
+            ->get();
+
+        $groups = TransferType::orderBy('supplier')->pluck('supplier')->unique();
+        return view('transfer-types.index', compact(['transferTypes', 'groups']));
     }
 }

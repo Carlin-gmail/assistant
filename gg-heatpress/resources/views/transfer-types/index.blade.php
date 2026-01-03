@@ -1,71 +1,119 @@
 <x-layouts.app title="Transfer Types">
 
-    {{-- Top of page --}}
     <div class="container py-4">
 
-        {{-- HEADER --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0"><b class="">Transfer Types</b></h1>
+        {{-- PAGE HEADER --}}
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <h1 class="mb-0 fw-bold">Transfer Types</h1>
 
             <x-custom.button
-            btnName="+ New Transfer Type"
-            href="{{ route('transfer-types.create') }}"
-            btnColor="btn-primary"
-            >
-            </x-custom.button>
-
+                btnName="+ New Transfer Type"
+                href="{{ route('transfer-types.create') }}"
+                btnColor="btn-primary"
+            />
         </div>
 
-        {{-- TABLE --}}
-        <div class="">
-            <div class="card-header">Available Transfer Types</div>
+        {{-- SEARCH --}}
+        <div class="mb-4">
+            <x-custom.search-bar
+                route="{{ route('transfer-types.search') }}"
+                placeholder="Search transfer types..."
+            />
+        </div>
 
-            <div class="card-body p-0">
-                        @foreach ($transferTypes as $transferType)
-                            <div class="mt-3">
-                                <x-custom.card
-                                    cardHeader="{{$transferType->name}}">
+        {{-- SUPPLIER QUICK LINKS --}}
+        <div class="mb-4">
+            <span class="text-muted small me-2">Jump to supplier:</span>
+            @foreach($groups as $group)
+                <a href="#supplier-{{ Str::slug($group ?? 'none') }}">
+                    <span class="badge bg-secondary me-1">
+                        {{ $group ?? 'No Supplier' }}
+                    </span>
+                </a>
+            @endforeach
+        </div>
 
-                                    <div class="card-body d-flex" style="justify-content: space-between">
+        {{-- GROUPED TRANSFER TYPES --}}
+        @foreach($groups as $group)
+
+            <section id="supplier-{{ Str::slug($group ?? 'none') }}" class="mb-5">
+
+                {{-- GROUP HEADER --}}
+                <div class="border-bottom pb-2 mb-3">
+                    <h4 class="mb-0">
+                        {{ strToUpper($group ?? 'No Supplier')}}
+                    </h4>
+                </div>
+
+                <div class="row g-3">
+
+                    @foreach ($transferTypes as $transferType)
+                        @if($transferType->supplier === $group)
+
+                            <div class="col-12 col-md-6 col-xl-4">
+
+                                <x-custom.card cardHeader="{{ $transferType->name }}">
+
+                                    {{-- CARD BODY --}}
+                                    <div class="card-body">
+
+                                        <div class="row small">
+                                            <div class="col-6 mb-2">
+                                                <strong>Fabric</strong><br>
+                                                {{ $transferType->fabric_type ?? '—' }}
+                                            </div>
+
+                                            <div class="col-6 mb-2">
+                                                <strong>Peel</strong><br>
+                                                {{ $transferType->peel_type ?? '—' }}
+                                            </div>
+
+                                            <div class="col-6 mb-2">
+                                                <strong>Temperature</strong><br>
+                                                {{ $transferType->temperature ?? '—' }}
+                                            </div>
+
+                                            <div class="col-6 mb-2">
+                                                <strong>Press Time</strong><br>
+                                                {{ $transferType->press_time ?? '—' }}
+                                            </div>
+                                        </div>
 
                                         <div class="">
-                                            <b>Fabric:</b>
-                                            {{$transferType->fabric_type ?? '—'}}
+                                            <strong class="">Website:</strong>
+                                            @if($transferType->transfer_url)
+                                                <a href="{{ $transferType->transfer_url }}" target="_blank">
+                                                    {{ $group ? $group : '—' }}
+                                                </a>
+                                            @endif
                                         </div>
 
-                                        <div class=""><b>Temp:</b> {{$transferType->temperature}}</div>
-                                        <div class=""><b>Time:</b> {{ $transferType->press_time }}</div>
-                                        <div class=""><b>Peel:</b> {{$transferType->peel_type}}</div>
-
-                                        <div class="text-muted small mb-0">
-                                            <b>Last Updated:</b> {{ $transferType->last_update ?? '—' }}
+                                        <div class="text-muted small mt-2">
+                                            Last updated: {{ substr($transferType->last_update, 0 ,10) ?? '—' }}
                                         </div>
+
                                     </div>
-                                    <div class="card-footer">
+
+                                    {{-- CARD FOOTER --}}
+                                    <div class="card-footer text-end">
                                         <x-custom.action_buttons
                                             viewName="transfer-types"
                                             :model="$transferType"
                                         />
                                     </div>
+
                                 </x-custom.card>
 
-
                             </div>
-                        @endforeach
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                        @endif
+                    @endforeach
+
+                </div>
+            </section>
+
+        @endforeach
+
     </div>
-
-
-
-    {{-- ========================================================= --}}
-    {{-- NEW TRANSFER TYPE MODAL --}}
-    {{-- ========================================================= --}}
-
-
-
 
 </x-layouts.app>

@@ -22,14 +22,10 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'           => 'required|string|max:255',
-            'email'          => 'nullable|email|max:255',
-            'phone'          => 'nullable|string|max:50',
-            'address'        => 'nullable|string|max:255',
-            'account_number' => 'nullable|string|max:50',
-            'city'           => 'nullable|string|max:100',
-            'state'          => 'nullable|string|max:100',
-            'notes'          => 'nullable|string',
+            'bag_number' => 'required|exists:customers,account_number',
+            'customer_id' => 'required|exists:customers,id',
+            'subcategory' => 'nullable|string',
+            'notes'       => 'nullable|string',
         ];
     }
 }

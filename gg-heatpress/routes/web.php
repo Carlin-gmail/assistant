@@ -54,7 +54,6 @@ Route::middleware(['auth'])->group(function () {
     | Customers (full resource + search)
     |--------------------------------------------------------------------------
     */
-
     Route::resource('customers', CustomerController::class);
 
     // /customers/search (extra)
@@ -159,6 +158,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transfer-types/{type}/modal',
         [TransferTypeController::class, 'pressingSettingsModal']
     )->name('transfer-types.modal');
+
+    Route::get('/transfer-types-search', [TransferTypeController::class, 'search'])
+        ->name('transfer-types.search');
 
 
     /*
