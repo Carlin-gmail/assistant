@@ -14,6 +14,10 @@ use App\Livewire\Actions\Logout;
 // Route::get('/profile', [ProfileController::class, 'edit'])
 //     ->name('profile');
 
+
+// DELETE ME
+Route::get('/test', fn () => view('test.index'));
+
 Route::get('/logout', Logout::class)->name('logout');
 
 // CSV generation routes
