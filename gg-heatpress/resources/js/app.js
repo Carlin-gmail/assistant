@@ -1,5 +1,6 @@
 import 'bootstrap';
 import './leftovers';
+import './feedback';
 // Js for the main menu toggle
 const toggleBtn = document.querySelector('#menuToggle');
 const mobileMenu = document.querySelector('#mobileMenu');
