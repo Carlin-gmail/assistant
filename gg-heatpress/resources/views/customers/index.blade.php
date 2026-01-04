@@ -2,148 +2,107 @@
 
     <div class="container py-4">
 
-        {{-- HEADER --}}
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="mb-0"><b class="">Customers</b></h1>
+        {{-- PAGE HEADER --}}
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h1 class="fw-bold mb-1">Customers</h1>
+                <div class="text-muted small">
+                    Manage customer accounts and bag assignments
+                </div>
+            </div>
 
-            {{-- Top buttons --}}
-            <div class="">
+            {{-- ACTIONS --}}
+            <div class="d-flex flex-wrap gap-2">
                 <x-custom.button
-                    btnName="+ NewCustomer"
+                    btnName="+ New Customer"
                     btnColor="btn-primary"
                     href="{{ route('customers.create') }}"
                 />
+
                 <x-custom.button
-                    btnName=" + Customers/batch"
-                    btnColor="btn-danger"
+                    btnName="Batch Create"
+                    btnColor="btn-outline-danger"
                     href="{{ route('customers.batch-create') }}"
                 />
+
                 <x-custom.button
-                    btnName="Getting Missing bags"
-                    btnColor="btn-secondary"
+                    btnName="Missing Bags"
+                    btnColor="btn-outline-secondary"
                     href="{{ route('customers.get-missing-bags') }}"
                 />
             </div>
         </div>
 
-        {{-- SEARCH + FILTER BAR --}}
+        {{-- SEARCH --}}
+        <div class="mb-4">
+            <x-custom.search-bar
+                route="{{ route('customers.index') }}"
+                placeholder="Search by customer name or bag number"
+            />
+        </div>
 
-        {{-- Search - need fix: make the bag be ordered by number if the search is numeric --}}
-        <x-custom.search-bar
-            route="{{ route('customers.index') }}"
-            placeholder="Search by name or bag number"
-        />
-
-        {{-- CUSTOMERS CARDS --}}
-        {{ $customers->links() }}
-        @foreach ($customers as $customer)
-            <x-custom.card cardHeader="{{ $customer->name }}">
-                <div class="d-flex card-body" style="justify-content: space-between">
-                    {{-- ACCOUNT NUMBER --}}
-                    <p class="">
-                        <b class="">Bag Number:</b> {{ $customer->account_number_accessor }}
-                    </p>
-
-                    <p>
-                        {{-- @dump($customer) --}}
-                        <b>Bags:</b>
-                        {{ $customer->bags->count() }}
-                    </p>
-
-                    <p>
-                        <b>Last Job:</b>
-                        {{ $customer->last_job_at
-                            ? $customer->last_job_at->format('Y-m-d')
-                            : '—' }}
-                    </p>
-
-                </div>
-
-                {{-- CARD FOOTER --}}
-                <div class="card-footer d-flex justify-content-end">
-                    {{-- NOTES --}}
-                    <p class="me-auto">
-                        <b class="">Notes:</b> {{ \Illuminate\Support\Str::limit($customer->notes, 40) ?: '—' }}
-                    </p>
-                    <x-custom.action_buttons :model="$customer" viewName="customers"/>
-                </div>
-
-            </x-custom.card>
-        @endforeach
-
-        {{-- PAGINATION --}}
-        <div class="">
+        {{-- PAGINATION (TOP) --}}
+        <div class="mb-3">
             {{ $customers->links() }}
         </div>
-    </div>
 
-    {{-- ===========================
-         NEW CUSTOMER MODAL
-       =========================== --}}
+        {{-- CUSTOMER CARDS (ONE PER LINE) --}}
+        <div class="d-flex flex-column gap-3">
 
-    <!--
-    <div class="modal fade" id="newCustomerModal" tabindex="-1">
-        <div class="modal-dialog">
-            <form action="{{ route('customers.store') }}" method="POST" class="modal-content">
-                @csrf
+            @foreach ($customers as $customer)
 
-                <div class="modal-header">
-                    <h5 class="modal-title">+ New Customer</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <x-custom.card cardHeader="{{ $customer->name }}">
 
-                <div class="modal-body">
+                    {{-- CARD BODY --}}
+                    <div class="card-body">
 
-                    <div class="mb-3">
-                        {{-- <label class="form-label">Name *</label> --}}
-                        <input name="name" class="form-control" placeholder="Name">
+                        <div class="row small">
+
+                            <div class="col-12 col-md-4 mb-2">
+                                <strong>Bag Number</strong><br>
+                                {{ $customer->account_number_accessor }}
+                            </div>
+
+                            <div class="col-12 col-md-4 mb-2">
+                                <strong>Total Bags</strong><br>
+                                {{ $customer->bags->count() }}
+                            </div>
+
+                            <div class="col-12 col-md-4 mb-2">
+                                <strong>Last Job</strong><br>
+                                {{ $customer->last_job_at
+                                    ? $customer->last_job_at->format('Y-m-d')
+                                    : '—' }}
+                            </div>
+
+                        </div>
+
+                        <div class="text-muted small mt-2">
+                            <strong>Notes:</strong>
+                            {{ \Illuminate\Support\Str::limit($customer->notes, 100) ?: '—' }}
+                        </div>
+
                     </div>
 
-                    <div class="mb-3">
-                        {{-- <label class="form-label">Email</label> --}}
-                        <input name="email" type="email" class="form-control" placeholder="Email">
+                    {{-- CARD FOOTER --}}
+                    <div class="card-footer text-end">
+                        <x-custom.action_buttons
+                            :model="$customer"
+                            viewName="customers"
+                        />
                     </div>
 
-                    <div class="mb-3">
-                        {{-- <label class="form-label">Phone</label> --}}
-                        <input name="phone" class="form-control" placeholder="Phone">
-                    </div>
+                </x-custom.card>
 
-                    <div class="">
-                        <label class="form-label">Address</label>
-                        <input name="address" class="form-control" placeholder="Address">
-                    </div>
+            @endforeach
 
-                    <div class="">
-                        <label class="form-label">City</label>
-                        <input name="city" class="form-control" placeholder="City">
-                    </div>
-
-                    <div class="">
-                        <label class="form-label">State</label>
-                        <input name="state" class="form-control" placeholder="State">
-                    </div>
-
-                    <div class="mb-3">
-                        {{-- <label class="form-label">Account Number</label> --}}
-                        <input type="text" name="account_number" class="form-control" placeholder="Account Number">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Notes</label>
-                        <textarea name="notes" class="form-control" rows="4"></textarea>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-primary">Save</button>
-                </div>
-
-            </form>
         </div>
+
+        {{-- PAGINATION (BOTTOM) --}}
+        <div class="mt-4">
+            {{ $customers->links() }}
+        </div>
+
     </div>
-    -->
 
 </x-layouts.app>

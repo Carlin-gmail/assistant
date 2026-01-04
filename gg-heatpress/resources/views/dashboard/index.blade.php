@@ -1,53 +1,93 @@
 <x-layouts.app title="Dashboard">
+
     <div class="container py-4">
 
-        <h1 class="mb-4"><b class="">Dashboard</b></h1>
+        {{-- PAGE TITLE --}}
+        <div class="mb-4">
+            <h1 class="fw-bold mb-1">Dashboard</h1>
+            <div class="text-muted small">
+                Heat Press Department overview
+            </div>
+        </div>
 
-        <div class="row g-4">
+        {{-- KPI CARDS --}}
+        <div class="row g-3 mb-4">
 
-            {{-- Total Customers --}}
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center p-3">
-                    <h5>Customers</h5>
-                    <h2 class="fw-bold">{{ $customerCount }}</h2>
+            {{-- Customers --}}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="text-muted small">Customers</div>
+                    <div class="fs-2 fw-bold">{{ $customerCount }}</div>
                 </div>
             </div>
 
-            {{-- Total Bags --}}
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center p-3">
-                    <h5>Bags</h5>
-                    <h2 class="fw-bold">{{ $bagCount }}</h2>
+            {{-- Bags --}}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="text-muted small">Bags</div>
+                    <div class="fs-2 fw-bold">{{ $bagCount }}</div>
                 </div>
             </div>
 
-            {{-- Total Leftovers --}}
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center p-3">
-                    <h5>Leftovers</h5>
-                    <h2 class="fw-bold">{{ $leftoverCount }}</h2>
+            {{-- Leftovers --}}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 shadow-sm text-center p-3">
+                    <div class="text-muted small">Leftovers</div>
+                    <div class="fs-2 fw-bold">{{ $leftoverCount }}</div>
                 </div>
             </div>
 
-            {{-- Expiring in 2 weeks --}}
-            <div class="col-md-3">
-                <div class="card shadow-sm text-center p-3">
-                    <h5>Expiring Soon</h5>
-                    <h2 class="fw-bold text-danger">{{ $expiringSoon }}</h2>
+            {{-- Expiring Soon (attention card) --}}
+            <div class="col-6 col-md-3">
+                <div class="card h-100 border border-danger text-center p-3">
+                    <div class="text-danger small fw-semibold">Expiring Soon</div>
+                    <div class="fs-2 fw-bold text-danger">{{ $expiringSoon }}</div>
+                    <div class="small text-muted">Next 14 days</div>
                 </div>
             </div>
 
         </div>
 
-        <hr class="my-5">
+        {{-- ACTIONS --}}
+        <div class="row g-4">
 
-        <h4>Quick Links</h4>
+            {{-- Primary actions --}}
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header fw-semibold">
+                        Quick Actions
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="{{ route('bags.index') }}" class="list-group-item list-group-item-action">
+                            ➕ Add / Manage Bags
+                        </a>
+                        <a href="{{ route('leftovers.index') }}" class="list-group-item list-group-item-action">
+                            📦 View Leftovers Inventory
+                        </a>
+                        <a href="{{ route('transfer-types.index') }}" class="list-group-item list-group-item-action">
+                            🧪 Transfer Types Reference
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        <div class="list-group pt-2">
-            <a href="{{ route('customers.index') }}" class="list-group-item list-group-item-action">Manage Customers</a>
-            <a href="{{ route('bags.index') }}" class="list-group-item list-group-item-action">Manage Bags</a>
-            <a href="{{ route('leftovers.index') }}" class="list-group-item list-group-item-action">Leftovers Inventory</a>
-            <a href="{{ route('transfer-types.index') }}" class="list-group-item list-group-item-action">Transfer Types</a>
+            {{-- Secondary / Admin --}}
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header fw-semibold">
+                        Administration
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="{{ route('customers.index') }}" class="list-group-item list-group-item-action">
+                            👤 Manage Customers
+                        </a>
+                        <a href="{{ route('settings.index') }}" class="list-group-item list-group-item-action">
+                            ⚙️ System Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>

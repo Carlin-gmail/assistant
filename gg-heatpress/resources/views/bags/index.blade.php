@@ -2,20 +2,22 @@
 
     <div class="container py-4">
 
-        {{-- HEADER --}}
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="mb-0"><b class="">Bags</b></h1>
-
-            {{-- No "New Bag" button here because bags belong to a customer --}}
+        {{-- PAGE HEADER --}}
+        <div class="mb-4">
+            <h1 class="fw-bold mb-1">Bags</h1>
+            <div class="text-muted small">
+                All customer bags and leftover inventory
+            </div>
         </div>
 
-
-        {{-- SEARCH + FILTERS (Single Row) --}}
-        <form method="GET" action="{{ route('bags.index') }}" class="row g-2 align-items-end mb-3">
+        {{-- SEARCH + FILTERS --}}
+        <form method="GET"
+              action="{{ route('bags.index') }}"
+              class="row g-2 align-items-end mb-4">
 
             {{-- Search --}}
-            <div class="col-md-4">
-                <label class="form-label mb-1">Search</label>
+            <div class="col-md-5">
+                <label class="form-label mb-1 small">Search</label>
                 <input type="text"
                        name="search"
                        value="{{ request('search') }}"
@@ -23,99 +25,110 @@
                        placeholder="Customer name or bag number">
             </div>
 
-            {{-- Subcategory Filter --}}
+            {{-- Subcategory (future) --}}
             <div class="col-md-3">
-                <label class="form-label mb-1">Subcategory</label>
+                <label class="form-label mb-1 small text-muted">
+                    Subcategory (soon)
+                </label>
                 <input type="text"
-                       name="subcategory"
-                       value="{{ request('subcategory') }}"
                        class="form-control"
-                       placeholder="Football, Dance, etc."
+                       placeholder="Football, Dance…"
                        disabled>
             </div>
 
-            {{-- Sort --}}
-            <div class="col-md-3 ">
-                <label class="form-label mb-1">Sort</label>
-                <select name="sort" class="form-select" disabled>
-                    <option value="">Customer A → Z</option>
-                    <option value="customer_desc" {{ request('sort')=='customer_desc' ? 'selected' : '' }}>Customer Z → A</option>
-                    <option value="id_asc" {{ request('sort')=='id_asc' ? 'selected' : '' }}>Bag Number ↑</option>
-                    <option value="id_desc" {{ request('sort')=='id_desc' ? 'selected' : '' }}>Bag Number ↓</option>
+            {{-- Sort (future) --}}
+            <div class="col-md-2">
+                <label class="form-label mb-1 small text-muted">
+                    Sort (soon)
+                </label>
+                <select class="form-select" disabled>
+                    <option>Customer A → Z</option>
                 </select>
             </div>
 
             <div class="col-md-2">
-                <button class="btn btn-secondary w-100">Apply</button>
+                <button class="btn btn-secondary w-100">
+                    Apply
+                </button>
             </div>
 
         </form>
 
-
         {{-- BAGS TABLE --}}
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body p-0">
 
-                <table class="table table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th>Bag</th>
-                            <th>Customer</th>
-                            <th>Subcategory</th>
-                            <th>Notes</th>
-                            <th>Leftovers</th>
-                            <th class="text-end" style="width:180px;">Actions</th>
-                        </tr>
-                    </thead>
+                {{-- RESPONSIVE WRAPPER --}}
+                <div class="table-responsive">
 
-                    <tbody>
-                        @foreach ($bags as $bag)
+                    <table class="table table-striped table-hover align-middle mb-0">
+                        <thead class="table-light">
                             <tr>
-                                {{-- BAG IDENTIFIER --}}
-                                <td>
-                                    <a href="{{ route('bags.show', $bag) }}" class="">
-                                        <strong>{{ $bag->bag_number }}.{{ $bag->bag_index }}</strong>
-                                    </a>
-                                </td>
-
-                                {{-- CUSTOMER --}}
-                                <td>
-                                    <a href="{{ route('customers.show', $bag->customer_id) }}">
-                                        {{ $bag->customer->name ?? 'none'}}
-                                    </a>
-                                </td>
-
-                                {{-- SUBCATEGORY --}}
-                                <td>
-                                    <a href="{{ route('bags.show', $bag) }}" class="">{{ $bag->subcategory ?: '—' }}</a>
-                                </td>
-
-                                {{-- NOTES --}}
-                                <td class="text-muted small">
-                                    {{ \Illuminate\Support\Str::limit($bag->notes, 40) }}
-                                </td>
-
-                                {{-- LEFTOVERS COUNT --}}
-                                <td>
-                                    {{ $bag->leftovers_count ?? $bag->leftovers->count() }}
-                                </td>
-
-                                {{-- ACTIONS --}}
-                                <td class="text-end">
-
-                                    <x-custom.action_buttons :model="$bag" viewName="bags"/>
-
-                                </td>
+                                <th style="min-width:120px;">Bag</th>
+                                <th style="min-width:180px;">Customer</th>
+                                <th style="min-width:140px;">Subcategory</th>
+                                <th style="min-width:220px;">Notes</th>
+                                <th class="text-center" style="min-width:100px;">Leftovers</th>
+                                <th class="text-end" style="min-width:150px;">Actions</th>
                             </tr>
-                        @endforeach
-                    </tbody>
+                        </thead>
 
-                </table>
+                        <tbody>
+                            @foreach ($bags as $bag)
+                                <tr>
+
+                                    {{-- BAG --}}
+                                    <td class="fw-bold">
+                                        <a href="{{ route('bags.show', $bag) }}"
+                                        class="text-decoration-none">
+                                            {{ $bag->bag_number }}.{{ $bag->bag_index }}
+                                        </a>
+                                    </td>
+
+                                    {{-- CUSTOMER --}}
+                                    <td>
+                                        <a href="{{ route('customers.show', $bag->customer_id) }}"
+                                        class="text-decoration-none">
+                                            {{ $bag->customer->name ?? '—' }}
+                                        </a>
+                                    </td>
+
+                                    {{-- SUBCATEGORY --}}
+                                    <td class="text-muted">
+                                        {{ $bag->subcategory ?: '—' }}
+                                    </td>
+
+                                    {{-- NOTES --}}
+                                    <td class="text-muted small text-truncate"
+                                        style="max-width: 240px;">
+                                        {{ \Illuminate\Support\Str::limit($bag->notes, 60) ?: '—' }}
+                                    </td>
+
+                                    {{-- LEFTOVERS --}}
+                                    <td class="text-center fw-semibold">
+                                        {{ $bag->leftovers_count ?? $bag->leftovers->count() }}
+                                    </td>
+
+                                    {{-- ACTIONS --}}
+                                    <td class="text-end">
+                                        <x-custom.action_buttons
+                                            :model="$bag"
+                                            viewName="bags"
+                                        />
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+
+                </div>
             </div>
         </div>
 
         {{-- PAGINATION --}}
-        <div class="mt-3">
+        <div class="mt-4">
             {{ $bags->links() }}
         </div>
 

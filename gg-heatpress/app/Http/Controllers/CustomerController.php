@@ -21,23 +21,14 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('search'); // check if there's a search query
+        $customers = Customer::with('bags')->paginate(20); // feeds the list initially
 
-        $customers = Customer::with('bags')->paginate(20);
-
-        if($search){
-            $customers = Customer::query()
-            ->with('bags')
-            ->when($search, fn($q) =>
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('account_number', 'like', "%{$search}%")
-            )
-            ->orderBy('name')
-            ->paginate(20)
-            ->withQueryString();
+        if($search){ // if there's a search query, redirect to search method
+            return $this->search($request);
         }
 
-        return view('customers.index', compact('customers', 'search'));
+        return view('customers.index', compact('customers'));
     }
 
     /**
@@ -83,7 +74,7 @@ class CustomerController extends Controller
      * Update customer.
      */
     public function update(Request $request, Customer $customer)
-    {
+    { // fix me: change to FormRequest
         $validated = $request->validate([
             'name'    => 'required|string|max:255',
             'email'   => 'nullable|email',
@@ -107,10 +98,10 @@ class CustomerController extends Controller
      * Delete customer.
      */
     public function destroy(Customer $customer)
-    {
+    {  // fix me: change the log to a service
         if($customer->delete()){
             Log::channel('auth')->info('Customer deleted', [
-                'user_name' => auth()->user()->name,
+                'user_name' => auth()->user()->name ?? 'system',
                 'customer_id' => $customer->id,
                 'customer_name' => $customer->name,
             ]);
@@ -121,7 +112,8 @@ class CustomerController extends Controller
             ->with('success', 'Customer removed.');
     }
 
-     public function saveBatchCsv(Request $request){
+     public function saveBatchCsv(Request $request)
+     { // fix me: change to FormRequest
 
         //Get the array from text
         $arr = $this->csvService->textToArray($request->input('raw_text'));
@@ -144,6 +136,18 @@ class CustomerController extends Controller
         ->route('customers.index')
         ->with('success', 'CSV data processed.');
 
+    }
+
+    public function search(Request $request)
+    { // fix me: change to FormRequest
+        $search = $request->input('search');
+
+        $customers = Customer::where('name', 'like', "%{$search}%")
+        ->with('bags')
+        ->paginate('20')
+        ->withQueryString();
+
+        return view('customers.index', compact('customers'));
     }
 
     public function getMissingBags(){
@@ -182,6 +186,8 @@ class CustomerController extends Controller
 
     public function backup(){ // need fix: needs to add a bath method that prints just the ones that are new customer, if it was printed before skip them.
         $customers = Customer::all();
+
         return view('settings.backup', compact('customers'));
+
     }
 }
