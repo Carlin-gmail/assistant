@@ -142,10 +142,17 @@ class CustomerController extends Controller
     { // fix me: change to FormRequest
         $search = $request->input('search');
 
-        $customers = Customer::where('name', 'like', "%{$search}%")
-        ->with('bags')
-        ->paginate('20')
-        ->withQueryString();
+        if($search[0] === '-'){
+            $customers = Customer::query()
+            ->where('account_number', substr($search, 1))
+            ->paginate(20)
+            ->withQueryString();
+        } else {
+            $customers = Customer::where('name', 'like', "%{$search}%")
+            ->with('bags')
+            ->paginate('20')
+            ->withQueryString();
+        }
 
         return view('customers.index', compact('customers'));
     }
