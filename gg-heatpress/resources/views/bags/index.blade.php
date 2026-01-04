@@ -16,34 +16,11 @@
               class="row g-2 align-items-end mb-4">
 
             {{-- Search --}}
-            <div class="col-md-5">
-                <label class="form-label mb-1 small">Search</label>
-                <input type="text"
-                       name="search"
-                       value="{{ request('search') }}"
-                       class="form-control"
-                       placeholder="Customer name or bag number">
-            </div>
-
-            {{-- Subcategory (future) --}}
-            <div class="col-md-3">
-                <label class="form-label mb-1 small text-muted">
-                    Subcategory (soon)
-                </label>
-                <input type="text"
-                       class="form-control"
-                       placeholder="Football, Dance…"
-                       disabled>
-            </div>
-
-            {{-- Sort (future) --}}
-            <div class="col-md-2">
-                <label class="form-label mb-1 small text-muted">
-                    Sort (soon)
-                </label>
-                <select class="form-select" disabled>
-                    <option>Customer A → Z</option>
-                </select>
+            <div class="">
+                <x-custom.search-bar
+                :route="route('bags.index')"
+                placeholder="To seach by bag number use '-' as first character"
+                />
             </div>
 
             <div class="col-md-2">

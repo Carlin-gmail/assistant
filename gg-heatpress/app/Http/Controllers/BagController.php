@@ -21,9 +21,12 @@ class BagController extends Controller
         if($request->input('search')){
             return $this->search($request);
         }
-        $bags = Bag::with(['customer'])->paginate(20);
-
-        // $bag = $query->paginate(20);
+        $bags = Bag::query()
+        ->join('customers', 'customers.id', '=', 'bags.customer_id')
+        ->orderBy('customers.name')
+        ->select('bags.*')
+        ->with('customer')
+        ->paginate(20);
 
         return view('bags.index', compact('bags'));
     }
@@ -124,12 +127,21 @@ public function show(Bag $bag)
     public function search(Request $request){
         $search = $request->input('search');
 
-        $bags = Bag::whereHas('customer', function ($q) use ($search) {
-            $q->where('name', 'like', "%{$search}%");
-        })
-        ->with('customer')
-        ->paginate('20');
+        if($search[0] === '-'){
+            $bags = Bag::where('bag_number', '=','4769')
+            ->with('customer')
+            ->paginate('20');
 
-        return view('bags.index', compact('bags'));
+            return view('bags.index', compact('bags'));
+        } else {
+
+            $bags = Bag::whereHas('customer', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->with('customer')
+            ->paginate('20');
+
+            return view('bags.index', compact('bags'));
+        }
     }
 }
