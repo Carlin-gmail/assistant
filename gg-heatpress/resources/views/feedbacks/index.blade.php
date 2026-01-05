@@ -1,153 +1,106 @@
-<x-layouts.app title="User Feedback">
+<x-layouts.app title="Feedbacks">
 
-<div class="container py-4">
+    <div class="container py-4">
 
-    {{-- HEADER --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">Feedback Inbox</h1>
-
-        <span class="badge bg-secondary">
-            Hardcoded Preview
-        </span>
-    </div>
-
-    <p class="text-muted mb-4">
-        This page lists feedback sent by users.
-        Each item must be reviewed and checked once resolved.
-    </p>
-
-    {{-- FEEDBACK LIST --}}
-    <div class="card">
-        <div class="card-header">
-            Pending Feedback
+        {{-- HEADER --}}
+        <div class="mb-4">
+            <h1 class="mb-1">User Feedbacks</h1>
+            <p class="text-muted">
+                Messages sent by users across the system.
+            </p>
         </div>
 
-        <div class="card-body p-0">
+        {{-- FEEDBACK LIST --}}
+        @if(isset($feedbacks) && $feedbacks->count())
+            <div class="row g-3">
 
-            <table class="table table-hover mb-0 align-middle">
+                @foreach ($feedbacks as $feedback)
+                    <div class="col-12">
+                        <div class="card shadow-sm">
 
-                <thead class="table-light">
-                    <tr>
-                        <th style="width: 50px;">✔</th>
-                        <th>User</th>
-                        <th>Message</th>
-                        <th>Page</th>
-                        <th>Status</th>
-                        <th style="width: 120px;">Actions</th>
-                    </tr>
-                </thead>
+                            <div class="card-body">
 
-                <tbody>
+                                {{-- TOP META ROW --}}
+                                <div class="d-flex justify-content-between align-items-start mb-2">
 
-                    {{-- FEEDBACK ITEM 1 --}}
-                    <tr>
-                        <td class="text-center">
-                            <input type="checkbox" disabled>
-                        </td>
+                                    <div>
+                                        <h6 class="mb-0">
+                                            {{ $feedback->subject ?? 'General Feedback' }}
+                                        </h6>
 
-                        <td>
-                            <strong>John Doe</strong><br>
-                            <small class="text-muted">john@email.com</small>
-                        </td>
+                                        <small class="text-muted">
+                                            From: {{ $feedback->message_from ?? 'unknown' }}
+                                        </small>
+                                    </div>
 
-                        <td>
-                            The leftovers page is confusing when multiple bags have the same number.
-                        </td>
+                                    {{-- STATUS --}}
+                                    <span class="badge
+                                        {{ $feedback->status === 'open' ? 'bg-warning text-dark' : 'bg-secondary' }}">
+                                        {{ ucfirst($feedback->status) }}
+                                    </span>
+                                </div>
 
-                        <td>
-                            <a href="#" class="text-decoration-none">
-                                /leftovers
-                            </a>
-                        </td>
+                                {{-- MESSAGE --}}
+                                <p class="mb-3">
+                                    {{ $feedback->message }}
+                                </p>
 
-                        <td>
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
-                        </td>
+                                {{-- EXTRA DETAILS --}}
+                                <div class="row text-muted small">
 
-                        <td>
-                            <button class="btn btn-sm btn-outline-success" disabled>
-                                Mark Done
-                            </button>
-                        </td>
-                    </tr>
+                                    @if(!empty($feedback->page_url))
+                                        <div class="col-md-4 mb-1">
+                                            <strong>Page:</strong>
+                                            <span class="d-block text-truncate">
+                                                {{ $feedback->page_url }}
+                                            </span>
+                                        </div>
+                                    @endif
 
-                    {{-- FEEDBACK ITEM 2 --}}
-                    <tr>
-                        <td class="text-center">
-                            <input type="checkbox" checked disabled>
-                        </td>
+                                    <div class="col-md-4 mb-1">
+                                        <strong>Priority:</strong>
+                                        {{ ucfirst($feedback->priority ?? 'normal') }}
+                                    </div>
 
-                        <td>
-                            <strong>Maria Silva</strong><br>
-                            <small class="text-muted">maria@email.com</small>
-                        </td>
+                                    @if(!empty($feedback->distak))
+                                        <div class="col-md-4 mb-1">
+                                            <strong>Distak:</strong>
+                                            {{ $feedback->distak }}
+                                        </div>
+                                    @endif
 
-                        <td>
-                            It would be great to upload images directly when creating leftovers.
-                        </td>
+                                </div>
 
-                        <td>
-                            <a href="#" class="text-decoration-none">
-                                /bags/12
-                            </a>
-                        </td>
+                                {{-- FOOTER --}}
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <small class="text-muted">
+                                        {{ $feedback->created_at->format('M d, Y • H:i') }}
+                                    </small>
 
-                        <td>
-                            <span class="badge bg-success">
-                                Done
-                            </span>
-                        </td>
+                                    {{-- FUTURE ACTIONS --}}
+                                    {{--
+                                    <div class="d-flex gap-2">
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">View</a>
+                                        <a href="#" class="btn btn-sm btn-outline-success">Close</a>
+                                    </div>
+                                    --}}
+                                </div>
 
-                        <td>
-                            <button class="btn btn-sm btn-outline-secondary" disabled>
-                                Archived
-                            </button>
-                        </td>
-                    </tr>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
 
-                    {{-- FEEDBACK ITEM 3 --}}
-                    <tr>
-                        <td class="text-center">
-                            <input type="checkbox" disabled>
-                        </td>
+            </div>
+        @else
+            {{-- EMPTY STATE --}}
+            <div class="alert alert-light border text-center">
+                <p class="mb-0 text-muted">
+                    No feedback has been received yet.
+                </p>
+            </div>
+        @endif
 
-                        <td>
-                            <strong>Alex Brown</strong><br>
-                            <small class="text-muted">alex@email.com</small>
-                        </td>
-
-                        <td>
-                            The bag identifier should be clearer. I don’t know what 1012.3 means.
-                        </td>
-
-                        <td>
-                            <a href="#" class="text-decoration-none">
-                                /bags
-                            </a>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
-                        </td>
-
-                        <td>
-                            <button class="btn btn-sm btn-outline-success" disabled>
-                                Mark Done
-                            </button>
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
     </div>
-
-</div>
 
 </x-layouts.app>

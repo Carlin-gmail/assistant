@@ -42,9 +42,34 @@
             <div class="card container my-4">
                 {{ $slot }}
             </div>
+
         </main>
+        <button class="feedback-button open-modal"
+        data-id="feedback-button">
+            Feedback
+        </button>
+        {{-- change this modal name back to modal, it is suitable for images and other kind of modals now -- fix me --}}
+        <x-custom.image-show-modal
+        id="modal">
+            <form class="p-1" method="POST" action="{{ route('feedbacks.store') }}">
+                @csrf
+                <div class="mb-2">
+                    <label for="feedback" class="form-label fw-bold">Your Feedback</label>
+                    <textarea class="form-control"
+                    id="feedback"
+                    name="feedback"
+                    rows="4" cols="120"
+                    required
+                    placeholder="You saw a bug, error or something to improve? please tell us!"
+                    ></textarea>
+
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+        </x-custom.image-show-modal>
 
     </div>
+
 @livewireScripts()
 </body>
 </html>
