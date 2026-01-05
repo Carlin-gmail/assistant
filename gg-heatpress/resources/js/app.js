@@ -1,5 +1,5 @@
 import 'bootstrap';
-import './leftovers';
+import './modal';
 import './feedback';
 // Js for the main menu toggle
 const toggleBtn = document.querySelector('#menuToggle');
