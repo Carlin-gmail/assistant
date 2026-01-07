@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Bag;
 use App\Models\Customer;
 use App\Services\BagService;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
 class BagController extends Controller

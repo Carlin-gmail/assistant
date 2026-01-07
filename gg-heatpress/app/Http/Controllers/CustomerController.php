@@ -44,7 +44,6 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-
         $customer = Customer::create($request->validated());
 
         return redirect()
@@ -114,6 +113,7 @@ class CustomerController extends Controller
 
      public function saveBatchCsv(Request $request)
      { // fix me: change to FormRequest
+        // dd($request->all());
 
         //Get the array from text
         $arr = $this->csvService->textToArray($request->input('raw_text'));
@@ -184,8 +184,22 @@ class CustomerController extends Controller
         ));
     }
 
-    public function backup(){ // need fix: needs to add a bath method that prints just the ones that are new customer, if it was printed before skip them.
-        $customers = Customer::all();
+    public function backup(Request $request){ // use the date as batch identifier. Print the new book using the cutting date to print the new entries.
+
+            log::info('Generating customer backup', [
+                'user_name' => auth()->user()->name ?? 'system',
+                'cut_date' => $request->input('cut_date') ?? date('Y-m-d 00:00:00'),
+                'today_is' => date('Y-m-d H:i:s'),
+                'message' => "The list being generated doesn't means that it was printed, just requested.",
+            ]);
+
+            $cutDate = $request->input('cut_date') ?? date('Y-m-d 00:00:00');
+            // dd($cutDate);
+            $customers = Customer::with('bags')
+            ->where('created_at', '>=', $cutDate . ' 00:00:00')
+            ->where('name', '!=', '')
+            ->orderBy('name')
+            ->get();
 
         return view('settings.backup', compact('customers'));
 

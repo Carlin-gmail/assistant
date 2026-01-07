@@ -12,34 +12,24 @@
         <div class="card">
             <div class="card-body">
 
-                <form action="{{ route('customers.store') }}" method="POST">
+                <form action="{{ route('customers.index') }}" method="POST">
                     @csrf
 
                     {{-- NAME --}}
                     <div class="mb-3">
                         <label class="form-label">Name *</label>
                         <input type="text"
-                               name="name"
-                               value="{{ old('name') }}"
-                               class="form-control @error('name') is-invalid @enderror"
-                               required>
-
-                        @error('name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                            name="name"
+                            class="form-control"
+                            required>
                     </div>
 
                     {{-- EMAIL --}}
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email"
-                               name="email"
-                               value="{{ old('email') }}"
-                               class="form-control @error('email') is-invalid @enderror">
-
-                        @error('email')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                            name="email"
+                            class="form-control">
                     </div>
 
                     {{-- ACCOUNT NUMBER --}}
@@ -47,12 +37,7 @@
                         <label class="form-label">Account Number</label>
                         <input type="text"
                                name="account_number"
-                               value="{{ old('account_number') }}"
-                               class="form-control @error('account_number') is-invalid @enderror">
-
-                        @error('account_number')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                               class="form-control">
                     </div>
 
                     {{-- PHONE --}}
@@ -60,24 +45,16 @@
                         <label class="form-label">Phone</label>
                         <input type="text"
                                name="phone"
-                               value="{{ old('phone') }}"
-                               class="form-control @error('phone') is-invalid @enderror">
-
-                        @error('phone')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
+                               class="form-control">
                     </div>
 
                     {{-- NOTES --}}
                     <div class="mb-3">
                         <label class="form-label">Notes</label>
                         <textarea name="notes"
-                                  rows="3"
-                                  class="form-control @error('notes') is-invalid @enderror">{{ old('notes') }}</textarea>
+                            rows="3"
+                            class="form-control">{{ old('notes') }}</textarea>
 
-                        @error('notes')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
                     </div>
 
                     {{-- ACTIONS --}}
