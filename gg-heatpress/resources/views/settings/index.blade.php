@@ -3,116 +3,97 @@
     <div class="container py-4">
 
         {{-- PAGE HEADER --}}
-        <div class="mb-5">
+        <div class="mb-4">
             <h1 class="fw-bold mb-1">Settings</h1>
             <p class="text-muted mb-0">
-                Manage users, personal profile, and system configuration.
+                Manage users, feedback, backups, and system configuration.
             </p>
         </div>
 
-        {{-- ===============================
-             PERSONAL & ADMIN SETTINGS
-        =============================== --}}
-        <div class="mb-4">
-            <h6 class="text-uppercase text-muted mb-3">
-                Account & Administration
-            </h6>
+        <div class="row g-4">
 
-            <div class="row g-4">
+            {{-- ===============================
+                 LEFT MENU
+            =============================== --}}
+            <div class="col-md-4 col-lg-3">
 
-                {{-- MY PROFILE --}}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">My Profile</h5>
-                            <p class="card-text text-muted">
-                                Update your personal information, email, or password.
-                            </p>
+                <div class="list-group shadow-sm">
 
-                            <a href="{{ route('user.edit', auth()->user()) }}"
-                               class="btn btn-outline-primary">
-                                Edit Profile
-                            </a>
-                        </div>
+                    <div class="list-group-item fw-semibold text-muted small">
+                        ACCOUNT
                     </div>
+
+                    <a href="{{ route('user.edit', auth()->user()) }}"
+                       class="list-group-item list-group-item-action">
+                        My Profile
+                    </a>
+
+                    <a href="{{ route('user.index') }}"
+                       class="list-group-item list-group-item-action">
+                        Users
+                    </a>
+
+                    <div class="list-group-item fw-semibold text-muted small">
+                        OPERATIONS
+                    </div>
+
+                    <a href="{{ route('settings.backup') }}"
+                       class="list-group-item list-group-item-action">
+                        Print Backup Book
+                    </a>
+
+                    <a href="{{ route('feedbacks.index') }}"
+                       class="list-group-item list-group-item-action">
+                        Feedback & Tickets
+                    </a>
+
+                    <div class="list-group-item fw-semibold text-muted small">
+                        SYSTEM
+                    </div>
+
+                    <a href="#"
+                       class="list-group-item list-group-item-action disabled">
+                        Application Settings (Soon)
+                    </a>
+
                 </div>
 
-                {{-- USERS --}}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Users</h5>
-                            <p class="card-text text-muted">
-                                Create, edit, and manage system users.
-                            </p>
+            </div>
 
-                            <a href="{{ route('user.index') }}"
-                               class="btn btn-outline-primary">
-                                Manage Users
-                            </a>
+            {{-- ===============================
+                 RIGHT CONTENT
+            =============================== --}}
+            <div class="col-md-8 col-lg-9">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        {{-- PLACEHOLDER CONTENT --}}
+                        <h4 class="mb-2">Settings Overview</h4>
+
+                        <p class="text-muted">
+                            Select an option from the menu on the left to manage
+                            different areas of the system.
+                        </p>
+
+                        <hr>
+
+                        <div class="text-muted small">
+                            This area will display:
+                            <ul class="mt-2">
+                                <li>User profile settings</li>
+                                <li>User management</li>
+                                <li>Feedback & support tickets</li>
+                                <li>Backup and print tools</li>
+                                <li>System configuration options</li>
+                            </ul>
                         </div>
+
                     </div>
                 </div>
 
             </div>
-        </div>
 
-        {{-- ===============================
-             OPERATIONS & BACKUP
-        =============================== --}}
-        <div class="mb-4">
-            <h6 class="text-uppercase text-muted mb-3">
-                Operations & Backup
-            </h6>
-
-            <div class="row g-4">
-
-                {{-- PRINT BACKUP --}}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Print Backup Book</h5>
-                            <p class="card-text text-muted">
-                                Generate a physical backup of all customer bags.
-                            </p>
-
-                            <x-custom.button
-                                href="{{ route('settings.backup') }}"
-                                btnColor="btn-outline-primary"
-                                btnName="Print Backup" />
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        {{-- ===============================
-             FUTURE SETTINGS
-        =============================== --}}
-        <div>
-            <h6 class="text-uppercase text-muted mb-3">
-                Application Configuration
-            </h6>
-
-            <div class="row g-4">
-
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 border border-secondary border-dashed">
-                        <div class="card-body">
-                            <h5 class="card-title">Application Settings</h5>
-                            <p class="card-text text-muted">
-                                Default rules, behaviors, and system-wide preferences.
-                            </p>
-
-                            <button class="btn btn-outline-secondary" disabled>
-                                Coming Soon
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
     </div>
