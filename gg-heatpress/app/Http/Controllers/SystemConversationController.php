@@ -10,10 +10,10 @@ class SystemConversationController extends Controller
     /**
      * Display a listing of the system conversations.
      */
-    public function index()
+    public function index() //this class need to be renamed to FeedbackController!!! fix me
     {
-        $feedbacks = SystemConversation::all();
-        return view('feedbacks.index', compact('feedbacks'));
+        $tickets = SystemConversation::all();
+        return view('feedbacks.index', compact('tickets'));
     }
 
     /**

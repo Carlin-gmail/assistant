@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\{
+use App\Http\Controllers\
+{
     CustomerController,
     BagController,
     DashboardController,
@@ -60,9 +61,8 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     | Customers
     |--------------------------------------------------------------------------
-    */
+       */
 
-    Route::resource('customers', CustomerController::class);
 
     Route::get('/customers-search', [CustomerController::class, 'search'])
         ->name('customers.search');
@@ -70,15 +70,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/customers/store-batch', [CustomerController::class, 'storeBatch'])
         ->name('customers.store-batch');
 
-    Route::get('/customers/batch-create', fn () =>
-        view('customers.batch-create')
+    Route::get('/customers/batch-create', function () {
+        return view('customers.batch-create');
+    }
     )->name('customers.batch-create');
+
+    Route::post('/csv', [CustomerController::class, 'saveBatchCsv'])
+    ->name('csv.save');
 
     Route::get('/get-missing-bags', [CustomerController::class, 'getMissingBags'])
         ->name('customers.get-missing-bags');
 
-    Route::post('/csv', [CustomerController::class, 'saveBatchCsv'])
-        ->name('csv.save');
+    Route::resource('customers', CustomerController::class);
 
     /*
     |--------------------------------------------------------------------------
@@ -86,10 +89,12 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('bags', BagController::class);
 
     Route::get('/bags/id/{id}', [BagController::class, 'searchById'])
         ->name('bags.searchById');
+
+    Route::resource('bags', BagController::class);
+
 
     /*
     |--------------------------------------------------------------------------
@@ -132,7 +137,6 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('transfer-types', TransferTypeController::class);
 
     Route::get('/transfer-types/{type}/modal',
         [TransferTypeController::class, 'pressingSettingsModal']
@@ -140,6 +144,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transfer-types-search', [TransferTypeController::class, 'search'])
         ->name('transfer-types.search');
+
+    Route::resource('transfer-types', TransferTypeController::class);
 
     /*
     |--------------------------------------------------------------------------
