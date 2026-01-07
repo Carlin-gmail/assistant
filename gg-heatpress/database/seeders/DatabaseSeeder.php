@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            CustomerSeeder::class,      // customers first
-            BagSeeder::class,           // depends on customers
-            TransferTypeSeeder::class,  // independent, but needed before leftovers
-            LeftoverSeeder::class,      // depends on bags + transfer types
+            // CustomerSeeder::class,      // customers first
+            // BagSeeder::class,           // depends on customers
+            // TransferTypeSeeder::class,  // independent, but needed before leftovers
+            // LeftoverSeeder::class,      // depends on bags + transfer types
         ]);
     }
 }
