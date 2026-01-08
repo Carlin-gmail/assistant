@@ -199,7 +199,7 @@
 
                 <input type="hidden"
                         name="leftover_id"
-                        value="{{ $leftover->id }}">
+                        value="{{ $leftover->id ?? '' }}">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Consume Leftovers</h5>
@@ -212,7 +212,7 @@
                     <input type="number"
                             name="quantity"
                             min="1"
-                            max="{{ $leftover->quantity }}"
+                            max="{{ $leftover->quantity ?? '0'}}"
                             class="form-control rounded"
                             required>
                 </div>

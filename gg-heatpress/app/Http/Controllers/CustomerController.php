@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreCustomerRequest;
 use App\Livewire\Actions\Logout;
 use App\Services\CreateCsvService;
+use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\TextToCsvRequest;
 use Illuminate\Support\Facades\Log;
 class CustomerController extends Controller
@@ -44,11 +44,18 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        $customer = Customer::create($request->validated());
+        if($customer = Customer::create($request->validated())){
 
-        return redirect()
+            Log::channel('auth')->info('New customer created', [
+                'user_name' => auth()->user()->name ?? 'system',
+                'customer_id' => $customer->id,
+                'customer_name' => $customer->name,
+            ]);
+
+             return redirect()
             ->route('customers.show', $customer)
             ->with('success', 'Customer created.');
+        }
     }
 
     /**
@@ -170,25 +177,34 @@ class CustomerController extends Controller
         $missingNumbers = [];
 
         // Define the range to check for missing numbers
-        $start = 0;          // or 0 / 1 if you prefer
+        $start = 1;          // or 0 / 1 if you prefer
+
+        if(count($numbers) > 0){
         $end   = max($numbers);
-
-        //Loop through the range and find missing numbers
-        for ($i = $start; $i <= $end; $i++) {
-            if (!in_array($i, $numbers)) {
-                $bagNumbers[] = $i;
+            //Loop through the range and find missing numbers
+            for ($i = $start; $i <= $end; $i++) {
+                if (!in_array($i, $numbers)) {
+                    $bagNumbers[] = $i;
+                }
             }
+
+            //get quantity of missing numbers
+            $counter = count($bagNumbers);
+
+            // dd($bagNumbers);
+            return view('customers.get-missing-bags', compact([
+                'counter',
+                'bagNumbers',
+            ]
+            ));
+        } else {
+            $counter = 0;
+            $bagNumbers = [];
+            return view('customers.get-missing-bags', compact([
+                'counter',
+                'bagNumbers'
+            ]));
         }
-
-        //get quantity of missing numbers
-        $counter = count($bagNumbers);
-
-        // dd($bagNumbers);
-        return view('customers.get-missing-bags', compact([
-            'counter',
-            'bagNumbers',
-        ]
-        ));
     }
 
     public function backup(Request $request){ // use the date as batch identifier. Print the new book using the cutting date to print the new entries.

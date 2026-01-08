@@ -23,12 +23,6 @@
                 />
             </div>
 
-            <div class="col-md-2">
-                <button class="btn btn-secondary w-100">
-                    Apply
-                </button>
-            </div>
-
         </form>
 
         {{-- BAGS TABLE --}}

@@ -27,7 +27,7 @@
 
             th, td {
                 border: 1px solid #000;
-                padding: 6px 8px;
+                padding: 3px 10px;
                 text-align: left;
             }
 
@@ -88,7 +88,6 @@
             >
         </label>
 
-
         <button type="submit">
             Apply
         </button>
@@ -122,7 +121,7 @@
                     @endphp
 
                     <tr>
-                        <td class="{{ $isDeleted ? 'deleted' : '' }}">
+                        <td class="{{ $isDeleted ? 'deleted' : '' }}" style="font-size: 12px">
                             {{ $customer->name }}
                         </td>
 
