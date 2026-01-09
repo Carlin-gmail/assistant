@@ -13,7 +13,7 @@ class SystemConversationController extends Controller
     public function index() //this class need to be renamed to FeedbackController!!! fix me
     {
         $tickets = SystemConversation::where('status', 'open')
-        ->paginate(3)
+        ->paginate(5)
         ->withQueryString();
         return view('feedbacks.index', compact('tickets'));
     }
@@ -38,7 +38,7 @@ class SystemConversationController extends Controller
 
         SystemConversation::create([
             'message' => $validated['feedback'],
-            'message_from' => auth()->user()->email,
+            'message_from' => auth()->user()->name,
             'status' => 'open',
             //get the url of this page
             'page_url' => url()->previous(),
