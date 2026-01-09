@@ -12,7 +12,9 @@ class SystemConversationController extends Controller
      */
     public function index() //this class need to be renamed to FeedbackController!!! fix me
     {
-        $tickets = SystemConversation::all();
+        $tickets = SystemConversation::where('status', 'open')
+        ->paginate(3)
+        ->withQueryString();
         return view('feedbacks.index', compact('tickets'));
     }
 
@@ -92,5 +94,15 @@ class SystemConversationController extends Controller
         return redirect()
             ->route('system-conversations.index')
             ->with('success', 'Conversation deleted successfully.');
+    }
+
+    public function feedbackDone($feedback)
+    {
+        $feedback = SystemConversation::findOrFail($feedback);
+        $feedback->status = 'done';
+        $feedback->save();
+        return redirect()
+            ->route('feedbacks.index')
+            ->with('success', 'Feedback marked as done successfully.');
     }
 }

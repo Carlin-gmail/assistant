@@ -47,55 +47,74 @@
         </div>
 
         {{-- CUSTOMER CARDS (ONE PER LINE) --}}
-        <div class="d-flex flex-column gap-3">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
 
-            @foreach ($customers as $customer)
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle mb-0">
 
-                <x-custom.card cardHeader="{{ $customer->name }}">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="min-width:200px;">Customer</th>
+                                <th style="min-width:140px;">Bag Number</th>
+                                <th class="text-center" style="min-width:120px;">Total Bags</th>
+                                <th style="min-width:140px;">Last Job</th>
+                                <th style="min-width:300px;">Notes</th>
+                                <th class="text-end" style="min-width:160px;">Actions</th>
+                            </tr>
+                        </thead>
 
-                    {{-- CARD BODY --}}
-                    <div class="card-body">
+                        <tbody>
+                            @foreach ($customers as $customer)
+                                <tr>
 
-                        <div class="row small">
+                                    {{-- CUSTOMER NAME --}}
+                                    <td class="fw-semibold">
+                                        <a href="{{ route('customers.show', $customer) }}"
+                                        class="text-decoration-none">
+                                            {{ $customer->name }}
+                                        </a>
+                                    </td>
 
-                            <div class="col-12 col-md-4 mb-2">
-                                <strong>Bag Number</strong><br>
-                                {{ $customer->account_number_accessor }}
-                            </div>
+                                    {{-- BAG NUMBER --}}
+                                    <td>
+                                        {{ $customer->account_number_accessor }}
+                                    </td>
 
-                            <div class="col-12 col-md-4 mb-2">
-                                <strong>Total Bags</strong><br>
-                                {{ $customer->bags->count() }}
-                            </div>
+                                    {{-- TOTAL BAGS --}}
+                                    <td class="text-center">
+                                        {{ $customer->bags->count() }}
+                                    </td>
 
-                            <div class="col-12 col-md-4 mb-2">
-                                <strong>Last Job</strong><br>
-                                {{ $customer->last_job_at
-                                    ? $customer->last_job_at->format('Y-m-d')
-                                    : '—' }}
-                            </div>
+                                    {{-- LAST JOB --}}
+                                    <td>
+                                        {{ $customer->last_job_at
+                                            ? $customer->last_job_at->format('Y-m-d')
+                                            : '—' }}
+                                    </td>
 
-                        </div>
+                                    {{-- NOTES --}}
+                                    <td class="text-muted small text-truncate"
+                                        style="max-width: 360px;">
+                                        {{ \Illuminate\Support\Str::limit($customer->notes, 100) ?: '—' }}
+                                    </td>
 
-                        <div class="text-muted small mt-2">
-                            <strong>Notes:</strong>
-                            {{ \Illuminate\Support\Str::limit($customer->notes, 100) ?: '—' }}
-                        </div>
+                                    {{-- ACTIONS --}}
+                                    <td class="text-end">
+                                        <x-custom.action_buttons
+                                            :model="$customer"
+                                            viewName="customers"
+                                        />
+                                    </td>
 
-                    </div>
+                                </tr>
+                            @endforeach
+                        </tbody>
 
-                    {{-- CARD FOOTER --}}
-                    <div class="card-footer text-end">
-                        <x-custom.action_buttons
-                            :model="$customer"
-                            viewName="customers"
-                        />
-                    </div>
+                    </table>
+                </div>
 
-                </x-custom.card>
-
-            @endforeach
-
+            </div>
         </div>
 
         {{-- PAGINATION (BOTTOM) --}}

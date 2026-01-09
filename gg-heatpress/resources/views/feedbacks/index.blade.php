@@ -90,97 +90,97 @@
                                 };
                             @endphp
 
-                            <div class="card shadow-sm border-start border-4 {{ $statusColor }}
-                                {{ $ticket->status === 'done' ? 'opacity-75' : '' }}">
+                            <div class="card shadow-sm">
 
-                                <div class="card-body">
+                                <div class="d-flex">
 
-                                    {{-- HEADER --}}
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-
-                                        <div>
-                                            <h6 class="mb-0">
-                                                {{ $ticket->subject ?? 'Untitled Ticket' }}
-                                            </h6>
-
-                                            <small class="text-muted">
-                                                Reported by: {{ $ticket->message_from ?? 'system' }}
-                                            </small>
-                                        </div>
-
-                                        <span class="badge
-                                            {{ $ticket->status === 'open' ? 'bg-warning text-dark' : '' }}
+                                    {{-- STATUS COLOR BAR --}}
+                                    <div
+                                        style="width:6px;"
+                                        class="
+                                            {{ $ticket->status === 'open' ? 'bg-warning' : '' }}
                                             {{ $ticket->status === 'in_progress' ? 'bg-primary' : '' }}
-                                            {{ $ticket->status === 'done' ? 'bg-success' : '' }}">
-                                            {{ ucfirst(str_replace('_', ' ', $ticket->status)) }}
-                                        </span>
-
+                                            {{ $ticket->status === 'done' ? 'bg-success' : '' }}
+                                        ">
                                     </div>
 
-                                    {{-- DESCRIPTION --}}
-                                    <p class="mb-3">
-                                        {{ $ticket->message }}
-                                    </p>
+                                    {{-- CONTENT --}}
+                                    <div class="flex-grow-1 px-3 py-2">
 
-                                    {{-- META --}}
-                                    <div class="row small text-muted">
+                                        {{-- LINE 1: MESSAGE + ACTIONS --}}
+                                        <div class="d-flex justify-content-between align-items-start mb-1">
 
-                                        <div class="col-md-4 mb-1">
-                                            <strong>Priority:</strong>
-                                            {{ ucfirst($ticket->priority ?? 'normal') }}
-                                        </div>
-
-                                        <div class="col-md-4 mb-1">
-                                            <strong>Category:</strong>
-                                            {{ $ticket->distak ? 'System / Maintenance' : 'Customer Care' }}
-                                        </div>
-
-                                        @if($ticket->page_url)
-                                            <div class="col-md-4 mb-1">
-                                                <strong>Area:</strong>
-                                                <span class="d-block text-truncate">
-                                                    {{ $ticket->page_url }}
-                                                </span>
+                                            <div class="fw-semibold">
+                                                {{ $ticket->message }}
                                             </div>
-                                        @endif
 
-                                    </div>
+                                            <div class="d-flex gap-1 ms-3 flex-shrink-0">
 
-                                    {{-- FOOTER --}}
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <a href="{{-- route('system-conversations.show', $ticket) --}}"
+                                                class="btn btn-sm btn-outline-primary px-2 py-0">
+                                                    View
+                                                </a>
 
-                                        <small class="text-muted">
-                                            Opened {{ $ticket->created_at->format('M d, Y • H:i') }}
-                                        </small>
+                                                <a href="{{-- route('system-conversations.edit', $ticket) --}}"
+                                                class="btn btn-sm btn-outline-secondary px-2 py-0">
+                                                    Edit
+                                                </a>
 
-                                        <div class="d-flex gap-2">
+                                                @if($ticket->status !== 'done')
+                                                    <form method="POST"
+                                                        action="{{-- route('system-conversations.complete', $ticket) --}}">
+                                                        @csrf
+                                                        @method('PATCH')
 
-                                            <a href="{{-- route('system-conversations.edit', $ticket) --}}"
-                                               class="btn btn-sm btn-outline-secondary">
-                                                Edit
-                                            </a>
+                                                        <a class="btn btn-sm btn-outline-success px-2 py-0"
+                                                        href="{{ route('feedbacks.done', $ticket->id)  }}"
+                                                        >
+                                                            Done
+                                                        </a>
+                                                    </form>
+                                                @endif
 
-                                            <a href="{{-- route('system-conversations.show', $ticket) --}}"
-                                               class="btn btn-sm btn-outline-primary">
-                                                View
-                                            </a>
+                                            </div>
+                                        </div>
 
-                                            @if($ticket->status !== 'done')
-                                                <form method="POST"
-                                                      action="{{-- route('system-conversations.complete', $ticket) --}}">
-                                                    @csrf
-                                                    @method('PATCH')
+                                        {{-- LINE 3: META --}}
+                                        <div class="small text-muted d-flex flex-wrap gap-3">
 
-                                                    <button class="btn btn-sm btn-outline-success">
-                                                        Mark as Done
-                                                    </button>
-                                                </form>
+                                            <span>
+                                                <strong>Priority:</strong>
+                                                {{ ucfirst($ticket->priority ?? 'normal') }}
+                                            </span>
+
+                                            <span>
+                                                <strong>Type:</strong>
+                                                {{ $ticket->distak ? 'System' : 'Customer' }}
+                                            </span>
+
+                                            @if($ticket->page_url)
+                                                <span class="text-truncate" style="max-width:260px;">
+                                                    <strong>Area:</strong>
+                                                    {{
+                                                        '/'.ltrim(
+                                                            parse_url($ticket->page_url, PHP_URL_PATH),
+                                                            '/'
+                                                        )
+                                                    }}
+                                                </span>
                                             @endif
 
+                                            <span>
+                                                <strong>Date:</strong>
+                                                {{ $ticket->created_at->format('M d, Y H:i') }}
+                                            </span>
+
+                                            <span>
+                                                <strong>User:</strong>
+                                                {{ $ticket->message_from ?? 'system' }}
+                                            </span>
+
                                         </div>
 
                                     </div>
-
                                 </div>
                             </div>
 
@@ -191,6 +191,7 @@
                                 </p>
                             </div>
                         @endforelse
+                        {{ $tickets->links() }}
 
                     </div>
 
