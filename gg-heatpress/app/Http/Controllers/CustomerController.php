@@ -35,7 +35,8 @@ class CustomerController extends Controller
         $search = $request->input('search'); // check if there's a search query
         $customers = Customer::with('bags') // feeds the list initially
         ->orderBy($order_by)
-        ->paginate(20);
+        ->paginate(20)
+        ->withQueryString();
 
 
         if($search){ // if there's a search query, redirect to search method
