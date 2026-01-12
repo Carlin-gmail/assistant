@@ -247,7 +247,7 @@ class CustomerController extends Controller
             $cutDate = $request->input('cut_date') ?? date('Y-m-d 00:00:00');
             // dd($cutDate);
             $customers = Customer::with('bags')
-            ->where('created_at', '>=', $cutDate . ' 00:00:00')
+            ->where('created_at', '<=', $cutDate . ' 00:00:00')
             ->where('name', '!=', '')
             ->orderBy('name')
             ->get();
