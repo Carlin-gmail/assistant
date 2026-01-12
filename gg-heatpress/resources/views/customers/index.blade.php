@@ -55,9 +55,19 @@
 
                         <thead class="table-light">
                             <tr>
-                                <th style="min-width:200px;">Customer</th>
-                                <th style="min-width:140px;">Bag Number</th>
-                                <th class="text-center" style="min-width:120px;">Total Bags</th>
+                                <th style="min-width:200px;">
+                                    <a href="{{ route('customers.index', array_merge(request()->query(), ['order_by' => 'name'])) }}" class="">
+                                        Customer
+                                    </a>
+                                </th>
+                                <th style="min-width:140px;">
+                                    <a href="{{ route('customers.index', array_merge(request()->query(),['order_by' => 'account_number' ])) }}" class="">
+                                        Bag Number
+                                    </a>
+                                </th>
+                                <th class="text-center" style="min-width:120px;">
+                                    Total Bags
+                                </th>
                                 <th style="min-width:140px;">Last Job</th>
                                 <th style="min-width:300px;">Notes</th>
                                 <th class="text-end" style="min-width:160px;">Actions</th>

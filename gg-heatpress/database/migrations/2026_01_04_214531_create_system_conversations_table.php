@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('system_conversations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->date('due_date')->nullable();
             $table->string('message_from')->nullable();
             $table->text('message')->nullable();
             $table->string('status')->default('open');
             $table->string('subject')->nullable();
             $table->string('conclusion')->nullable();
             $table->string('priority')->nullable();
+            $table->integer('position')->default(1);
+            $table->string('assigned_to')->nullable();
             $table->boolean('distak')->default(false);
             $table->string('page_url')->nullable();
         });

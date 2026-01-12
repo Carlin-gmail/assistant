@@ -11,7 +11,7 @@
         </div>
 
         <div class="row">
-
+<!--
             {{-- ===============================
                 LEFT FILTER PANEL (UI READY)
             =============================== --}}
@@ -22,6 +22,26 @@
                     <h6 class="text-uppercase text-muted small mb-3">
                         Filters
                     </h6>
+
+                    {{-- CATEGORY FILTER --}}
+                    <div class="mb-4">
+                        <label class="form-label small text-muted mb-1">
+                            Category
+                        </label>
+
+                        <select name="category"
+                                class="form-select form-select-sm">
+                            <option value="">All categories</option>
+
+                            @foreach ($categories as $category)
+                                <option value="{{ $category }}"
+                                    {{ request('category') === $category ? 'selected' : '' }}>
+                                    {{ $category }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
 
                     {{-- PRIORITY --}}
                     <div class="mb-4">
@@ -43,24 +63,10 @@
                         </div>
                     </div>
 
-                    {{-- CATEGORY --}}
-                    <div class="mb-4">
-                        <strong class="small d-block mb-2">Category</strong>
-
-                        <div class="form-check small">
-                            <input class="form-check-input" type="checkbox">
-                            <label class="form-check-label">System / Maintenance</label>
-                        </div>
-
-                        <div class="form-check small">
-                            <input class="form-check-input" type="checkbox">
-                            <label class="form-check-label">Customer Care</label>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
+-->
 
             {{-- ===============================
                 MAIN TICKET LIST
@@ -91,97 +97,119 @@
                             @endphp
 
                             <div class="card shadow-sm">
+                                {{-- Ticket/feedback Card --}}
+                                <div class="card shadow-sm position-relative">
 
-                                <div class="d-flex">
+                                    <div class="d-flex">
 
-                                    {{-- STATUS COLOR BAR --}}
-                                    <div
-                                        style="width:6px;"
-                                        class="
-                                            {{ $ticket->status === 'open' ? 'bg-warning' : '' }}
-                                            {{ $ticket->status === 'in_progress' ? 'bg-primary' : '' }}
-                                            {{ $ticket->status === 'done' ? 'bg-success' : '' }}
-                                        ">
-                                    </div>
+                                        {{-- STATUS COLOR BAR --}}
+                                        <div
+                                            style="width:6px;"
+                                            class="
+                                                {{ $ticket->status === 'open' ? 'bg-warning' : '' }}
+                                                {{ $ticket->status === 'in_progress' ? 'bg-primary' : '' }}
+                                                {{ $ticket->status === 'done' ? 'bg-success' : '' }}
+                                            ">
+                                        </div>
 
-                                    {{-- CONTENT --}}
-                                    <div class="flex-grow-1 px-3 py-2">
+                                        {{-- CONTENT --}}
+                                        <div class="flex-grow-1 px-3 py-2">
 
-                                        {{-- LINE 1: MESSAGE + ACTIONS --}}
-                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                            {{-- ROW 1: MESSAGE + ACTIONS --}}
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
 
-                                            <div class="fw-semibold">
-                                                {{ $ticket->message }}
+                                                <div class="fw-semibold">
+                                                    {{ $ticket->message }}
+                                                </div>
+
+                                                <div class="d-flex gap-1 ms-3 flex-shrink-0">
+
+                                                    <a href="{{-- route('system-conversations.show', $ticket) --}}"
+                                                    class="btn btn-sm btn-outline-primary px-2 py-0">
+                                                        View
+                                                    </a>
+
+                                                    <a href="{{-- route('system-conversations.edit', $ticket) --}}"
+                                                    class="btn btn-sm btn-outline-secondary px-2 py-0">
+                                                        Edit
+                                                    </a>
+
+                                                    @if($ticket->status !== 'done')
+                                                        <form method="POST"
+                                                            action="{{ route('feedbacks.done', $ticket) }}">
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <button class="btn btn-sm btn-outline-success px-2 py-0">
+                                                                Done
+                                                            </button>
+                                                        </form>
+                                                    @endif
+
+                                                </div>
                                             </div>
 
-                                            <div class="d-flex gap-1 ms-3 flex-shrink-0">
+                                            {{-- ROW 2: CATEGORY --}}
+                                            <div class="small text-muted mb-1">
+                                                {{ $ticket->category ?? 'Uncategorized' }}
+                                            </div>
 
-                                                <a href="{{-- route('system-conversations.show', $ticket) --}}"
-                                                class="btn btn-sm btn-outline-primary px-2 py-0">
-                                                    View
-                                                </a>
+                                            {{-- ROW 3: META --}}
+                                            <div class="small text-muted d-flex flex-wrap gap-3">
 
-                                                <a href="{{-- route('system-conversations.edit', $ticket) --}}"
-                                                class="btn btn-sm btn-outline-secondary px-2 py-0">
-                                                    Edit
-                                                </a>
+                                                <span>
+                                                    <strong>Priority:</strong>
+                                                    {{ ucfirst($ticket->priority ?? 'normal') }}
+                                                </span>
 
-                                                @if($ticket->status !== 'done')
-                                                    <form method="POST"
-                                                        action="{{-- route('system-conversations.complete', $ticket) --}}">
-                                                        @csrf
-                                                        @method('PATCH')
+                                                <span>
+                                                    <strong>Assigned to:</strong>
+                                                    {{ $ticket->assigned_to ?? '—' }}
+                                                </span>
 
-                                                        <a class="btn btn-sm btn-outline-success px-2 py-0"
-                                                        href="{{ route('feedbacks.done', $ticket->id)  }}"
-                                                        >
-                                                            Done
-                                                        </a>
-                                                    </form>
+                                                @if($ticket->page_url)
+                                                    <span class="text-truncate" style="max-width:260px;">
+                                                        <strong>Area:</strong>
+                                                        {{ parse_url($ticket->page_url, PHP_URL_PATH) }}
+                                                    </span>
                                                 @endif
 
-                                            </div>
-                                        </div>
-
-                                        {{-- LINE 3: META --}}
-                                        <div class="small text-muted d-flex flex-wrap gap-3">
-
-                                            <span>
-                                                <strong>Priority:</strong>
-                                                {{ ucfirst($ticket->priority ?? 'normal') }}
-                                            </span>
-
-                                            <span>
-                                                <strong>Type:</strong>
-                                                {{ $ticket->distak ? 'System' : 'Customer' }}
-                                            </span>
-
-                                            @if($ticket->page_url)
-                                                <span class="text-truncate" style="max-width:260px;">
-                                                    <strong>Area:</strong>
-                                                    {{
-                                                        '/'.ltrim(
-                                                            parse_url($ticket->page_url, PHP_URL_PATH),
-                                                            '/'
-                                                        )
-                                                    }}
+                                                <span>
+                                                    <strong>Date:</strong>
+                                                    {{ $ticket->created_at->format('M d, Y H:i') }}
                                                 </span>
-                                            @endif
 
-                                            <span>
-                                                <strong>Date:</strong>
-                                                {{ $ticket->created_at->format('M d, Y H:i') }}
-                                            </span>
+                                            </div>
 
-                                            <span>
-                                                <strong>User:</strong>
-                                                {{ $ticket->message_from ?? 'system' }}
-                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {{-- POSITION INPUT (BOTTOM-RIGHT, NOT A ROW) --}}
+                                    <div class="position-absolute bottom-0 end-0 p-2">
+
+                                        <div class="d-flex align-items-center gap-1 small text-muted">
+
+                                            <label for="position-{{ $ticket->id }}" class="mb-0">
+                                                Position
+                                            </label>
+
+                                            <form class="" method="GET" action="{{ route('feedbacks.position-update', [$ticket->id, 'id'=>'2']) }}" >
+                                                <input type="number"
+                                                    id="position-{{ $ticket->id }}"
+                                                    class="form-control form-control-sm rounded-pill text-center"
+                                                    name="position"
+                                                    style="width:70px;"
+                                                    value="{{ $ticket->position ?? old('position', 0) }}"
+                                                >
+                                                <input type="hidden" name="id" value="{{ $ticket->id }}">
+                                            </form>
 
                                         </div>
 
                                     </div>
+
                                 </div>
+
                             </div>
 
                         @empty

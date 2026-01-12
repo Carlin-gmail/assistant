@@ -22,7 +22,6 @@
                 placeholder="To seach by bag number use '-' as first character"
                 />
             </div>
-
         </form>
 
         {{-- BAGS TABLE --}}

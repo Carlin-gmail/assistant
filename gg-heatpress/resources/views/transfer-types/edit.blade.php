@@ -60,6 +60,7 @@
                                    class="form-control">
                         </div>
 
+                        {{-- PRESSING TIME --}}
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Time (sec)</label>
                             <input type="number"
@@ -68,10 +69,12 @@
                                    class="form-control">
                         </div>
 
+                        {{-- PRESSURE --}}
                         <div class="col-md-3 mb-3">
-                            <label class="form-label">Pressure</label>
+                            <label for="pressure" class="form-label">Pressure</label>
                             <input type="text"
                                    name="pressure"
+                                   id="pressure"
                                    value="{{ old('pressure', $transferType->pressure) }}"
                                    class="form-control">
                         </div>

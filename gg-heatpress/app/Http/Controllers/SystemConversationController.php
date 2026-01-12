@@ -13,9 +13,17 @@ class SystemConversationController extends Controller
     public function index() //this class need to be renamed to FeedbackController!!! fix me
     {
         $tickets = SystemConversation::where('status', 'open')
-        ->paginate(5)
+        ->orderBy('position', 'asc')
+        ->orderBy('message', 'asc')
+        ->paginate(10)
         ->withQueryString();
-        return view('feedbacks.index', compact('tickets'));
+
+        $categories = ['bug', 'feature_request', 'general_feedback'];
+
+        return view('feedbacks.index', compact([
+        'tickets',
+        'categories',
+        ]));
     }
 
     /**
@@ -43,8 +51,14 @@ class SystemConversationController extends Controller
             //get the url of this page
             'page_url' => url()->previous(),
             'subject' => $request->input('subject', 'General Feedback'),
+            'position' => '100',
             'priority' => $request->input('priority', 'normal'),
             'distak' => $request->input('distak', ''),
+        ]);
+
+        \Log::channel('tickets')->info('New feedback submitted', [
+            'submitted_by' => auth()->user()->name,
+            'subject' => $request->input('message', 'General Feedback'),
         ]);
 
         return redirect()
@@ -84,6 +98,21 @@ class SystemConversationController extends Controller
             ->with('success', 'Conversation updated successfully.');
     }
 
+    public function updatePosition(Request $request)
+    {
+        $validated = $request->validate([
+            'position' => 'required|integer|min:0',
+        ]);
+
+        $id = SystemConversation::findOrFail($request->input('id'));
+
+        $id->position = $validated['position'];
+        $id->save();
+
+        return redirect()
+            ->route('feedbacks.index')
+            ->with('success', 'Position updated successfully.');
+    }
     /**
      * Remove the specified system conversation from storage.
      */
@@ -101,6 +130,13 @@ class SystemConversationController extends Controller
         $feedback = SystemConversation::findOrFail($feedback);
         $feedback->status = 'done';
         $feedback->save();
+
+        //logging
+        \Log::channel('tickets')->info('Feedback marked as done', [
+            'feedback_id' => $feedback->id,
+            'marked_by' => auth()->user()->name,
+        ]);
+
         return redirect()
             ->route('feedbacks.index')
             ->with('success', 'Feedback marked as done successfully.');

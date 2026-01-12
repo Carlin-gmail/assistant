@@ -148,6 +148,18 @@ class CustomerController extends Controller
     public function search(Request $request)
     { // fix me: change to FormRequest
         $search = $request->input('search');
+        $allowedOrderBys = ['name', 'account_number', 'total_bags', 'last_job', 'notes'];
+
+
+        if(!in_array($request->input('order_by'), $allowedOrderBys)) {
+            log::warning('Invalid order_by parameter in customer search', [
+                'user_name' => auth()->user()->name ?? 'system',
+                'order_by' => $request->input('order_by'),
+            ]);
+            $orderBy = 'name';
+        } else {
+            $orderBy = $request->input('order_by');
+        }
 
         if($search[0] === '-'){
             $customers = Customer::query()
@@ -156,6 +168,7 @@ class CustomerController extends Controller
             ->withQueryString();
         } else {
             $customers = Customer::where('name', 'like', "%{$search}%")
+            ->orderBy($orderBy)
             ->with('bags')
             ->paginate('20')
             ->withQueryString();
@@ -169,7 +182,7 @@ class CustomerController extends Controller
         $counter = 0;
              // dd($numbers);
         // Extract only the integers from the account numbers to check
-        $numbers = Customer::where('account_number', '!=', '0000')
+        $numbers = Customer::where('account_number', '!=', null)
             ->pluck('account_number')
             ->map(fn ($n) => (int) $n)
             ->toArray();

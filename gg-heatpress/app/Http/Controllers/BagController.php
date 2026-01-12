@@ -20,6 +20,7 @@ class BagController extends Controller
      */
     public function index(Request $request)
     {
+        // redirect to search if search param exists
         if($request->input('search')){
             return $this->search($request);
         }
@@ -130,7 +131,7 @@ public function show(Bag $bag)
         $search = $request->input('search');
 
         if($search[0] === '-'){
-            $bags = Bag::where('bag_number', '=','4769')
+            $bags = Bag::where('bag_number',substr($search,1))
             ->with('customer')
             ->paginate('20');
 

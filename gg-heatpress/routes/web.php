@@ -155,10 +155,13 @@ Route::middleware('auth')->group(function () {
 
     // Route::get('/feedbacks', [SystemConversationController::class, 'index'])
         // ->name('system-conversations.index');
-    Route::resource('/feedbacks', SystemConversationController::class);
-    Route::get('/feedbacks/done/{feedback}', [SystemConversationController::class, 'feedbackDone'])
+
+    Route::patch('/feedbacks/done/{feedback}', [SystemConversationController::class, 'feedbackDone'])
         ->name('feedbacks.done');
 
+    Route::get('/feedbacks/position-update', [ SystemConversationController::class, 'updatePosition'])->name('feedbacks.position-update');
+
+    Route::resource('/feedbacks', SystemConversationController::class);
 
     /*
     |--------------------------------------------------------------------------

@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class SystemConversation extends Model
 {
     protected $fillable = [
+        'assigned_to',
+        'conclusion',
+        'distak',
+        'due_date',
         'message_from',
         'message',
         'status',
         'subject',
-        'conclusion',
         'priority',
-        'distak',
+        'position',
         'page_url',
     ];
 }
