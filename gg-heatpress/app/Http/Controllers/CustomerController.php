@@ -21,8 +21,22 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
+        $allowedOrderBys = ['name', 'account_number', 'total_bags', 'last_job', 'notes'];
+        if(!in_array($request->input('order_by'), $allowedOrderBys)) {
+            log::warning('Invalid order_by parameter in customer listing', [
+                'user_name' => auth()->user()->name ?? 'system',
+                'order_by' => $request->input('order_by'),
+            ]);
+            $order_by = 'name';
+        } else {
+            $order_by = $request->input('order_by');
+        }
+
         $search = $request->input('search'); // check if there's a search query
-        $customers = Customer::with('bags')->paginate(20); // feeds the list initially
+        $customers = Customer::with('bags') // feeds the list initially
+        ->orderBy($order_by)
+        ->paginate(20);
+
 
         if($search){ // if there's a search query, redirect to search method
             return $this->search($request);
