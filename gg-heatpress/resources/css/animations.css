@@ -1,0 +1,14 @@
+.menu {
+    color: white;
+    display: flex;
+    padding: 10px 0;
+    background-color: rgb(24, 79, 141);
+    transition: all 0.3s ease;
+}
+.menu li:hover {
+    color:rgb(238, 67, 67);
+    font-weight: 600;
+    padding: 0 5px;
+    border-radius: 5px;
+    display: flex;
+}

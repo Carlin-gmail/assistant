@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('system_conversations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('category')->nullable();
             $table->date('due_date')->nullable();
             $table->string('message_from')->nullable();
             $table->text('message')->nullable();

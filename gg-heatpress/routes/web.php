@@ -12,6 +12,7 @@ use App\Http\Controllers\
     ProfileController,
     UserController,
     FeedbackController,
+    InventoryController,
     SystemConversationController
 };
 
@@ -57,6 +58,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bags
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/bags/id/{id}', [BagController::class, 'searchById'])
+        ->name('bags.searchById');
+
+    Route::resource('bags', BagController::class);
+
     /*
     |--------------------------------------------------------------------------
     | Customers
@@ -82,18 +95,6 @@ Route::middleware('auth')->group(function () {
         ->name('customers.get-missing-bags');
 
     Route::resource('customers', CustomerController::class);
-
-    /*
-    |--------------------------------------------------------------------------
-    | Bags
-    |--------------------------------------------------------------------------
-    */
-
-
-    Route::get('/bags/id/{id}', [BagController::class, 'searchById'])
-        ->name('bags.searchById');
-
-    Route::resource('bags', BagController::class);
 
 
     /*
@@ -131,6 +132,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/feedbacks', [FeedbackController::class, 'index'])
         ->name('feedbacks.index');
 
+    /* INVENTOORY */
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
     /*
     |--------------------------------------------------------------------------
     | Transfer Types

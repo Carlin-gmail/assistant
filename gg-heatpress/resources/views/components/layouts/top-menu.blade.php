@@ -1,20 +1,20 @@
-<nav class="bg-dark text-white sticky-top">
+<nav class=" sticky-top menu">
     <div class="container py-2">
         <div class="d-flex align-items-center justify-content-between">
 
             {{-- Left: Brand --}}
             <a href="{{ route('dashboard') }}"
                class="text-white fw-bold text-decoration-none">
-                GG · Heat Press
+                GG · Heat Press - <small class="text-secondary">Welcome {{ auth()->user()->name }}</small>
             </a>
 
             {{-- Center: Desktop menu --}}
             <ul class="list-unstyled d-none d-lg-flex gap-4 mb-0 align-items-center">
-                <li><a class="nav-link text-white p-0" href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li><a class="nav-link text-white p-0" href="{{ route('customers.index') }}">Customers</a></li>
-                <li><a class="nav-link text-white p-0" href="{{ route('bags.index') }}">Bags</a></li>
-                <li><a class="nav-link text-white p-0" href="{{ route('transfer-types.index') }}">Transfer Types</a></li>
-                <li><a class="nav-link text-white p-0" href="{{ route('settings.index') }}">Settings</a></li>
+                <li><a class="nav-link p-0" href="{{ route('dashboard') }}">Dashboard</a></li>
+                <li><a class="nav-link p-0" href="{{ route('customers.index') }}">Customers</a></li>
+                <li><a class="nav-link p-0" href="{{ route('bags.index') }}">Bags</a></li>
+                <li><a class="nav-link p-0" href="{{ route('transfer-types.index') }}">Transfer Types</a></li>
+                <li><a class="nav-link p-0" href="{{ route('settings.index') }}">Settings</a></li>
             </ul>
 
             {{-- Right: Actions --}}

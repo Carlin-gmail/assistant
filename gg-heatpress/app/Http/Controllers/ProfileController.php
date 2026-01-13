@@ -14,9 +14,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request)
     {
-        return view('profile.edit', [
+        return view('settings.index', [
             'user' => $request->user(),
-        ]);
+        ])
+        ->with('success', "session('success')");
     }
 
     /**

@@ -53,18 +53,29 @@
         id="modal">
             <form class="p-1" method="POST" action="{{ route('feedbacks.store') }}">
                 @csrf
-                <div class="mb-2">
+                <div class="mb-2 p-2">
+                    <label for="category">
+                        Category
+                    </label>
+                    <input type="text"
+                        id="category"
+                        name="category"
+                        class="form-control mb-2"
+                        placeholder="Category (e.g. Bug Report, Feature Request)"
+                        required
+                    >
+
                     <label for="feedback" class="form-label fw-bold">Your Feedback</label>
                     <textarea class="form-control"
                     id="feedback"
                     name="feedback"
                     rows="4" cols="120"
                     required
-                    placeholder="You saw a bug, error or something to improve? please tell us!"
-                    ></textarea>
+                    placeholder="You saw a bug, error or something to improve? please tell us!">
+                    </textarea>
 
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary p-2">Submit</button>
                 </form>
         </x-custom.image-show-modal>
 

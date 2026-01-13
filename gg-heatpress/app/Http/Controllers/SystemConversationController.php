@@ -26,17 +26,13 @@ class SystemConversationController extends Controller
         ]));
     }
 
-    /**
-     * Show the form for creating a new system conversation.
-     */
+    /*** Show the form for creating a new system conversation.*/
     public function create()
     {
         return view('system-conversations.create');
     }
 
-    /**
-     * Store a newly created system conversation in storage.
-     */
+    /*** Store a newly created system conversation in storage.*/
     public function store(Request $request)
     {
         // dd($request->all());
@@ -45,6 +41,7 @@ class SystemConversationController extends Controller
         ]);
 
         SystemConversation::create([
+            'category' => $request->input('category', 'general_ticket'),
             'message' => $validated['feedback'],
             'message_from' => auth()->user()->name,
             'status' => 'open',
