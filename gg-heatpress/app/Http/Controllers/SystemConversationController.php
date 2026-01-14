@@ -70,6 +70,7 @@ class SystemConversationController extends Controller
         $validated = $request->validate([
             'message' => 'required|string|max:5000',
             'category' => 'nullable|string|max:255',
+            'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|string|max:255',
         ]);
 
