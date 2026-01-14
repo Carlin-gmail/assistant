@@ -8,6 +8,28 @@
             <p class="text-muted">
                 Internal to-do list for customer care, bugs, and system maintenance.
             </p>
+            <div class="">
+                <p>Categories   </p>
+                <x-custom.button
+                    href="{{ route('feedbacks.index', ['category' => 'done']) }}"
+                    btnColor="btn-primary"
+                    btnName="Done"
+                />
+                <x-custom.button
+                    href="{{ route('feedbacks.index') }}"
+                    btnColor="btn-outline-primary"
+                    btnName="All "
+                />
+                @foreach ($categories as $category )
+                    <x-custom.button
+                    href="{{ route('feedbacks.index', ['category' => $category]) }}"
+                    btnColor="btn-outline-secondary"
+                    btnName="{{ $category }}"
+                    />
+
+                @endforeach
+
+            </div>
         </div>
 
         <div class="row">
@@ -71,7 +93,7 @@
             {{-- ===============================
                 MAIN TICKET LIST
             =============================== --}}
-            <div class="col-md-9 col-lg-10">
+            <div class="col-md-9 col-lg-12">
 
                 <div class="px-3">
 
@@ -85,7 +107,11 @@
                     {{-- TICKETS --}}
                     <div class="d-flex flex-column gap-3">
 
+                        Total: {{ $ticketsCount ?? '0' }}
+
                         @forelse ($tickets as $ticket)
+
+                            {{-- @dd($ticket) --}}
 
                             @php
                                 $statusColor = match($ticket->status) {
@@ -96,21 +122,25 @@
                                 };
                             @endphp
 
-                            <div class="card shadow-sm">
+                            <div class="card shadow-sm ps-1
+                                                {{ $ticket->status === 'open' ? 'bg-warning' : '' }}
+                                                {{ $ticket->status === 'in_progress' ? 'bg-primary' : '' }}
+                                                {{ $ticket->status === 'done' ? 'bg-success' : '' }}
+                                            ">
                                 {{-- Ticket/feedback Card --}}
-                                <div class="card shadow-sm position-relative">
+                                <div class="card shadow-sm position-relative ps-1">
 
                                     <div class="d-flex">
 
                                         {{-- STATUS COLOR BAR --}}
-                                        <div
+                                        {{-- <div
                                             style="width:6px;"
                                             class="
                                                 {{ $ticket->status === 'open' ? 'bg-warning' : '' }}
                                                 {{ $ticket->status === 'in_progress' ? 'bg-primary' : '' }}
                                                 {{ $ticket->status === 'done' ? 'bg-success' : '' }}
                                             ">
-                                        </div>
+                                        </div> --}}
 
                                         {{-- CONTENT --}}
                                         <div class="flex-grow-1 px-3 py-2">
@@ -201,7 +231,7 @@
                                                     style="width:70px;"
                                                     value="{{ $ticket->position ?? old('position', 0) }}"
                                                 >
-                                                <input type="hidden" name="id" value="{{ $ticket->id }}">
+                                                <input type="hidden" name="id" value="{{ $ticket->id }}" disabled>
                                             </form>
 
                                         </div>

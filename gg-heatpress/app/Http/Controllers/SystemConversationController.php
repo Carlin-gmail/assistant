@@ -10,19 +10,49 @@ class SystemConversationController extends Controller
     /**
      * Display a listing of the system conversations.
      */
-    public function index() //this class need to be renamed to FeedbackController!!! fix me
+    public function index(Request $request) //this class need to be renamed to FeedbackController!!! fix me
     {
-        $tickets = SystemConversation::where('status', 'open')
-        ->orderBy('position', 'asc')
-        ->orderBy('message', 'asc')
-        ->paginate(10)
-        ->withQueryString();
+        // VARIABLES
+        $cat = $request->input('category');
 
-        $categories = ['bug', 'feature_request', 'general_feedback'];
+        $categories = SystemConversation::select('category')
+        ->distinct()
+        ->where('status', '!=', 'done')
+        // ->where('category', $category ?? '')
+        ->pluck('category');
+
+        if($cat === 'done'){
+            $tickets = SystemConversation::where('status', 'done')
+            ->orderBy('position', 'asc')
+            ->orderBy('message', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+            $ticketsCount = count($tickets);
+        } else if($cat){
+            $tickets = SystemConversation::where('status', 'open')
+            ->where('category', $cat ?? null)
+            ->orderBy('position', 'asc')
+            ->orderBy('message', 'asc')
+            // ->groupBy('category')
+            ->paginate(10)
+            ->withQueryString();
+
+            $ticketsCount = count($tickets);
+        } else {
+            $tickets = SystemConversation::where('status', 'open')
+            ->orderBy('position', 'asc')
+            ->orderBy('message', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+            $ticketsCount = count($tickets);
+        }
 
         return view('feedbacks.index', compact([
         'tickets',
         'categories',
+        'ticketsCount'
         ]));
     }
 
@@ -38,6 +68,7 @@ class SystemConversationController extends Controller
         // dd($request->all());
         $validated = $request->validate([
             'feedback' => 'required|string|max:5000',
+            'category' => 'nullable|string|max:255',
         ]);
 
         SystemConversation::create([

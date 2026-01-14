@@ -70,13 +70,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('bags', BagController::class);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Customers
-    |--------------------------------------------------------------------------
-       */
-
-
+    /***   CUSTOMERS   ***/
     Route::get('/customers-search', [CustomerController::class, 'search'])
         ->name('customers.search');
 
