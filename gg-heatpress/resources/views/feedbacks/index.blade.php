@@ -12,7 +12,7 @@
                 <p>Categories   </p>
                 <x-custom.button
                     href="{{ route('feedbacks.index', ['category' => 'done']) }}"
-                    btnColor="btn-primary"
+                    btnColor="btn-outline-success"
                     btnName="Done"
                 />
                 <x-custom.button

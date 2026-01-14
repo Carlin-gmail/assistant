@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const fullImage = trigger.dataset.image; // if have an image it will be here
                 modalImage.src = fullImage;
             }
-            modal.classList.add('is-open')
+            modal.classList.add('is-open');
+            modal.style.display = 'flex';
             modal.id = trigger.dataset.id;
 
             return;
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Close modal when clicking outside content
         if (event.target === modal) {
             modal.classList.remove('is-open');
+            modal.style.display = 'none';
             modalImage.src = '';
         }
     });

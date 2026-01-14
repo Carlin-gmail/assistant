@@ -18,6 +18,7 @@ class SystemConversationController extends Controller
         $categories = SystemConversation::select('category')
         ->distinct()
         ->where('status', '!=', 'done')
+        ->orderBy('category', 'asc')
         // ->where('category', $category ?? '')
         ->pluck('category');
 
@@ -67,13 +68,13 @@ class SystemConversationController extends Controller
     {
         // dd($request->all());
         $validated = $request->validate([
-            'feedback' => 'required|string|max:5000',
+            'message' => 'required|string|max:5000',
             'category' => 'nullable|string|max:255',
         ]);
 
         SystemConversation::create([
             'category' => $request->input('category', 'general_ticket'),
-            'message' => $validated['feedback'],
+            'message' => $validated['message'],
             'message_from' => auth()->user()->name,
             'status' => 'open',
             //get the url of this page

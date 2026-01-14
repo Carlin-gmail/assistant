@@ -1,5 +1,5 @@
 <a
 style="width:10rem"
 href="{{ $href ?? '#' }}"
-class="btn {{ $btnColor }} p-1 m-1 ">
+class="btn {{ $btnColor }} p-1 m-1 shadow-md">
 {{ $btnName }} </a>
