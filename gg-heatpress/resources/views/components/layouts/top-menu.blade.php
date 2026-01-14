@@ -20,11 +20,11 @@
             {{-- Right: Actions --}}
             <div class="d-flex align-items-center gap-3">
 
-                <span class="small text-muted d-none d-lg-inline">
+                <span class="small text-white d-none d-lg-inline border-start p-1 border-bottom rounded">
                     {{ auth()->user()->name }}
                 </span>
 
-                <a class="btn btn-primary btn-sm d-none d-lg-inline-block"
+                <a class="btn btn-primary btn-sm d-none"
                    href="{{ route('bags.index') }}">
                     + Add Leftover
                 </a>
@@ -46,10 +46,10 @@
     </div>
 
     {{-- Mobile menu --}}
-    <div id="mobileMenu" class="mobile-menu bg-dark d-lg-none">
+    <div id="mobileMenu" class="mobile-menu d-lg-none">
         <div class="container py-3">
 
-            <div class="mb-3 text-muted small">
+            <div class="mb-3 text-white small">
                 Logged in as <strong>{{ auth()->user()->name }}</strong>
             </div>
 
