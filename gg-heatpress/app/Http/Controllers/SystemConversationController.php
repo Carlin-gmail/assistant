@@ -70,20 +70,10 @@ class SystemConversationController extends Controller
         $validated = $request->validate([
             'message' => 'required|string|max:5000',
             'category' => 'nullable|string|max:255',
+            'assigned_to' => 'nullable|string|max:255',
         ]);
 
-        SystemConversation::create([
-            'category' => $request->input('category', 'general_ticket'),
-            'message' => $validated['message'],
-            'message_from' => auth()->user()->name,
-            'status' => 'open',
-            //get the url of this page
-            'page_url' => url()->previous(),
-            'subject' => $request->input('subject', 'General Feedback'),
-            'position' => '100',
-            'priority' => $request->input('priority', 'normal'),
-            'distak' => $request->input('distak', ''),
-        ]);
+        SystemConversation::create($validated);
 
         \Log::channel('tickets')->info('New feedback submitted', [
             'submitted_by' => auth()->user()->name,

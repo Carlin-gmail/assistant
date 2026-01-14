@@ -69,7 +69,27 @@
                             name="category"
                             class="form-control"
                             placeholder="Bug, Improvement, Maintenance..."
-                            required>
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">
+                            Assigned To
+                        </label>
+
+                        <select
+                        name="assigned_to"
+                        id="assigned_to"
+                        class="form-select mb-2"
+                        >
+                            <option value="">-- Select User --</option>
+                            <option value="Any" selected>Any</option>
+                            @foreach (\App\Models\User::all() as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+
                     </div>
 
                     {{-- MESSAGE --}}
