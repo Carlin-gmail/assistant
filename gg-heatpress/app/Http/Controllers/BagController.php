@@ -8,6 +8,7 @@ use App\Services\BagService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreBagRequest;
 
 class BagController extends Controller
 {
@@ -50,18 +51,11 @@ class BagController extends Controller
     /**
      * Store bag using service
      */
-    public function store(Request $request)
+    public function store(StoreBagRequest $request)
     {
-        // dd($request->all());
-            $validated = $request->validate([
-            'bag_number' => 'required|exists:customers,account_number',
-            'customer_id' => 'required|exists:customers,id',
-            'subcategory' => 'nullable|string',
-            'notes'       => 'nullable|string',
-        ]);
 
-        if(isset($validated)) {
-            $bag = $this->bagService->create($validated);
+        if($request->validated()) {
+            $bag = $this->bagService->create($request->validated());
         } else {
             dd('no validated data');
         }

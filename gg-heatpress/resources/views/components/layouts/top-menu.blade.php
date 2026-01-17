@@ -13,6 +13,7 @@
                 <li><a class="nav-link p-0" href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li><a class="nav-link p-0" href="{{ route('customers.index') }}">Customers</a></li>
                 <li><a class="nav-link p-0" href="{{ route('bags.index') }}">Bags</a></li>
+                <li><a class="nav-link p-0" href="{{ route('inventories.index') }}">Inventory</a></li>
                 <li><a class="nav-link p-0" href="{{ route('transfer-types.index') }}">Transfer Types</a></li>
                 <li><a class="nav-link p-0" href="{{ route('settings.index') }}">Settings</a></li>
             </ul>
@@ -55,7 +56,10 @@
 
             <ul class="list-unstyled mb-4">
                 <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('customers.index') }}">Customers</a></li>
+                <li class="mb-2">
+                    <a class="text-white text-decoration-none" href="{{ route('customers.index') }}">Customers</a></li>
+                <li class="mb-2">
+                    <a class="text-white text-decoration-none" href="{{ route('inventories.index') }}">Inventory</a></li>
                 <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('bags.index') }}">Bags</a></li>
                 <li class="mb-2"><a class="text-white text-decoration-none" href="{{ route('transfer-types.index') }}">Transfer Types</a></li>
                 <li><a class="text-white text-decoration-none" href="{{ route('settings.index') }}">Settings</a></li>

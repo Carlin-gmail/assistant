@@ -6,14 +6,18 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Livewire\Actions\Logout;
 use App\Services\CreateCsvService;
+use App\Services\CustomerService;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\TextToCsvRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use Illuminate\Support\Facades\Log;
 class CustomerController extends Controller
 {
     protected $csvService;
-    public function __construct(CreateCsvService $csvService){
+    protected $customerService;
+    public function __construct(CreateCsvService $csvService, CustomerService $customerService){
         $this->csvService = $csvService;
+        $this->customerService = $customerService;
     }
 
     /**
@@ -21,27 +25,21 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $allowedOrderBys = ['name', 'account_number', 'total_bags', 'last_job', 'notes'];
-        if(!in_array($request->input('order_by'), $allowedOrderBys)) {
-            log::warning('Invalid order_by parameter in customer listing', [
-                'user_name' => auth()->user()->name ?? 'system',
-                'order_by' => $request->input('order_by'),
-            ]);
-            $order_by = 'name';
-        } else {
-            $order_by = $request->input('order_by');
-        }
+
+        $allowedOrderBys = $this->customerService->allowedOrderBys();
+
+        $orderBy = $this->customerService->orderBy($request);
 
         $search = $request->input('search'); // check if there's a search query
-        $customers = Customer::with('bags') // feeds the list initially
-        ->orderBy($order_by)
-        ->paginate(20)
-        ->withQueryString();
-
 
         if($search){ // if there's a search query, redirect to search method
             return $this->search($request);
         }
+
+        $customers = Customer::with('bags') // feeds the list initially
+        ->orderBy($orderBy)
+        ->paginate(20)
+        ->withQueryString();
 
         return view('customers.index', compact('customers'));
     }
@@ -94,19 +92,9 @@ class CustomerController extends Controller
     /**
      * Update customer.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     { // fix me: change to FormRequest
-        $validated = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'nullable|email',
-            'phone'   => 'nullable|string',
-            'address' => 'nullable|string',
-            'account_number' => 'nullable|integer',
-            'city'    => 'nullable|string',
-            'state'   => 'nullable|string',
-            'notes'   => 'nullable|string',
-        ]);
-        // dd($validated);
+        $validated = $request->validated();
 
         $customer->update($validated);
 

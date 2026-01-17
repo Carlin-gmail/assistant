@@ -132,32 +132,42 @@
 
                                     <div class="d-flex">
 
-                                        {{-- STATUS COLOR BAR --}}
-                                        {{-- <div
-                                            style="width:6px;"
-                                            class="
-                                                {{ $ticket->status === 'open' ? 'bg-warning' : '' }}
-                                                {{ $ticket->status === 'in_progress' ? 'bg-primary' : '' }}
-                                                {{ $ticket->status === 'done' ? 'bg-success' : '' }}
-                                            ">
-                                        </div> --}}
-
                                         {{-- CONTENT --}}
                                         <div class="flex-grow-1 px-3 py-2">
 
                                             {{-- ROW 1: MESSAGE + ACTIONS --}}
                                             <div class="d-flex justify-content-between align-items-start mb-1">
 
-                                                <div class="fw-semibold">
+                                            <div class="d-flex flex-wrap align-items-baseline gap-2">
+
+                                                {{-- SUBJECT --}}
+                                                <span class="{{ $statusColor }} border-top border-bottom fw-semibold table-info py-1 rounded">
+                                                    {{ strtoupper($ticket->subject) ?? 'No subject' }}
+                                                </span>
+
+                                                {{-- SEPARATOR --}}
+                                                <span class="text-muted small">
+                                                    —
+                                                </span>
+
+                                                {{-- MESSAGE --}}
+                                                <span class="text-muted">
                                                     {{ $ticket->message }}
-                                                </div>
+                                                </span>
+
+                                            </div>
 
                                                 <div class="d-flex gap-1 ms-3 flex-shrink-0">
 
-                                                    <a href="{{-- route('system-conversations.show', $ticket) --}}"
-                                                    class="btn btn-sm btn-outline-primary px-2 py-0">
-                                                        View
-                                                    </a>
+                                                    <form action="{{ route('feedbacks.destroy', $ticket->id) }}"
+                                                    method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger px-2 py-0">
+                                                            Delete
+                                                        </button>
+                                                    </form>
 
                                                     <a href="{{-- route('system-conversations.edit', $ticket) --}}"
                                                     class="btn btn-sm btn-outline-secondary px-2 py-0">
@@ -223,7 +233,7 @@
                                                 Position
                                             </label>
 
-                                            <form class="" method="GET" action="{{ route('feedbacks.position-update', [$ticket->id, 'id'=>'2']) }}" >
+                                            <form class="" method="GET" action="{{ route('feedbacks.position-update', $ticket) }}" >
                                                 <input type="number"
                                                     id="position-{{ $ticket->id }}"
                                                     class="form-control form-control-sm rounded-pill text-center"
@@ -231,7 +241,7 @@
                                                     style="width:70px;"
                                                     value="{{ $ticket->position ?? old('position', 0) }}"
                                                 >
-                                                <input type="hidden" name="id" value="{{ $ticket->id }}" disabled>
+                                                <input type="hidden" name="id" value="{{ $ticket->id }}">
                                             </form>
 
                                         </div>

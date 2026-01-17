@@ -25,18 +25,6 @@
         {{-- <livewire:layout.navigation /> --}}
         <x-layouts.top-menu />
 
-
-        <!-- Page Heading -->
-        {{-- @if (isset($header))
-            <!-- bg-secondary is already Bootstrap -->
-            <header class="bg-secondary shadow-sm">
-                <!-- REPLACED: max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 -->
-                <div class="container py-3 px-3">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif --}}
-
         <!-- Page Content -->
         <main class="flex-grow-1">
             <div class="card container my-4">
@@ -58,6 +46,21 @@
 
                     <h5 class="mb-3">Send New Ticket</h5>
 
+                    {{-- SUBJECT --}}
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">
+                            Subject
+                        </label>
+
+                        <input type="text"
+                            id="subject"
+                            name="subject"
+                            class="form-control"
+                            placeholder="subject..."
+                            required
+                        >
+                    </div>
+
                     {{-- CATEGORY --}}
                     <div class="mb-3">
                         <label for="category" class="form-label">
@@ -69,7 +72,6 @@
                             name="category"
                             class="form-control"
                             placeholder="Bug, Improvement, Maintenance..."
-                            required
                         >
                     </div>
 

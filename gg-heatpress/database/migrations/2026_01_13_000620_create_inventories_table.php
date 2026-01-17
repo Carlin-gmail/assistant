@@ -19,19 +19,21 @@ return new class extends Migration
             $table->string('color')->nullable();
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
+            $table->string('product_url')->nullable();
             $table->string('name')->required();
             $table->text('notes')->nullable();
             $table->string('material')->nullable();
+            $table->string('minimum_stock_level')->nullable(); // to trigger automation
             $table->string('model')->nullable();
             $table->string('location')->nullable();
-            $table->string('status')->nullable();
+            $table->string('status')->nullable(); // in use, backup, stored, broken...
             $table->string('style')->nullable();
             $table->string('size')->nullable();
             $table->decimal('price', 10, 2)->nullable();
             $table->date('purchase_date')->nullable();
             $table->integer('quantity')->default(0);
             $table->string('sku')->unique()->nullable();
-            $table->string('type')->nullable();
+            $table->string('type')->nullable(); // durable, consumable, electronic...
             $table->string('vendor')->nullable();
             $table->timestamps();
         });

@@ -29,6 +29,7 @@ Route::get('/test', fn () => view('test.index'));
 
 Route::get('/js', fn () => view('delete-me.learningJS'));
 
+// LOGOUT
 Route::get('/logout', Logout::class)->name('logout');
 
 /*
@@ -127,7 +128,8 @@ Route::middleware('auth')->group(function () {
         ->name('feedbacks.index');
 
     /* INVENTOORY */
-    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::resource('inventories', InventoryController::class);
+    // Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
     /*
     |--------------------------------------------------------------------------
     | Transfer Types
@@ -153,12 +155,13 @@ Route::middleware('auth')->group(function () {
     // Route::get('/feedbacks', [SystemConversationController::class, 'index'])
         // ->name('system-conversations.index');
 
+    Route::resource('/feedbacks', SystemConversationController::class);
+
     Route::patch('/feedbacks/done/{feedback}', [SystemConversationController::class, 'feedbackDone'])
         ->name('feedbacks.done');
 
     Route::get('/feedbacks/position-update', [ SystemConversationController::class, 'updatePosition'])->name('feedbacks.position-update');
 
-    Route::resource('/feedbacks', SystemConversationController::class);
 
     /*
     |--------------------------------------------------------------------------

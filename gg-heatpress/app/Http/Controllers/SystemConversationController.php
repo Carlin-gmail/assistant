@@ -69,6 +69,7 @@ class SystemConversationController extends Controller
         // dd($request->all());
         $validated = $request->validate([
             'message' => 'required|string|max:5000',
+            'subject' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:255',
             'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|string|max:255',
@@ -78,7 +79,7 @@ class SystemConversationController extends Controller
 
         \Log::channel('tickets')->info('New feedback submitted', [
             'submitted_by' => auth()->user()->name,
-            'subject' => $request->input('message', 'General Feedback'),
+            'subject' => $request->input('subject', 'General Feedback'),
         ]);
 
         return redirect()
@@ -91,7 +92,7 @@ class SystemConversationController extends Controller
      */
     public function show(SystemConversation $systemConversation)
     {
-        return view('system-conversations.show', compact('systemConversation'));
+        // return view('system-conversations.show', compact('systemConversation'));
     }
 
     /**
@@ -124,10 +125,10 @@ class SystemConversationController extends Controller
             'position' => 'required|integer|min:0',
         ]);
 
-        $id = SystemConversation::findOrFail($request->input('id'));
+        $ticket = SystemConversation::findOrFail($request->input('id'));
 
-        $id->position = $validated['position'];
-        $id->save();
+        $ticket->position = $validated['position'];
+        $ticket->save();
 
         return redirect()
             ->route('feedbacks.index')
@@ -136,12 +137,13 @@ class SystemConversationController extends Controller
     /**
      * Remove the specified system conversation from storage.
      */
-    public function destroy(SystemConversation $systemConversation)
+    public function destroy( $id) // needs to be id becauser the variable name in the route is feedback and in the view is $ticket.
     {
+        $systemConversation = SystemConversation::findOrFail($id);
         $systemConversation->delete();
 
         return redirect()
-            ->route('system-conversations.index')
+            ->route('feedbacks.index')
             ->with('success', 'Conversation deleted successfully.');
     }
 
